@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One-Click Monitoring Stack | DevOpsMonitor</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .product-detail {
+            padding: 60px 0;
+        }
+        .back-btn {
+            margin-bottom: 30px;
+        }
+        .demo-video {
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 30px 0;
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+        }
+        .demo-video iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .install-steps {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        pre {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <a href="../index.html" style="text-decoration: none; color: inherit;">
+                    <span>DevOpsMonitor</span>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html#products">← Back to Products</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container product-detail">
+        <h1>One-Click Monitoring Stack</h1>
+        <p class="section-subtitle">Complete monitoring solution - $49</p>
+        
+        <div style="display: flex; gap: 40px; margin-top: 40px; flex-wrap: wrap;">
+            <!-- Left Column -->
+            <div style="flex: 1; min-width: 300px;">
+                <div class="install-steps">
+                    <h3>Quick Install</h3>
+                    <pre><code># 1. Download
+curl -L https://your-link.com/monitoring.zip -o stack.zip
+
+# 2. Extract
+unzip stack.zip
+cd monitoring-stack
+
+# 3. Deploy
+docker-compose up -d
+
+# 4. Access
+# Grafana: http://localhost:3000 (admin/admin)
+# Prometheus: http://localhost:9090</code></pre>
+                    
+                    <h3>What's Included</h3>
+                    <ul style="list-style: none; padding: 0; margin-top: 20px;">
+                        <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-check" style="color: #27ae60;"></i>
+                            Prometheus + Grafana + Alertmanager
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-check" style="color: #27ae60;"></i>
+                            10+ Pre-configured Dashboards
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-check" style="color: #27ae60;"></i>
+                            Automated Alerting Rules
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-check" style="color: #27ae60;"></i>
+                            Self-Healing Scripts
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-check" style="color: #27ae60;"></i>
+                            Ansible Playbooks
+                        </li>
+                    </ul>
+                    
+                    <div style="margin-top: 30px; text-align: center;">
+                        <div class="price" style="font-size: 2.5rem;">$49</div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="showBankDetails()">
+                            <i class="fas fa-shopping-cart"></i> Buy Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div style="flex: 2; min-width: 300px;">
+                <h2>Demo Video</h2>
+                <div class="demo-video">
+                    <!-- Replace with your video -->
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+                
+                <h2>Features</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0;">
+                    <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 5px;">
+                        <i class="fas fa-bolt" style="font-size: 2rem; color: #3498db;"></i>
+                        <h4>Fast Deployment</h4>
+                        <p>5-minute setup</p>
+                    </div>
+                    <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 5px;">
+                        <i class="fas fa-shield-alt" style="font-size: 2rem; color: #3498db;"></i>
+                        <h4>Production Ready</h4>
+                        <p>Tested on 100+ servers</p>
+                    </div>
+                    <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 5px;">
+                        <i class="fas fa-sync-alt" style="font-size: 2rem; color: #3498db;"></i>
+                        <h4>Auto Updates</h4>
+                        <p>Regular security updates</p>
+                    </div>
+                </div>
+                
+                <h2>FAQ</h2>
+                <div style="margin-top: 20px;">
+                    <h3>Q: What are system requirements?</h3>
+                    <p>A: Minimum 2GB RAM, 10GB disk, Docker required.</p>
+                    
+                    <h3>Q: Is there a free version?</h3>
+                    <p>A: Basic version available on GitHub.</p>
+                    
+                    <h3>Q: How do I get support?</h3>
+                    <p>A: Email support within 24 hours.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 DevOps Monitoring Solutions. Digital delivery only.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>
