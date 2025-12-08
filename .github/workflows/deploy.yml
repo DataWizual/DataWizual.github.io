@@ -6,11 +6,11 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
-# ENVIRONMENT VARIABLES FOR AUTOMATION
-env:
-  DEPLOY_TARGET: ${{ vars.DEPLOY_TARGET || 'github-pages' }}
-  NOTIFY_SLACK: ${{ vars.NOTIFY_SLACK || 'false' }}
-  AUTO_ROLLBACK: ${{ vars.AUTO_ROLLBACK || 'true' }}
+# УБИРАЕМ env секцию - она вызывает ошибку в if:
+# env:
+#   DEPLOY_TARGET: ${{ vars.DEPLOY_TARGET || 'github-pages' }}
+#   NOTIFY_SLACK: ${{ vars.NOTIFY_SLACK || 'false' }}
+#   AUTO_ROLLBACK: ${{ vars.AUTO_ROLLBACK || 'true' }}
 
 jobs:
   # --- PHASE 1: AUTOMATED CODE QUALITY ---
@@ -27,10 +27,8 @@ jobs:
       - name: 🤖 Auto-Detect Build System
         id: detect
         run: |
-          # AUTOMATIC DETECTION
           if [ -f "package.json" ]; then
             echo "system=npm" >> $GITHUB_OUTPUT
-            echo "build=node" >> $GITHUB_OUTPUT
           elif [ -f "requirements.txt" ]; then
             echo "system=pip" >> $GITHUB_OUTPUT
           else
@@ -71,77 +69,47 @@ jobs:
       - name: 🤖 Auto-Detect Deployment Target
         id: deploy-detect
         run: |
-          # AUTO-SELECT DEPLOYMENT METHOD
-          if [ "${{ env.DEPLOY_TARGET }}" = "netlify" ] || [ -f "netlify.toml" ]; then
-            echo "target=netlify" >> $GITHUB_OUTPUT
-          elif [ "${{ env.DEPLOY_TARGET }}" = "vercel" ] || [ -f "vercel.json" ]; then
-            echo "target=vercel" >> $GITHUB_OUTPUT
-          else
-            echo "target=github-pages" >> $GITHUB_OUTPUT
-          fi
+          # Упрощаем: всегда GitHub Pages для статики
+          echo "target=github-pages" >> $GITHUB_OUTPUT
           
       - name: 🤖 Auto-Deploy to GitHub Pages
-        if: steps.deploy-detect.outputs.target == 'github-pages'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
           
-      - name: 🤖 Auto-Deploy to Netlify
-        if: steps.deploy-detect.outputs.target == 'netlify'
-        uses: nwtgck/actions-netlify@v2
-        with:
-          publish-dir: '.'
-          production-branch: main
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          
       - name: 🤖 Auto-Health Check
         run: |
-          echo "Waiting for deployment..."
-          sleep 30
-          echo "✅ Deployment should be live now"
-          
-      - name: 🤖 Auto-Notification
-        if: env.NOTIFY_SLACK == 'true'
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_MESSAGE: "🚀 Automated deployment completed successfully!"
+          echo "✅ Deployment completed"
+          echo "Site should be live in 1-2 minutes"
 
-  # --- PHASE 3: AUTOMATED ROLLBACK ---
+  # --- PHASE 3: АВТОМАТИЧЕСКИЙ ОТКАТ (ИСПРАВЛЕННЫЙ) ---
   automated-rollback:
     name: 🔄 Auto-Rollback System
     runs-on: ubuntu-latest
     needs: automated-deploy
-    if: failure() && env.AUTO_ROLLBACK == 'true'
+    if: failure()  # ← УПРОЩАЕМ: только failure(), без env проверки
     
     steps:
       - name: 🤖 Trigger Auto-Rollback
         run: |
-          echo "🚨 DEPLOYMENT FAILED - AUTO-ROLLBACK INITIATED"
+          echo "🚨 DEPLOYMENT FAILED - AUTO-ROLLBACK WOULD TRIGGER HERE"
+          echo ""
+          echo "In full GitFlow Pro version, this would:"
+          echo "1. Rollback to previous stable version"
+          echo "2. Send notifications to team"
+          echo "3. Create incident report"
+          echo ""
+          echo "For demo: Simulating successful rollback..."
           
-          # Download rollback script
-          curl -s https://raw.githubusercontent.com/gitflow-pro/scripts/main/auto-rollback.sh \
-            -o /tmp/rollback.sh
+      - name: 🤖 Create Report
+        run: |
+          echo "# Auto-Rollback Simulation" > rollback-report.md
+          echo "Status: Rollback simulated successfully" >> rollback-report.md
+          echo "Time: $(date)" >> rollback-report.md
           
-          chmod +x /tmp/rollback.sh
-          
-          # Execute rollback
-          /tmp/rollback.sh \
-            --app-url "https://your-site.com" \
-            --previous-tag "stable-latest" \
-            --slack-webhook "${{ secrets.SLACK_WEBHOOK_URL }}"
-            
-          echo "✅ Auto-rollback completed"
-          
-      - name: 🤖 Create Incident Report
-        uses: actions/github-script@v6
+      - name: 🤖 Save Report
+        uses: actions/upload-artifact@v4
         with:
-          script: |
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `🚨 Auto-Rollback Triggered: ${context.sha}`,
-              body: `Deployment failed and auto-rollback was executed.`,
-              labels: ['incident', 'auto-rollback']
-            })
+          name: rollback-simulation-report
+          path: rollback-report.md
