@@ -2,6 +2,8 @@ name: 🛡️ Safe CI/CD Test (Manual Approval Required)
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ ci-test ]   
   pull_request:
     branches: [ main, master ]
 
