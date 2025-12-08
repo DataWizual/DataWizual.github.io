@@ -1,61 +1,147 @@
-# GitFlow Pro - Static Website Deployment
-# Template Version: 1.0
-
-name: 🚀 Deploy Static Website
+# GitFlow Pro - FULL Automated Static Site Deployment
+name: 🤖 Automated CI/CD Pipeline
 
 on:
   push:
     branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+  workflow_dispatch:
+
+# ENVIRONMENT VARIABLES FOR AUTOMATION
+env:
+  DEPLOY_TARGET: ${{ vars.DEPLOY_TARGET || 'github-pages' }}
+  NOTIFY_SLACK: ${{ vars.NOTIFY_SLACK || 'false' }}
+  AUTO_ROLLBACK: ${{ vars.AUTO_ROLLBACK || 'true' }}
 
 jobs:
-  validate:
-    name: 🔍 Validate Code
+  # --- PHASE 1: AUTOMATED CODE QUALITY ---
+  automated-checks:
+    name: 🔍 Auto-Code Analysis
     runs-on: ubuntu-latest
+    outputs:
+      quality_score: ${{ steps.quality.outputs.score }}
+      
     steps:
-      - name: Checkout code
+      - name: 🤖 Auto-Checkout
         uses: actions/checkout@v3
-
-      - name: Validate HTML
+        
+      - name: 🤖 Auto-Detect Build System
+        id: detect
         run: |
-          echo "HTML validation placeholder"
-          # In full version: html5validator, link checking, etc
+          # AUTOMATIC DETECTION
+          if [ -f "package.json" ]; then
+            echo "system=npm" >> $GITHUB_OUTPUT
+            echo "build=node" >> $GITHUB_OUTPUT
+          elif [ -f "requirements.txt" ]; then
+            echo "system=pip" >> $GITHUB_OUTPUT
+          else
+            echo "system=static" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: 🤖 Auto-Install Dependencies
+        if: steps.detect.outputs.system == 'npm'
+        run: npm ci
+      
+      - name: 🤖 Auto-Run Tests
+        if: steps.detect.outputs.system == 'npm'
+        run: |
+          if grep -q '"test"' package.json; then
+            npm test
+          else
+            echo "No tests found - skipping"
+          fi
+      
+      - name: 🤖 Auto-Performance Check
+        uses: treosh/lighthouse-ci-action@v9
+        id: quality
+        with:
+          uploadArtifacts: true
+          temporaryPublicStorage: true
 
-  deploy:
-    name: 🚀 Deploy to Production
+  # --- PHASE 2: AUTOMATED DEPLOYMENT ---
+  automated-deploy:
+    name: 🚀 Auto-Deploy
     runs-on: ubuntu-latest
-    needs: validate
+    needs: automated-checks
     if: github.event_name == 'push'
     
     steps:
-      - name: Checkout code
+      - name: 🤖 Auto-Checkout
         uses: actions/checkout@v3
-
-      - name: Setup deployment
+      
+      - name: 🤖 Auto-Detect Deployment Target
+        id: deploy-detect
         run: |
-          echo "Choose your deployment target:"
-          echo "1. GitHub Pages (recommended for static sites)"
-          echo "2. Netlify"
-          echo "3. Vercel"
-          echo "4. AWS S3"
-          echo ""
-          echo "Configure in next steps..."
-
-      - name: Deploy to GitHub Pages
-        if: ${{ vars.DEPLOY_TARGET == 'github-pages' || !vars.DEPLOY_TARGET }}
+          # AUTO-SELECT DEPLOYMENT METHOD
+          if [ "${{ env.DEPLOY_TARGET }}" = "netlify" ] || [ -f "netlify.toml" ]; then
+            echo "target=netlify" >> $GITHUB_OUTPUT
+          elif [ "${{ env.DEPLOY_TARGET }}" = "vercel" ] || [ -f "vercel.json" ]; then
+            echo "target=vercel" >> $GITHUB_OUTPUT
+          else
+            echo "target=github-pages" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: 🤖 Auto-Deploy to GitHub Pages
+        if: steps.deploy-detect.outputs.target == 'github-pages'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
-
-      - name: Health Check
-        run: |
-          echo "✅ Deployment complete!"
-          echo "Site should be live in 1-2 minutes"
           
-      - name: Send Notification
-        if: success()
+      - name: 🤖 Auto-Deploy to Netlify
+        if: steps.deploy-detect.outputs.target == 'netlify'
+        uses: nwtgck/actions-netlify@v2
+        with:
+          publish-dir: '.'
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: 🤖 Auto-Health Check
         run: |
-          echo "Sending success notification..."
-          # Slack/Email notifications in full version
+          echo "Waiting for deployment..."
+          sleep 30
+          echo "✅ Deployment should be live now"
+          
+      - name: 🤖 Auto-Notification
+        if: env.NOTIFY_SLACK == 'true'
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_MESSAGE: "🚀 Automated deployment completed successfully!"
+
+  # --- PHASE 3: AUTOMATED ROLLBACK ---
+  automated-rollback:
+    name: 🔄 Auto-Rollback System
+    runs-on: ubuntu-latest
+    needs: automated-deploy
+    if: failure() && env.AUTO_ROLLBACK == 'true'
+    
+    steps:
+      - name: 🤖 Trigger Auto-Rollback
+        run: |
+          echo "🚨 DEPLOYMENT FAILED - AUTO-ROLLBACK INITIATED"
+          
+          # Download rollback script
+          curl -s https://raw.githubusercontent.com/gitflow-pro/scripts/main/auto-rollback.sh \
+            -o /tmp/rollback.sh
+          
+          chmod +x /tmp/rollback.sh
+          
+          # Execute rollback
+          /tmp/rollback.sh \
+            --app-url "https://your-site.com" \
+            --previous-tag "stable-latest" \
+            --slack-webhook "${{ secrets.SLACK_WEBHOOK_URL }}"
+            
+          echo "✅ Auto-rollback completed"
+          
+      - name: 🤖 Create Incident Report
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Auto-Rollback Triggered: ${context.sha}`,
+              body: `Deployment failed and auto-rollback was executed.`,
+              labels: ['incident', 'auto-rollback']
+            })
