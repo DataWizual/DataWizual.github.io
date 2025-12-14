@@ -3,7 +3,7 @@ name: 🤖 Automated CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main]
   workflow_dispatch:
 
 # УБИРАЕМ env секцию - она вызывает ошибку в if:
@@ -57,7 +57,7 @@ jobs:
     
     steps:
       - name: 🤖 Auto-Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: 🤖 Auto-Detect Deployment Target
         id: deploy-detect
@@ -66,7 +66,7 @@ jobs:
           echo "target=github-pages" >> $GITHUB_OUTPUT
           
       - name: 🤖 Auto-Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
