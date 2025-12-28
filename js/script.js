@@ -1,6 +1,5 @@
-// Main script for DevOpsMonitor
-
-console.log('DevOpsMonitor loaded');
+// Main script for DataWizual Security
+console.log('DataWizual Security Engine Loaded');
 
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -19,37 +18,25 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Bank details modal
-function showBankDetails() {
-    const details = `
-Bank Transfer Details:
-
-Bank: Wise (USD account)
-Account: 1234567890
-Routing: 084009519
-SWIFT: CMFGUS33
-Amount: $49
-Reference: MONITORING-[YOUR EMAIL]
-
-After payment, email receipt to:
-sales@devopsmonitor.com
-    `;
-    alert(details);
+// Logic for Access Request
+function handleAccessRequest() {
+    window.location.href = "mailto:security@datawizual.com?subject=Access%20Request:%20Auditor%20Core%20Pro";
 }
 
-// Product buttons functionality
-document.querySelectorAll('.btn-primary').forEach(button => {
-    if (button.getAttribute('href') === '#buy') {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            showBankDetails();
-        });
-    }
+// Fade-in effect on scroll
+const observerOptions = { threshold: 0.1 };
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.section').forEach(section => {
+    section.style.opacity = "0";
+    section.style.transform = "translateY(20px)";
+    section.style.transition = "all 0.8s ease-out";
+    observer.observe(section);
 });
-
-// Simple form handling (for future)
-function handleEmailOrder(product) {
-    const subject = `Order: ${product}`;
-    const body = `I would like to purchase: ${product}\n\nMy email: `;
-    window.location.href = `mailto:sales@devopsmonitor.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-}
