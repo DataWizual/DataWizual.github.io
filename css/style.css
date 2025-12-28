@@ -387,12 +387,12 @@ body {
     }
 }
 
-/* Эффект градиентного текста */
 .text-gradient {
-    background: linear-gradient(90deg, #fff, #3498db);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary), #8e44ad);
+    background-clip: text; /* Стандартное свойство */
+    -webkit-background-clip: text; /* Для поддержки Chrome, Safari, Edge */
+    -webkit-text-fill-color: transparent; /* Обязательно для эффекта в Webkit */
+    color: var(--primary); /* Резервный цвет для старых браузеров */
 }
 
 /* Свечение кнопки */
@@ -477,9 +477,11 @@ body {
 
 /* Gradient & Glow Effects */
 .text-gradient {
-    background: linear-gradient(90deg, #fff, #3498db);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    background: linear-gradient(135deg, var(--primary), #8e44ad);
+    background-clip: text; /* Стандартное свойство */
+    -webkit-background-clip: text; /* Для поддержки Chrome, Safari, Edge */
+    -webkit-text-fill-color: transparent; /* Обязательно для эффекта в Webkit */
+    color: var(--primary); /* Резервный цвет для старых браузеров */
 }
 
 .btn-glow {
