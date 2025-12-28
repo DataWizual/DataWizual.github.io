@@ -20,7 +20,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 // Logic for Access Request
 function handleAccessRequest() {
-    window.location.href = "mailto:security@datawizual.com?subject=Access%20Request:%20Auditor%20Core%20Pro";
+    window.location.href = "mailto:eldorzufarov66@gmail.com?subject=Access%20Request:%20Auditor%20Core%20Pro";
 }
 
 // Fade-in effect on scroll
