@@ -625,27 +625,26 @@ code { background: #eee; padding: 2px 4px; border-radius: 3px; font-family: mono
     100% { transform: scale(1); opacity: 0.8; }
 }
 
-/* Эффект печатающегося текста */
 .typing-text {
     display: inline-block;
-    overflow: hidden; /* Скрывает текст, который еще не "напечатан" */
-    border-right: 3px solid var(--primary); /* Это наш курсор */
-    white-space: nowrap; /* Запрещает перенос строки */
+    overflow: hidden;
+    border-right: 3px solid var(--primary); /* Курсор */
+    white-space: nowrap;
     width: 0;
-    /* Анимация: typing (печать), blink (мигание курсора) */
+    /* Увеличим цикл до 7 секунд для солидности */
     animation: 
-        typing 4s steps(35, end) infinite,
+        typing 7s steps(35, end) infinite,
         blink-caret 0.75s step-end infinite;
 }
 
-/* Сама печать: от 0 до 100% ширины */
 @keyframes typing {
-    0% { width: 0 }
-    70% { width: 100% } /* Текст замирает в конце на 30% времени */
-    100% { width: 0 }    /* Быстро возвращается в начало */
+    0% { width: 0; }
+    30% { width: 100%; }  /* Печатает текст первые 2 секунды */
+    85% { width: 100%; }  /* Удерживает текст и курсор В КОНЦЕ до 85% времени (длинная пауза) */
+    95% { width: 0; opacity: 0; } /* Мгновенно исчезает перед перезапуском */
+    100% { width: 0; opacity: 0; }
 }
 
-/* Мигание курсора */
 @keyframes blink-caret {
     from, to { border-color: transparent }
     50% { border-color: var(--primary) }
