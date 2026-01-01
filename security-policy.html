@@ -21,64 +21,122 @@
 
     <main class="container" style="padding: 80px 20px; max-width: 900px; margin: 0 auto;">
         <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Vulnerability Disclosure Policy (VDP)</h1>
-        <p style="color: #94a3b8; margin-bottom: 40px;">Version 1.1 | Effective Date: January 1, 2026</p>
+        <p style="color: #94a3b8; margin-bottom: 40px;">
+            Version 1.2 | Effective Date: January 1, 2026
+        </p>
 
         <div style="line-height: 1.8; font-size: 1.05rem; color: #cbd5e1;">
-            <p>This policy governs <strong>ongoing security research</strong> conducted by DataWizual. We are committed to protecting the software ecosystem through ethical, non-intrusive analysis and coordinated vulnerability disclosure.</p>
+            <p>
+                This policy governs <strong>ongoing, good-faith security research</strong> conducted by DataWizual.
+                The purpose is to identify security risks in publicly accessible software artifacts and to
+                coordinate responsible disclosure in a professional, non-intrusive manner.
+            </p>
 
-            <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">1. Scope of Research</h3>
+            <p>
+                DataWizual focuses on <strong>static analysis, architectural review, and supply-chain risk assessment</strong>
+                of modern CI/CD workflows and infrastructure code. No exploitation or active intrusion is performed.
+            </p>
+
+            <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">
+                1. Scope of Research
+            </h3>
+
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
-                <div style="background: rgba(34, 197, 94, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(34, 197, 94, 0.2);">
-                    <strong style="color: #4ade80;">✔ In-Scope</strong>
-                    <ul style="margin-top: 10px; font-size: 0.95rem; list-style: none; padding: 0;">
-                        <li>• Public source code repositories</li>
-                        <li>• Public Infrastructure-as-Code (IaC)</li>
-                        <li>• Public CI/CD configuration files</li>
-                        <li>• Published Docker images / Artifacts</li>
+                <div style="background: rgba(34, 197, 94, 0.1); padding: 15px; border-radius: 8px;">
+                    <strong>In Scope</strong>
+                    <ul>
+                        <li>Public Git repositories</li>
+                        <li>CI/CD workflow definitions</li>
+                        <li>Infrastructure-as-Code templates</li>
+                        <li>Build and deployment configuration files</li>
                     </ul>
                 </div>
-                <div style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2);">
-                    <strong style="color: #f87171;">✘ Out-of-Scope</strong>
-                    <ul style="margin-top: 10px; font-size: 0.95rem; list-style: none; padding: 0;">
-                        <li>• Production SaaS / Live environments</li>
-                        <li>• User data & Private databases</li>
-                        <li>• Denial of Service (DoS) attacks</li>
-                        <li>• Social Engineering / Phishing</li>
+
+                <div style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 8px;">
+                    <strong>Out of Scope</strong>
+                    <ul>
+                        <li>Private or proprietary systems</li>
+                        <li>Live service exploitation or runtime attacks</li>
+                        <li>Denial-of-Service testing</li>
+                        <li>Social engineering or phishing</li>
                     </ul>
                 </div>
             </div>
 
-            <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">2. Terms of Good Faith (Safe Harbor)</h3>
-            <p>DataWizual conducts automated static analysis on <strong>public artifacts only</strong>. We maintain Safe Harbor by adhering to the following:</p>
-            <ul style="margin-left: 20px; list-style-type: disc;">
-                <li><strong>No Intent to Harm:</strong> Our goal is defensive. We do not destroy data or disrupt services.</li>
-                <li><strong>No Exploitation:</strong> We do not bypass authentication or interact with runtime systems.</li>
-                <li><strong>No Circumvention:</strong> We do not attempt to bypass technical security controls of the platforms hosting the code.</li>
+            <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">
+                2. Research Principles
+            </h3>
+
+            <ul>
+                <li><strong>Non-Intrusive:</strong> Analysis is limited to publicly available code and configuration.</li>
+                <li><strong>No Exploitation:</strong> Vulnerabilities are never actively exploited.</li>
+                <li><strong>Privacy-First:</strong> No access to private data, systems, or credentials.</li>
+                <li><strong>Automation with Care:</strong> Automated static analysis tools are used only on public artifacts.</li>
             </ul>
 
-            <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">3. Coordinated Disclosure & Timeline</h3>
-            <p>We follow a <strong>90-day disclosure window</strong>. This timeline is flexible and <em>may be extended upon mutual agreement</em> based on the complexity of the fix.</p>
-            <ul style="margin-left: 20px; list-style-type: disc;">
-                <li>Reports are sent privately to the dedicated security contact.</li>
-                <li>Public disclosure is only performed under <strong>coordinated conditions</strong> and after a fix is verified.</li>
-                <li>We do not seek financial compensation (extortion) for disclosing findings.</li>
+            <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">
+                3. Reporting & Coordination Process
+            </h3>
+
+            <p>
+                When a potential security risk is identified, DataWizual follows a coordinated disclosure process:
+            </p>
+
+            <ol>
+                <li>Initial private notification via official security contact channels.</li>
+                <li>Provision of a high-level description of the risk and remediation guidance.</li>
+                <li>No public disclosure prior to remediation or mutual agreement.</li>
+            </ol>
+
+            <p>
+                DataWizual will acknowledge receipt of reports and communications within
+                <strong>3–7 business days</strong> when acting as the receiving party.
+            </p>
+
+            <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">
+                4. Disclosure Timeline
+            </h3>
+
+            <p>
+                Findings remain confidential until a fix is available or a standard
+                <strong>90-day coordination window</strong> has passed.
+                This timeline may be extended by mutual agreement between parties.
+            </p>
+
+            <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">
+                5. Safe Harbor
+            </h3>
+
+            <p>
+                This policy is intended to provide <strong>Safe Harbor</strong> for security research conducted
+                in good faith and in accordance with this document.
+                DataWizual does not engage in extortion, public shaming, or coercive disclosure practices.
+            </p>
+
+            <p>
+                All activities are performed solely to improve the security and resilience
+                of the software supply chain.
+            </p>
+
+            <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">
+                6. Contact
+            </h3>
+
+            <p>
+                For coordinated disclosure or security-related communication:
+            </p>
+
+            <ul>
+                <li>Email: <strong>eldorzufarov66@gmail.com</strong></li>
+                <li>Policy reference: <a href="https://datawizual.github.io/security-policy.html" style="color: var(--primary);">Security Disclosure Policy</a></li>
             </ul>
 
-            <div style="margin-top: 60px; padding: 30px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-                <h4 style="color: white; margin-top: 0;"><i class="fas fa-envelope-open-text"></i> Reporting Channels</h4>
-                <p>For research coordination or sensitive reports, please use our dedicated security alias:</p>
-                <a href="mailto:eldorzufarov66@gmail.com" style="color: var(--primary); font-weight: bold; text-decoration: none;">security@datawizual.com (Forwarded to: eldorzufarov66@gmail.com)</a>
-                <p style="font-size: 0.9rem; color: #94a3b8; margin-top: 10px;">
-                    <i class="fas fa-check-circle" style="color: #4ade80;"></i> 
-                    <a href="/.well-known/security.txt" style="color: #94a3b8; text-decoration: underline;">security.txt</a> is implemented and compliant with RFC 9116.
-                </p>
-            </div>
+            <p style="margin-top: 40px; color: #94a3b8;">
+                DataWizual considers responsible security research a collaborative effort and values
+                respectful coordination with engineering and security teams.
+            </p>
         </div>
     </main>
-
-    <footer style="padding: 40px 0; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 80px;">
-        <p style="color: #64748b;">&copy; 2026 DataWizual Security. All rights reserved.</p>
-    </footer>
 
 </body>
 </html>

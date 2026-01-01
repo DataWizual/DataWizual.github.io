@@ -196,7 +196,49 @@
     </div>
 </section>
 
+<section id="cases" style="padding: 100px 0; background: #0f172a;">
+    <div class="container">
+        <h2 style="text-align: center; color: white; margin-bottom: 50px;">Security Research Highlights</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 16px; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='translateY(0)'">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                    <span style="background: rgba(248, 113, 113, 0.2); color: #f87171; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">CRITICAL</span>
+                    <i class="fas fa-server" style="color: #4ade80; font-size: 1.5rem;"></i>
+                </div>
+                <h3 style="color: white; margin-bottom: 15px;">Cloud-Native Backend Platform</h3>
+                <p style="color: #94a3b8; font-size: 0.95rem; margin-bottom: 20px;">Analyzed a major open-source infrastructure provider with 70k+ stars on GitHub.</p>
+                <ul style="color: #cbd5e1; font-size: 0.9rem; padding-left: 15px; margin-bottom: 20px;">
+                    <li style="margin-bottom: 8px;">Path Traversal in internal build scripts.</li>
+                    <li style="margin-bottom: 8px;">Supply-chain risk: Unpinned transitive dependencies.</li>
+                    <li style="margin-bottom: 8px;">Leaked credential patterns in historical commits.</li>
+                </ul>
+                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; color: #4ade80; font-size: 0.85rem; font-weight: bold;">
+                    <i class="fas fa-check-circle"></i> Reported via Coordinated Disclosure
+                </div>
+            </div>
 
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 16px; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='translateY(0)'">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                    <span style="background: rgba(251, 191, 36, 0.2); color: #fbbf24; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">HIGH RISK</span>
+                    <i class="fas fa-project-diagram" style="color: #4ade80; font-size: 1.5rem;"></i>
+                </div>
+                <h3 style="color: white; margin-bottom: 15px;">Low-code Enterprise Ecosystem</h3>
+                <p style="color: #94a3b8; font-size: 0.95rem; margin-bottom: 20px;">Audit of a popular framework for internal tool development used by Fortune 500 teams.</p>
+                <ul style="color: #cbd5e1; font-size: 0.9rem; padding-left: 15px; margin-bottom: 20px;">
+                    <li style="margin-bottom: 8px;">Insecure Docker configuration (Privilege Escalation).</li>
+                    <li style="margin-bottom: 8px;">CI/CD trust boundary violations.</li>
+                    <li style="margin-bottom: 8px;">Exposure of build-time environment variables.</li>
+                </ul>
+                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; color: #4ade80; font-size: 0.85rem; font-weight: bold;">
+                    <i class="fas fa-check-circle"></i> Mitigation Guidance Provided
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 
 <section class="section bg-light" id="pricing">
     <div class="container" style="text-align: center;">
