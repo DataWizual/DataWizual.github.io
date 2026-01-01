@@ -6,6 +6,7 @@
     <title>Security Disclosure Policy | DataWizual</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="security" href="https://datawizual.github.io/.well-known/security.txt">
 </head>
 <body style="background: #0f172a; color: white;">
 
@@ -18,31 +19,56 @@
         </div>
     </nav>
 
-    <main class="container" style="padding: 80px 20px; max-width: 800px; margin: 0 auto;">
-        <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Security Disclosure Policy</h1>
-        <p style="color: #94a3b8; margin-bottom: 40px;">Last Updated: January 1, 2026</p>
+    <main class="container" style="padding: 80px 20px; max-width: 900px; margin: 0 auto;">
+        <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Vulnerability Disclosure Policy (VDP)</h1>
+        <p style="color: #94a3b8; margin-bottom: 40px;">Version 1.1 | Effective Date: January 1, 2026</p>
 
-        <div style="line-height: 1.8; font-size: 1.1rem; color: #cbd5e1;">
-            <p>At <strong>DataWizual</strong>, we believe that the security of the open-source ecosystem is a shared responsibility. This policy outlines our commitment to responsible security research and coordinated disclosure.</p>
+        <div style="line-height: 1.8; font-size: 1.05rem; color: #cbd5e1;">
+            <p>This policy governs <strong>ongoing security research</strong> conducted by DataWizual. We are committed to protecting the software ecosystem through ethical, non-intrusive analysis and coordinated vulnerability disclosure.</p>
 
-            <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">1. Responsible Disclosure Principles</h3>
-            <p>We perform non-intrusive security audits of public repositories to validate our internal security engines. Our research is guided by the following rules:</p>
-            <ul style="margin-left: 20px; list-style-type: disc; margin-top: 10px;">
-                <li><strong>Non-Intrusive:</strong> We only analyze publicly available source code, configurations, and IaC templates.</li>
-                <li><strong>No Exploitation:</strong> We do not attempt to exploit vulnerabilities, bypass authentication, or access private data.</li>
-                <li><strong>Confidentiality:</strong> Findings are reported privately to the project owners. We do not publish details until a fix is available or a 90-day coordination window has passed.</li>
+            <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">1. Scope of Research</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+                <div style="background: rgba(34, 197, 94, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(34, 197, 94, 0.2);">
+                    <strong style="color: #4ade80;">✔ In-Scope</strong>
+                    <ul style="margin-top: 10px; font-size: 0.95rem; list-style: none; padding: 0;">
+                        <li>• Public source code repositories</li>
+                        <li>• Public Infrastructure-as-Code (IaC)</li>
+                        <li>• Public CI/CD configuration files</li>
+                        <li>• Published Docker images / Artifacts</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2);">
+                    <strong style="color: #f87171;">✘ Out-of-Scope</strong>
+                    <ul style="margin-top: 10px; font-size: 0.95rem; list-style: none; padding: 0;">
+                        <li>• Production SaaS / Live environments</li>
+                        <li>• User data & Private databases</li>
+                        <li>• Denial of Service (DoS) attacks</li>
+                        <li>• Social Engineering / Phishing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">2. Terms of Good Faith (Safe Harbor)</h3>
+            <p>DataWizual conducts automated static analysis on <strong>public artifacts only</strong>. We maintain Safe Harbor by adhering to the following:</p>
+            <ul style="margin-left: 20px; list-style-type: disc;">
+                <li><strong>No Intent to Harm:</strong> Our goal is defensive. We do not destroy data or disrupt services.</li>
+                <li><strong>No Exploitation:</strong> We do not bypass authentication or interact with runtime systems.</li>
+                <li><strong>No Circumvention:</strong> We do not attempt to bypass technical security controls of the platforms hosting the code.</li>
             </ul>
 
-            <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">2. Reporting Process</h3>
-            <p>If we identify a potential risk, we reach out via official security channels (e.g., security@company.com or Bug Bounty platforms). Our reports include a detailed description of the risk pattern and recommended remediation steps.</p>
-
-            <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">3. Safe Harbor</h3>
-            <p>We expect project owners to provide a "Safe Harbor" for researchers who act in good faith. We do not support or engage in extortion or public shaming. Our goal is to make the software supply chain safer.</p>
+            <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">3. Coordinated Disclosure & Timeline</h3>
+            <p>We follow a <strong>90-day disclosure window</strong>. This timeline is flexible and <em>may be extended upon mutual agreement</em> based on the complexity of the fix.</p>
+            <ul style="margin-left: 20px; list-style-type: disc;">
+                <li>Reports are sent privately to the dedicated security contact.</li>
+                <li>Public disclosure is only performed under <strong>coordinated conditions</strong> and after a fix is verified.</li>
+                <li>We do not seek financial compensation (extortion) for disclosing findings.</li>
+            </ul>
 
             <div style="margin-top: 60px; padding: 30px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-                <h4 style="color: white; margin-top: 0;">Inquiries & Coordination</h4>
-                <p>For inquiries regarding our methodology or to coordinate a private disclosure, please contact:</p>
-                <a href="mailto:eldorzufarov66@gmail.com" style="color: var(--primary); font-weight: bold; text-decoration: none;">eldorzufarov66@gmail.com</a>
+                <h4 style="color: white; margin-top: 0;"><i class="fas fa-envelope-open-text"></i> Reporting Channels</h4>
+                <p>For research coordination or sensitive reports, please use our dedicated security alias:</p>
+                <a href="mailto:eldorzufarov66@gmail.com" style="color: var(--primary); font-weight: bold; text-decoration: none;">security@datawizual.com (Forwarded to: eldorzufarov66@gmail.com)</a>
+                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 10px;">Digital Signature / security.txt support coming soon.</p>
             </div>
         </div>
     </main>
