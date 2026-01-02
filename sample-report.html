@@ -3,144 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sample Security Report | Auditor Core v1.0</title>
+    <title>Sample Security Report | DataWizual</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --crit: #e74c3c; --high: #e67e22; --med: #f1c40f; --low: #3498db;
-            --bg: #f5f6fa; --dark: #2c3e50; --primary: #3498db;
-        }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--dark); margin: 0; padding: 0; }
+        /* Strict Professional Report Styling */
+        .report-container { background: #ffffff; color: #1a1a1a; padding: 50px; border-radius: 4px; font-family: 'Inter', -apple-system, sans-serif; }
+        .report-header { border-bottom: 3px solid #1a1a1a; margin-bottom: 30px; padding-bottom: 20px; }
+        .report-meta { display: flex; justify-content: space-between; align-items: baseline; color: #666; font-size: 0.9rem; }
         
-        /* Navigation */
-        .report-nav { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 15px 0; position: sticky; top: 0; z-index: 1000; }
-        .nav-container { max-width: 1000px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
-        .nav-links a { margin-left: 20px; text-decoration: none; color: var(--primary); font-weight: 500; }
+        .severity-badges { margin: 25px 0; display: flex; gap: 10px; }
+        .s-badge { padding: 10px 20px; border-radius: 2px; font-weight: 800; letter-spacing: 0.5px; color: #fff; }
+        .bg-crit { background: #dc2626; }
+        .bg-high { background: #ea580c; }
+        .bg-med { background: #ca8a04; }
+        .bg-low { background: #2563eb; }
 
-        .container { max-width: 1000px; margin: 40px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .header { border-bottom: 2px solid #eee; padding-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .badge { padding: 5px 12px; border-radius: 4px; color: white; font-weight: bold; font-size: 12px; text-transform: uppercase; }
-        .b-crit { background: var(--crit); }
+        .table-wrapper { overflow-x: auto; margin-top: 40px; }
+        .audit-table { width: 100%; border-collapse: collapse; border: 1px solid #e5e7eb; }
+        .audit-table th { background: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; text-align: left; font-size: 0.85rem; text-transform: uppercase; color: #374151; }
+        .audit-table td { border: 1px solid #e5e7eb; padding: 15px; vertical-align: top; font-size: 0.9rem; }
         
-        /* Summary Grid */
-        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin: 30px 0; }
-        .stat-card { padding: 20px; border-radius: 8px; text-align: center; border-bottom: 4px solid #ddd; background: #fafafa; }
-        .stat-card.crit { border-color: var(--crit); color: var(--crit); }
-        .stat-val { font-size: 2rem; font-weight: bold; display: block; }
+        .t-crit { color: #dc2626; font-weight: 700; }
+        .path-text { font-family: 'SFMono-Regular', Consolas, monospace; color: #4b5563; font-size: 0.8rem; word-break: break-all; }
+        .rule-id { font-weight: 600; display: block; margin-bottom: 4px; color: #111827; }
         
-        /* Findings */
-        .finding { border: 1px solid #eee; border-radius: 8px; margin-bottom: 25px; overflow: hidden; }
-        .finding-header { background: #fdfdfd; padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-        .finding-body { padding: 20px; }
-        .code-box { background: #2d3436; color: #dfe6e9; padding: 15px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 13px; margin: 15px 0; overflow-x: auto; }
-        .remediation { background: #e8f4fd; border-left: 4px solid var(--low); padding: 15px; margin-top: 15px; font-size: 14px; }
-        
-        .footer-cta { margin-top: 60px; padding-top: 40px; border-top: 2px solid #eee; text-align: center; }
-        .btn { display: inline-block; padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: bold; transition: 0.3s; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-outline { border: 1px solid #ddd; color: var(--dark); margin-left: 10px; }
+        @media print {
+            .navbar, .footer, .no-print { display: none; }
+            .report-container { padding: 0; }
+        }
     </style>
 </head>
 <body>
 
-<nav class="report-nav">
-    <div class="nav-container">
-        <div class="nav-logo">
-            <a href="index.html" style="text-decoration: none; color: var(--dark); font-weight: bold;">
-                <i class="fas fa-arrow-left"></i> Back to DataWizual
-            </a>
-        </div>
+<nav class="navbar no-print">
+    <div class="container">
+        <div class="logo"><i class="fas fa-shield-alt"></i> DataWizual Security</div>
         <div class="nav-links">
             <a href="index.html">Home</a>
             <a href="methodology.html">Methodology</a>
             <a href="audit.html">Audit Service</a>
+            <a href="sample-report.html">Demo Report</a>
+            <a href="security-policy.html">Security Policy</a>
         </div>
     </div>
 </nav>
 
-<div class="container">
-    <div class="header">
-        <div>
-            <h1>Security Audit Report: Project Alpha</h1>
-            <p>Generated by <strong>Auditor Core Baseline v1.0</strong> • <span style="color: #27ae60;">Scan Completed</span></p>
-        </div>
-        <div class="badge b-crit">Status: Critical Risk</div>
-    </div>
-
-    <div class="summary-grid">
-        <div class="stat-card crit"><span class="stat-val">26</span> Critical</div>
-        <div class="stat-card" style="border-color: var(--high); color: var(--high);"><span class="stat-val">3</span> High</div>
-        <div class="stat-card" style="border-color: var(--med); color: var(--med);"><span class="stat-val">1</span> Medium</div>
-        <div class="stat-card" style="border-color: var(--low); color: var(--low);"><span class="stat-val">0</span> Low</div>
-    </div>
-
-    <h2>Primary Findings</h2>
-
-    <div class="finding">
-        <div class="finding-header">
-            <strong>OS Command Injection (shell=True)</strong>
-            <span class="badge b-crit">Critical</span>
-        </div>
-        <div class="finding-body">
-            <p><strong>Rule:</strong> subprocess-shell-true</p>
-            <p>The application spawns a shell process using user-controlled input, allowing arbitrary command execution.</p>
-            <div class="code-box">Path: script_manager.py:158<br>subprocess.run(user_input, shell=True)</div>
-            <div class="remediation">
-                <strong>Remediation:</strong> Use <code>shell=False</code> and pass arguments as a list.
+<div class="container" style="margin-top: 40px; margin-bottom: 40px;">
+    <div class="report-container">
+        <div class="report-header">
+            <div class="report-meta">
+                <span>AUDIT_ID: DW-2026-ALPHA</span>
+                <span>Generated: 1/2/26, 18:37</span>
             </div>
+            <h1 style="font-size: 2rem; margin-top: 10px;">Security Audit Report: <span style="color: #6366f1;">COMPLETED</span></h1>
+            <p style="margin-top: 5px;">Target Environment: <strong>production-cluster-alpha</strong></p>
         </div>
-    </div>
 
-    <div class="finding">
-        <div class="finding-header">
-            <strong>Cleartext Auth over HTTP</strong>
-            <span class="badge b-crit">Critical</span>
+        <div class="severity-badges">
+            <div class="s-badge bg-crit">CRITICAL: 155</div>
+            <div class="s-badge bg-high">HIGH: 40</div>
+            <div class="s-badge bg-med">MEDIUM: 15</div>
+            <div class="s-badge bg-low">LOW: 0</div>
         </div>
-        <div class="finding-body">
-            <p><strong>Rule:</strong> no-auth-over-http</p>
-            <p>Sensitive credentials detected being transmitted over unencrypted HTTP protocol.</p>
-            <div class="code-box">Path: diagnostics/check_grafana.py:18<br>requests.get("http://internal-api/v1/auth", auth=(user, pwd))</div>
-            <div class="remediation">
-                <strong>Remediation:</strong> Enforce HTTPS/TLS for all authenticated requests.
-            </div>
-        </div>
-    </div>
 
-    <div class="finding">
-        <div class="finding-header">
-            <strong>Python NaN Injection</strong>
-            <span class="badge b-crit">Critical</span>
+        <div class="table-wrapper">
+            <table class="audit-table">
+                <thead>
+                    <tr>
+                        <th style="width: 35%;">Rule & Description</th>
+                        <th style="width: 15%;">Severity</th>
+                        <th style="width: 15%;">CWE</th>
+                        <th style="width: 35%;">Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="rule-id">secret.generic_credential</span>
+                            Potential hardcoded authentication token found in source code.
+                        </td>
+                        <td class="t-crit">CRITICAL</td>
+                        <td>CWE-798</td>
+                        <td class="path-text">src/auth/providers/client-config.ts:46</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="rule-id">secret.api_key_exposure</span>
+                            Hardcoded API key detected. Potential for unauthorized service access.
+                        </td>
+                        <td class="t-crit">CRITICAL</td>
+                        <td>CWE-798</td>
+                        <td class="path-text">modules/connector/v2/gateway.py:102</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="rule-id">ci.privileged_container</span>
+                            Container running with privileged access in CI pipeline definition.
+                        </td>
+                        <td style="color: #ea580c; font-weight: 700;">HIGH</td>
+                        <td>CWE-269</td>
+                        <td class="path-text">.github/workflows/deploy-main.yml:24</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="rule-id">infra.unencrypted_transport</span>
+                            Internal microservice communication detected over plaintext HTTP.
+                        </td>
+                        <td style="color: #ca8a04; font-weight: 700;">MEDIUM</td>
+                        <td>CWE-319</td>
+                        <td class="path-text">infrastructure/terraform/service-mesh.tf:88</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="finding-body">
-            <p><strong>Rule:</strong> nan-injection-vulnerability</p>
-            <p>Direct typecasting of user input to float allows injection of 'NaN' values, leading to logic bypasses.</p>
-            <div class="code-box">Path: backend/app.py:93<br>val = float(request.args.get('input'))</div>
-            <div class="remediation">
-                <strong>Remediation:</strong> Implement input validation to filter 'nan' strings before typecasting.
-            </div>
-        </div>
-    </div>
 
-    <div class="footer-cta">
-        <h3>Need a full assessment?</h3>
-        <p>Get a comprehensive security audit of your entire infrastructure.</p>
-        <br>
-        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;">
-            <a href="audit.html" class="btn btn-primary">Request Professional Audit</a>
-            
-            <a href="index.html" class="btn btn-outline">Return to Home</a>
-            
-            <a href="https://github.com/auditor-core-systems/audit-core-baseline-v1.git" 
-            target="_blank" 
-            class="btn btn-outline" 
-            style="display: flex; align-items: center; gap: 8px;">
-                <i class="fab fa-github"></i> View Engine
-            </a>
+        <div style="margin-top: 50px; padding: 30px; background: #f8fafc; border-radius: 4px; text-align: center;" class="no-print">
+            <h3>Protect your infrastructure.</h3>
+            <p style="color: #64748b; margin-bottom: 20px;">This is a redacted sample. A full audit includes detailed remediation code and impact analysis.</p>
+            <a href="mailto:eldorzufarov66@gmail.com" class="btn btn-primary" style="text-decoration: none;">Request Expert Consultation</a>
         </div>
-        <p style="margin-top: 30px; font-size: 0.8rem; color: #999;">&copy; 2025 DataWizual Security. All rights reserved.</p>
     </div>
 </div>
+
+<footer class="footer no-print">
+    <div class="container" style="text-align: center;">
+        <p>&copy; 2026 DataWizual Security. Private & Confidential.</p>
+    </div>
+</footer>
 
 </body>
 </html>

@@ -4,33 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Methodology | DataWizual Security</title>
-    
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/style.css">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        /* Резервные стили, если style.css не загрузится */
-        :root { --primary: #3498db; --secondary: #2c3e50; --light: #f8f9fa; }
-        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; color: #333; margin: 0; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .section { padding: 80px 0; }
-        .bg-light { background: var(--light); }
-        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 10px; color: var(--secondary); }
-        .section-subtitle { text-align: center; color: #666; margin-bottom: 50px; font-size: 1.1rem; }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .feature-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; transition: 0.3s; border: 1px solid #eee; }
-        .feature-card:hover { transform: translateY(-10px); }
-        .step-number { font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); margin-bottom: 15px; display: block; }
-        .feature-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; }
-        .btn { display: inline-block; padding: 15px 35px; border-radius: 50px; text-decoration: none; font-weight: bold; transition: 0.3s; }
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3); }
-        .btn-primary:hover { background: #2980b9; transform: translateY(-2px); }
-        .navbar { background: white; padding: 20px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-weight: bold; font-size: 1.4rem; color: var(--secondary); display: flex; align-items: center; gap: 10px; }
-        .nav-links a { margin-left: 25px; text-decoration: none; color: var(--secondary); font-weight: 500; }
+        :root { --primary: #3498db; --secondary: #0f172a; --light: #f8f9fa; }
+        body { background: #0f172a; color: white; line-height: 1.6; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        .method-card { 
+            background: #1a1c20; padding: 40px; border-radius: 15px; 
+            border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
+        }
+        .method-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .phase-badge { 
+            display: inline-block; padding: 4px 12px; border-radius: 20px; 
+            font-size: 0.8rem; font-weight: bold; margin-bottom: 20px; 
+        }
+        .section-title { font-size: 2.5rem; text-align: center; margin-bottom: 15px; }
+        .section-subtitle { text-align: center; color: #94a3b8; margin-bottom: 60px; font-size: 1.1rem; }
+        .audit-hero {
+            background: var(--secondary);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .audit-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .audit-hero p {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }        
     </style>
 </head>
 <body>
@@ -43,61 +51,103 @@
                 <a href="methodology.html">Methodology</a>
                 <a href="audit.html">Audit Service</a>
                 <a href="sample-report.html">Demo Report</a>
+                <a href="security-policy.html">Security Policy</a>
             </div>
     </div>
 </nav>
 
-<section class="section">
+<header class="audit-hero">
     <div class="container">
-        <h1 class="section-title">Audit Methodology</h1>
-        <p class="section-subtitle">A rigorous, risk-driven approach to infrastructure security.</p>
+        <h1>The Methodology of Silence</h1>
+        <p>
+            This methodology is applied strictly to <strong>authorized scopes</strong>,
+            <strong>public repositories</strong>, and <strong>environments explicitly permitted by the client</strong>.
+            <br><br>
+            All research follows <strong>Coordinated Disclosure principles</strong> and focuses on
+            CI/CD, supply-chain, and infrastructure-level risks — without exploitation,
+            disruption, or access to production systems.
+        </p>
+    </div>
+</header>
 
-        <div class="features-grid">
-            <div class="feature-card">
-                <span class="step-number">Phase 01</span>
-                <i class="fas fa-search"></i>
-                <h3>Reconnaissance</h3>
-                <p>We analyze attack surfaces, CI/CD pipelines, and trust boundaries to map potential entry points.</p>
+
+<section class="section" style="padding-bottom: 100px;">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
+            
+            <div class="method-card">
+                <span class="phase-badge" style="background: rgba(52, 152, 219, 0.2); color: #3498db;">PHASE 01</span>
+                <h3><i class="fas fa-search" style="margin-right: 10px;"></i> Reconnaissance</h3>
+                <p style="color: #cbd5e1; margin-bottom: 25px;">Before we run a single script, we map the digital territory. We focus on trust boundaries and hidden entry points.</p>
+                <ul style="list-style: none; padding: 0; color: #94a3b8;">
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #3498db; margin-right: 8px;"></i> Mapping public-facing assets and DNS records</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #3498db; margin-right: 8px;"></i> Deep analysis of GitHub Actions & GitLab CI workflows</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #3498db; margin-right: 8px;"></i> Identifying third-party integrations and webhooks</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #3498db; margin-right: 8px;"></i> Reviewing baseline IAM policies and access tokens</li>
+                </ul>
             </div>
-            <div class="feature-card">
-                <span class="step-number">Phase 02</span>
-                <i class="fas fa-microchip"></i>
-                <h3>Automated Intelligence</h3>
-                <p>Execution of <a href="https://github.com/auditor-core-systems/audit-core-baseline-v1.git" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold;">Auditor Core Baseline v1.0</a> to identify logic flaws...</p>
+
+            <div class="method-card">
+                <span class="phase-badge" style="background: rgba(74, 222, 128, 0.2); color: #4ade80;">PHASE 02</span>
+                <h3><i class="fas fa-robot" style="margin-right: 10px;"></i> Automated Intelligence</h3>
+                <p style="color: #cbd5e1; margin-bottom: 25px;">Execution of the <strong>Auditor Core Baseline v1.0</strong>. We deploy our proprietary engine to scan for deep-seated flaws.</p>
+                <ul style="list-style: none; padding: 0; color: #94a3b8;">
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #4ade80; margin-right: 8px;"></i> Automated secret leak detection in history & logs</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #4ade80; margin-right: 8px;"></i> Supply-chain dependency vulnerability analysis</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #4ade80; margin-right: 8px;"></i> Container image and Dockerfile security hardening</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #4ade80; margin-right: 8px;"></i> Identifying misconfigured S3 buckets and databases</li>
+                </ul>
             </div>
-            <div class="feature-card">
-                <span class="step-number">Phase 03</span>
-                <i class="fas fa-user-check"></i>
-                <h3>Expert Validation</h3>
-                <p>Manual verification of findings to eliminate false positives and prioritize real business risks.</p>
+
+            <div class="method-card">
+                <span class="phase-badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">PHASE 03</span>
+                <h3><i class="fas fa-user-check" style="margin-right: 10px;"></i> Expert Validation</h3>
+                <p style="color: #cbd5e1; margin-bottom: 25px;">The human element. We manually verify every automated finding to ensure zero false positives and real impact.</p>
+                <ul style="list-style: none; padding: 0; color: #94a3b8;">
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #f59e0b; margin-right: 8px;"></i>  Manual validation of identified logic vulnerabilities under controlled and authorized conditions
+</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #f59e0b; margin-right: 8px;"></i> Prioritization based on actual business risk</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #f59e0b; margin-right: 8px;"></i> Development of custom remediation code snippets</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #f59e0b; margin-right: 8px;"></i> Final comprehensive report & debriefing session</li>
+                </ul>
             </div>
+
         </div>
     </div>
 </section>
 
-<section class="section bg-light">
+<section style="padding: 100px 0; background: #1a1c20; border-top: 1px solid rgba(255,255,255,0.05);">
     <div class="container" style="text-align: center;">
-        <h2 class="section-title">Ready for a Deep Review?</h2>
-        <p class="section-subtitle">Get a professional security assessment with actionable remediation steps.</p>
+        <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Ready for a Deep Review?</h2>
+        <p style="color: #94a3b8; margin-bottom: 40px; font-size: 1.2rem;">Get a professional security assessment with actionable remediation steps.</p>
         
-        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-            <a href="mailto:eldorzufarov66@gmail.com?subject=Audit%20Inquiry" class="btn btn-primary">
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <a href="mailto:eldorzufarov66@gmail.com?subject=Audit Inquiry" class="btn btn-primary btn-glow">
                 <i class="fas fa-envelope"></i> Request an Audit
             </a>
-            
-            <a href="https://github.com/auditor-core-systems/audit-core-baseline-v1.git" 
-            target="_blank" 
-            class="btn btn-outline" 
-            style="border: 1px solid var(--primary); color: var(--primary); text-decoration: none; padding: 12px 25px; border-radius: 5px; font-weight: bold;">
+            <a href="https://github.com/auditor-core-systems/audit-core-baseline-v1.git" target="_blank" class="btn btn-secondary">
                 <i class="fab fa-github"></i> Explore the Engine
             </a>
         </div>
     </div>
 </section>
 
-<footer style="background: var(--secondary); color: white; padding: 40px 0; text-align: center;">
+<footer class="footer">
     <div class="container">
-        <p>&copy; 2025 DataWizual Security. All rights reserved.</p>
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 50px; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <div style="flex: 1; min-width: 250px;">
+                <h4 style="color: white; margin-bottom: 20px;">DataWizual Security</h4>
+                <p style="color: #aaa;">Independent CI/CD security audits. Ensuring your infrastructure is an asset, not a liability.</p>
+            </div>
+            <div>
+                <h4>Legal & Safety</h4>
+                <p style="margin-top: 10px; display: flex; gap: 20px;">
+                    <a href="security-policy.html" style="color: #aaa; text-decoration: none;"><i class="fas fa-shield-alt"></i> Security Policy</a>
+                    <a href="sample-report.html" style="color: #aaa; text-decoration: none;"><i class="fas fa-file-alt"></i> Demo Report</a>
+                </p>
+                <p style="margin-top: 15px; color: #666;">© 2026 DataWizual Security. All rights reserved.</p>
+            </div>
+        </div>
     </div>
 </footer>
 
