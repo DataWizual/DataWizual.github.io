@@ -1,0 +1,5 @@
+Contact: mailto:eldorzufarov66@gmail.com
+Policy: https://datawizual.github.io/security-policy.html
+Expires: 2027-01-01T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://datawizual.github.io/.well-known/security.txt

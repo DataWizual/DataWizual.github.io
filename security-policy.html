@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Disclosure Policy | DataWizual</title>
+    <meta name="description" content="Vulnerability Disclosure Policy and Safe Harbor principles for DataWizual Security.">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="security" href="https://datawizual.github.io/.well-known/security.txt">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i> DataWizual Security
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="auditor-core.html">Auditor Core</a>
+            <a href="sentinel.html">Sentinel</a>
+            <a href="compare.html">Compare</a>
+            <a href="get.html">Get Products</a>
+            <a href="methodology.html">Methodology</a>
+            <a href="sample-report.html">Demo Report</a>
+            <a href="audit.html">Audit Service</a>
+            <a href="security-policy.html" class="active">Security policy</a>
+        </div>
+    </div>
+</nav>
+
+<header class="hero" style="padding: 60px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+    <div class="container" style="max-width: 900px;">
+        <h1 class="hero-title" style="font-size: 2.5rem;">Vulnerability <span class="text-gradient">Disclosure Policy</span></h1>
+        <p style="color: var(--gray); margin-top: 10px;">Version 1.2 | Effective Date: January 1, 2026</p>
+    </div>
+</header>
+
+<main class="container" style="max-width: 900px; padding: 60px 20px; line-height: 1.8;">
+    
+    <section class="policy-intro" style="margin-bottom: 50px;">
+        <p style="font-size: 1.1rem; color: #cbd5e1;">
+            This policy governs <strong>good-faith security research</strong> conducted by DataWizual. 
+            Our mission is to identify systemic risks in CI/CD workflows and infrastructure while ensuring 
+            responsible, non-intrusive coordination with software vendors.
+        </p>
+    </section>
+
+    
+
+    <div class="policy-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 50px;">
+        <div style="background: rgba(34, 197, 94, 0.05); padding: 30px; border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.2);">
+            <h3 style="color: #4ade80; margin-bottom: 15px;"><i class="fas fa-check-circle"></i> In Scope</h3>
+            <ul style="list-style: none; padding: 0; color: #cbd5e1; font-size: 0.95rem;">
+                <li style="margin-bottom: 10px;">• Publicly accessible code repositories and configurations</li>
+                <li style="margin-bottom: 10px;">• CI/CD workflow definitions</li>
+                <li style="margin-bottom: 10px;">• Infrastructure-as-Code files (Terraform, CloudFormation, etc.)</li>
+                <li style="margin-bottom: 10px;">• Dependency manifests (package.json, requirements.txt, etc.)</li>
+            </ul>
+        </div>
+
+        <div style="background: rgba(239, 68, 68, 0.05); padding: 30px; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.2);">
+            <h3 style="color: #f87171; margin-bottom: 15px;"><i class="fas fa-times-circle"></i> Out of Scope</h3>
+            <ul style="list-style: none; padding: 0; color: #cbd5e1; font-size: 0.95rem;">
+                <li style="margin-bottom: 10px;">• Private infrastructure systems</li>
+                <li style="margin-bottom: 10px;">• Live exploitation or interface misuse</li>
+                <li style="margin-bottom: 10px;">• Social engineering or phishing</li>
+                <li style="margin-bottom: 10px;">• Denial-of-Service testing</li>
+            </ul>
+        </div>
+    </div>
+    <h3>Safe Harbor</h3>
+    <p>
+    This policy is intended to provide Safe Harbor under applicable laws
+    for researchers acting in good faith and within the terms described
+    herein. DataWizual will not pursue legal action against good-faith
+    security research consistent with this policy.
+    </p>
+<br>
+    <h3>Response & Timeline</h3>
+    <p>
+    DataWizual commits to acknowledge reports within <strong>3–7 business days</strong>.
+    Findings will remain confidential until a fix is available or a maximum
+    of <strong>90 days</strong> has elapsed, unless mutually agreed otherwise.
+    </p>
+
+    <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">1. Research Principles</h3>
+    <p style="color: var(--gray); margin-bottom: 30px;">
+        <strong>Non-Intrusive:</strong> Analysis is limited to public artifacts. <br>
+        <strong>No Exploitation:</strong> We never execute payloads against live systems. <br>
+        <strong>Privacy-First:</strong> We do not collect or store private data.
+    </p>
+
+    <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">2. Disclosure Coordination</h3>
+    <ol style="color: var(--gray); padding-left: 20px; margin-bottom: 30px;">
+        <li style="margin-bottom: 10px;">Private notification via official security channels.</li>
+        <li style="margin-bottom: 10px;">Provision of detailed findings and remediation advice.</li>
+        <li style="margin-bottom: 10px;">Findings remain confidential for <strong>90 days</strong> or until a fix is released.</li>
+    </ol>
+
+    <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">3. Safe Harbor</h3>
+    <p style="color: var(--gray); margin-bottom: 30px;">
+        We consider research conducted under these guidelines to be <strong>authorized</strong>. 
+        DataWizual will not initiate legal action against parties who coordinate in good faith.
+    </p>
+
+    <div style="background: #1a1c20; padding: 40px; border-radius: 12px; border: 1px solid #333; margin-top: 60px; text-align: center;">
+        <h3 style="margin-bottom: 10px;">Security Contact</h3>
+        <p style="color: var(--primary); font-weight: bold; font-size: 1.2rem;">eldorzufarov66@gmail.com</p>
+        <p style="font-size: 0.9rem; color: var(--gray); margin-top: 10px;">Standard response time: 3–7 business days.</p>
+    </div>
+
+</main>
+
+<footer class="footer">
+    <div class="container" style="text-align: center;">
+        <p style="color: var(--gray); font-size: 0.9rem;">
+            &copy; 2026 DataWizual Security. All research conducted for a safer supply chain.
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>

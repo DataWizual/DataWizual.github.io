@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Security Report | DataWizual</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Strict Professional Report Styling */
+        .report-container { background: #ffffff; color: #1a1a1a; padding: 50px; border-radius: 4px; font-family: 'Inter', -apple-system, sans-serif; }
+        .report-header { border-bottom: 3px solid #1a1a1a; margin-bottom: 30px; padding-bottom: 20px; }
+        .report-meta { display: flex; justify-content: space-between; align-items: baseline; color: #666; font-size: 0.9rem; }
+        
+        .severity-badges { margin: 25px 0; display: flex; gap: 10px; }
+        .s-badge { padding: 10px 20px; border-radius: 2px; font-weight: 800; letter-spacing: 0.5px; color: #fff; }
+        .bg-crit { background: #dc2626; }
+        .bg-high { background: #ea580c; }
+        .bg-med { background: #ca8a04; }
+        .bg-low { background: #2563eb; }
+
+        .table-wrapper { overflow-x: auto; margin-top: 40px; }
+        .audit-table { width: 100%; border-collapse: collapse; border: 1px solid #e5e7eb; }
+        .audit-table th { background: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; text-align: left; font-size: 0.85rem; text-transform: uppercase; color: #374151; }
+        .audit-table td { border: 1px solid #e5e7eb; padding: 15px; vertical-align: top; font-size: 0.9rem; }
+        
+        .t-crit { color: #dc2626; font-weight: 700; }
+        .path-text { font-family: 'SFMono-Regular', Consolas, monospace; color: #4b5563; font-size: 0.8rem; word-break: break-all; }
+        .rule-id { font-weight: 600; display: block; margin-bottom: 4px; color: #111827; }
+        
+        @media print {
+            .navbar, .footer, .no-print { display: none; }
+            .report-container { padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i> DataWizual Security
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="auditor-core.html">Auditor Core</a>
+            <a href="sentinel.html">Sentinel</a>
+            <a href="compare.html">Compare</a>
+            <a href="get.html">Get Products</a>
+            <a href="methodology.html">Methodology</a>
+            <a href="sample-report.html" class="active">Demo Report</a>
+            <a href="audit.html">Audit Service</a>
+            <a href="security-policy.html">Security policy</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="margin-top: 40px; margin-bottom: 40px;">
+    <div class="report-container">
+        <div class="report-header">
+            <div class="report-meta">
+                <span>AUDIT_ID: DW-2026-ALPHA</span>
+                <span>Generated: 1/2/26, 18:37</span>
+            </div>
+            <h1 style="font-size: 2rem; margin-top: 10px;">Security Audit Report: <span style="color: #6366f1;">COMPLETED</span></h1>
+
+            <p style="margin-top: 5px;">Target Environment: <strong>production-cluster-alpha</strong></p>
+            <p style="font-size:0.9rem; color:#777;">
+            This report is a sanitized demonstration generated from authorized test data.
+            No real customer infrastructure is disclosed.
+            </p>
+        </div>
+
+        <div class="severity-badges">
+            <div class="s-badge bg-crit">CRITICAL: 155</div>
+            <div class="s-badge bg-high">HIGH: 40</div>
+            <div class="s-badge bg-med">MEDIUM: 15</div>
+            <div class="s-badge bg-low">LOW: 0</div>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="audit-table">
+                <thead>
+                    <tr>
+                        <th style="width: 35%;">Rule & Description</th>
+                        <th style="width: 15%;">Severity</th>
+                        <th style="width: 15%;">CWE</th>
+                        <th style="width: 35%;">Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="rule-id">secret.generic_credential</span>
+                            Potential hardcoded authentication token found in source code.
+                        </td>
+                        <td class="t-crit">CRITICAL</td>
+                        <td>CWE-798</td>
+                        <td class="path-text">src/auth/providers/client-config.ts:46</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="rule-id">secret.api_key_exposure</span>
+                            Hardcoded API key detected. Potential for unauthorized service access.
+                        </td>
+                        <td class="t-crit">CRITICAL</td>
+                        <td>CWE-798</td>
+                        <td class="path-text">modules/connector/v2/gateway.py:102</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="rule-id">ci.privileged_container</span>
+                            Container running with privileged access in CI pipeline definition.
+                        </td>
+                        <td style="color: #ea580c; font-weight: 700;">HIGH</td>
+                        <td>CWE-269</td>
+                        <td class="path-text">.github/workflows/deploy-main.yml:24</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="rule-id">infra.unencrypted_transport</span>
+                            Internal microservice communication detected over plaintext HTTP.
+                        </td>
+                        <td style="color: #ca8a04; font-weight: 700;">MEDIUM</td>
+                        <td>CWE-319</td>
+                        <td class="path-text">infrastructure/terraform/service-mesh.tf:88</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 50px; padding: 30px; background: #f8fafc; border-radius: 4px; text-align: center;" class="no-print">
+            <h3>Protect your infrastructure.</h3>
+            <p style="color: #64748b; margin-bottom: 20px;">This is a redacted sample. A full audit includes detailed remediation code and impact analysis.</p>
+            <a href="mailto:eldorzufarov66@gmail.com" class="btn btn-primary" style="text-decoration: none;">Request Expert Consultation</a>
+        </div>
+    </div>
+</div>
+
+<footer class="footer no-print">
+    <div class="container" style="text-align: center;">
+        <p>&copy; 2026 DataWizual Security. Private & Confidential.</p>
+    </div>
+</footer>
+
+</body>
+</html>

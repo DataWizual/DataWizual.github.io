@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel | Deterministic Security Gate for CI/CD | DataWizual</title>
+    <meta name="description" content="Stop threats before they emerge. Sentinel enforces security policies at the commit level, creating an impenetrable development perimeter.">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="security" href="https://datawizual.github.io/.well-known/security.txt">
+    <style>
+        /* Sentinel-specific animations */
+        @keyframes shield-pulse {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4);
+            }
+            50% { 
+                transform: scale(1.05); 
+                box-shadow: 0 0 20px 10px rgba(74, 222, 128, 0.2);
+            }
+        }
+        
+        @keyframes block-strike {
+            0% { transform: translateX(-20px) scale(1); opacity: 0; }
+            50% { transform: translateX(0) scale(1.1); opacity: 1; }
+            100% { transform: translateX(20px) scale(1); opacity: 0; }
+        }
+        
+        @keyframes gate-open {
+            0% { transform: scaleY(0.3); opacity: 0; }
+            100% { transform: scaleY(1); opacity: 1; }
+        }
+        
+        .shield-pulse {
+            animation: shield-pulse 2s infinite ease-in-out;
+        }
+        
+        .block-strike {
+            position: relative;
+        }
+        
+        .block-strike::after {
+            content: '🛑';
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: block-strike 0.5s ease-out;
+            opacity: 0;
+        }
+        
+        .gate-visual {
+            background: linear-gradient(135deg, #0f172a 0%, #1a365d 100%);
+            border-radius: 12px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+        
+        .gate-left, .gate-right {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 50%;
+            background: rgba(26, 28, 32, 0.9);
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            transition: transform 0.5s ease;
+        }
+        
+        .gate-left { 
+            left: 0; 
+            border-right: none;
+            transform-origin: left;
+        }
+        
+        .gate-right { 
+            right: 0; 
+            border-left: none;
+            transform-origin: right;
+        }
+        
+        .gate-open .gate-left { transform: rotateY(-60deg); }
+        .gate-open .gate-right { transform: rotateY(60deg); }
+        
+        .rule-card {
+            background: rgba(26, 28, 32, 0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .rule-card:hover {
+            border-color: rgba(74, 222, 128, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .rule-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #4ade80, #3498db);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .rule-card:hover::before {
+            opacity: 1;
+        }
+        
+        .decision-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        .decision-allow { 
+            background: rgba(74, 222, 128, 0.15); 
+            color: #4ade80; 
+            border: 1px solid rgba(74, 222, 128, 0.3); 
+        }
+        
+        .decision-block { 
+            background: rgba(239, 68, 68, 0.15); 
+            color: #f87171; 
+            border: 1px solid rgba(239, 68, 68, 0.3); 
+        }
+        
+        .decision-warn { 
+            background: rgba(245, 158, 11, 0.15); 
+            color: #f59e0b; 
+            border: 1px solid rgba(245, 158, 11, 0.3); 
+        }
+        
+        .pipeline-stage {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(26, 28, 32, 0.6);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .pipeline-stage.sentinel-active {
+            border-color: rgba(74, 222, 128, 0.4);
+            background: rgba(74, 222, 128, 0.05);
+        }
+        
+        .pipeline-stage.blocked {
+            border-color: rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.05);
+        }
+        
+        .stage-connector {
+            width: 20px;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            margin: 0 10px;
+        }
+        
+        .stage-connector.active {
+            background: linear-gradient(90deg, #4ade80, #3498db);
+            animation: scan-wave 1.5s infinite linear;
+        }
+        
+        .zero-leakage {
+            background: rgba(26, 28, 32, 0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .zero-leakage::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(74, 222, 128, 0.05) 0%, transparent 50%);
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i> DataWizual Security
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="auditor-core.html">Auditor Core</a>
+            <a href="sentinel.html" class="active">Sentinel</a>
+            <a href="compare.html">Compare</a>
+            <a href="get.html">Get Products</a>
+            <a href="methodology.html">Methodology</a>
+            <a href="sample-report.html">Demo Report</a>
+            <a href="audit.html">Audit Service</a>
+            <a href="security-policy.html">Security policy</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Sentinel Hero Section -->
+<header class="hero" style="padding: 120px 0; position: relative; overflow: hidden; background: linear-gradient(135deg, #0f172a 0%, #14532d 100%);">
+    <div class="container" style="position: relative; z-index: 2;">
+        <div class="hero-flex">
+            <div class="hero-content">
+                <div class="badge-new" style="display: inline-block; padding: 8px 16px; background: rgba(74, 222, 128, 0.1); border: 1px solid #4ade80; border-radius: 20px; color: #4ade80; font-size: 0.9rem; margin-bottom: 20px; font-weight: 600;">
+                    <i class="fas fa-shield-alt"></i> Deterministic Security Gate
+                </div>
+
+                <h1 class="hero-title">
+                    Stop Threats Before <span class="text-gradient">They Emerge</span>
+                </h1>
+
+                <p class="hero-subtitle" style="font-size: 1.2rem;">
+                    Sentinel is a deterministic policy enforcement engine that creates an 
+                    <strong>impenetrable development perimeter</strong>. It blocks insecure code 
+                    before it reaches your repositories or production environments.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="#how-it-works" class="btn btn-primary btn-glow" style="background: rgba(74, 222, 128, 0.1); border: 1px solid #4ade80; color: #4ade80;">
+                        <i class="fas fa-play-circle"></i> See Protection in Action
+                    </a>
+                    <a href="#integration" class="btn btn-secondary">
+                        <i class="fas fa-code-branch"></i> Integration Guide
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="gate-visual" id="gateDemo">
+                    <div class="gate-left"></div>
+                    <div class="gate-right"></div>
+                    
+                    <div style="position: relative; z-index: 2; text-align: center;">
+                        <div class="shield-pulse" style="margin-bottom: 30px;">
+                            <i class="fas fa-shield-alt" style="font-size: 4rem; color: #4ade80;"></i>
+                        </div>
+                        
+                        <h3 style="color: white; margin-bottom: 15px; font-size: 1.5rem;">
+                            Security Gate: <span id="gateStatus">ACTIVE</span>
+                        </h3>
+                        
+                        <div style="background: rgba(0,0,0,0.5); padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                            <div style="font-family: 'Courier New', monospace; font-size: 14px; color: #eee; text-align: left;">
+                                <p><span style="color: #4ade80;">$</span> git push origin main</p>
+                                <p><span style="color: #3498db;">[SENTINEL]</span> Analyzing commit: a1b2c3d4...</p>
+                                <p id="gateMessage" style="color: #4ade80; font-weight: bold;">
+                                    ✓ Security policy satisfied
+                                </p>
+                                <p style="color: #94a3b8;">Remote: Counting objects: 100% (5/5)</p>
+                            </div>
+                        </div>
+                        
+                        <button onclick="toggleGate()" class="btn" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; margin-right: 10px;">
+                            <i class="fas fa-ban"></i> Simulate Violation
+                        </button>
+                        
+                        <button onclick="resetGate()" class="btn" style="background: rgba(74, 222, 128, 0.1); border: 1px solid #4ade80; color: #4ade80;">
+                            <i class="fas fa-check"></i> Reset Gate
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Core Philosophy: Deterministic Protection -->
+<section class="section" style="padding: 100px 0; background: rgba(15, 23, 42, 0.7);">
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 20px; font-size: 2.8rem;">
+            Deterministic by <span class="text-gradient">Design</span>
+        </h2>
+        <p style="text-align: center; color: var(--gray); margin-bottom: 60px; font-size: 1.1rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+            Unlike scanners that provide risk opinions, Sentinel delivers authoritative decisions. 
+            Every execution results in exactly one of two states.
+        </p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 60px;">
+            
+            <div class="rule-card" style="text-align: center;">
+                <div style="width: 70px; height: 70px; background: rgba(74, 222, 128, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+                    <i class="fas fa-check-circle" style="font-size: 2rem; color: #4ade80;"></i>
+                </div>
+                <h3 style="margin-bottom: 15px; color: white;">ALLOW (0)</h3>
+                <p style="color: var(--gray); line-height: 1.6;">
+                    Zero violations detected. Code meets all security policies. 
+                    Pipeline proceeds without interruption.
+                </p>
+                <div style="margin-top: 20px;">
+                    <span class="decision-badge decision-allow">Pipeline Proceeds</span>
+                </div>
+            </div>
+            
+            <div class="rule-card block-strike" style="text-align: center;">
+                <div style="width: 70px; height: 70px; background: rgba(239, 68, 68, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+                    <i class="fas fa-ban" style="font-size: 2rem; color: #f87171;"></i>
+                </div>
+                <h3 style="margin-bottom: 15px; color: white;">BLOCK (1)</h3>
+                <p style="color: var(--gray); line-height: 1.6;">
+                    Unapproved critical violations detected. 
+                    Pipeline terminates immediately. Code cannot proceed.
+                </p>
+                <div style="margin-top: 20px;">
+                    <span class="decision-badge decision-block">Pipeline Terminated</span>
+                </div>
+            </div>
+            
+            <div class="rule-card" style="text-align: center;">
+                <div style="width: 70px; height: 70px; background: rgba(245, 158, 11, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: #f59e0b;"></i>
+                </div>
+                <h3 style="margin-bottom: 15px; color: white;">WARN (Audited)</h3>
+                <p style="color: var(--gray); line-height: 1.6;">
+                    Overridden violations with formal justification. 
+                    Pipeline proceeds with explicit audit trail.
+                </p>
+                <div style="margin-top: 20px;">
+                    <span class="decision-badge decision-warn">Audited Exception</span>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- Audit-First Model -->
+        <div style="background: rgba(26, 28, 32, 0.8); border-radius: 16px; padding: 40px; border: 1px solid rgba(255,255,255,0.05);">
+            <h3 style="color: white; margin-bottom: 20px; text-align: center;">
+                <i class="fas fa-clipboard-check"></i> Audit-First Exception Model
+            </h3>
+            <p style="color: var(--gray); text-align: center; max-width: 800px; margin: 0 auto 30px;">
+                Sentinel uses an auditable exception model. Violations cannot be silently ignored; 
+                they must be formally justified in <code>sentinel.yaml</code>.
+            </p>
+            
+            <div style="background: #1a1c20; border-radius: 8px; padding: 25px; font-family: 'Courier New', monospace; font-size: 14px; color: #eee; max-width: 600px; margin: 0 auto;">
+                <div style="color: #94a3b8; margin-bottom: 15px;"># sentinel.yaml - Policy Overrides</div>
+                <div style="color: #f59e0b;">overrides:</div>
+                <div style="margin-left: 20px;">
+                    <div style="color: #94a3b8;">- rule_id: "SUPPLY-001"</div>
+                    <div style="color: #94a3b8; margin-left: 40px;">justification: "Legacy base image required for test-suite compatibility"</div>
+                    <div style="margin-top: 10px; color: #94a3b8;">- rule_id: "SEC-001"</div>
+                    <div style="color: #94a3b8; margin-left: 40px;">justification: "Verified public mock token for internal tests"</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section id="how-it-works" class="section" style="padding: 100px 0; background: var(--dark);">
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 20px; font-size: 2.8rem;">
+            How <span class="text-gradient">Sentinel Works</span>
+        </h2>
+        <p style="text-align: center; color: var(--gray); margin-bottom: 60px; font-size: 1.1rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+            Sentinel enforces a single authoritative decision point per execution.
+        </p>
+        
+        <!-- Pipeline Visualization -->
+        <div style="max-width: 800px; margin: 0 auto 80px;">
+            <h3 style="color: white; margin-bottom: 30px; text-align: center;">
+                <i class="fas fa-project-diagram"></i> The Security Gate in Your CI/CD Pipeline
+            </h3>
+            
+            <div class="pipeline-stage">
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 40px; height: 40px; background: rgba(52, 152, 219, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                        <i class="fas fa-code" style="color: var(--primary);"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600; color: white;">Code Commit</div>
+                        <div style="font-size: 0.9rem; color: var(--gray);">Developer pushes to repository</div>
+                    </div>
+                </div>
+                <div style="color: var(--gray); font-family: monospace;">git push</div>
+            </div>
+            
+            <div class="stage-connector"></div>
+            
+            <div class="pipeline-stage">
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 40px; height: 40px; background: rgba(74, 222, 128, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                        <i class="fas fa-shield-alt" style="color: #4ade80;"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600; color: white;">Sentinel Gate</div>
+                        <div style="font-size: 0.9rem; color: var(--gray);">Deterministic policy evaluation</div>
+                    </div>
+                </div>
+                <div style="color: #4ade80; font-weight: 600;">ACTIVE</div>
+            </div>
+            
+            <div class="stage-connector active"></div>
+            
+            <div class="pipeline-stage" id="decisionStage">
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 40px; height: 40px; background: rgba(74, 222, 128, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                        <i class="fas fa-check-circle" style="color: #4ade80;"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600; color: white;">Decision Point</div>
+                        <div style="font-size: 0.9rem; color: var(--gray);">ALLOW, BLOCK, or WARN</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="decision-badge decision-allow">ALLOW</span>
+                </div>
+            </div>
+            
+            <div class="stage-connector"></div>
+            
+            <div class="pipeline-stage">
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 40px; height: 40px; background: rgba(52, 152, 219, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                        <i class="fas fa-rocket" style="color: var(--primary);"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600; color: white;">Pipeline Continuation</div>
+                        <div style="font-size: 0.9rem; color: var(--gray);">Build, test, deploy</div>
+                    </div>
+                </div>
+                <div style="color: var(--gray);">Proceeds only if ALLOW</div>
+            </div>
+        </div>
+        
+        <!-- Rules Engine -->
+        <div>
+            <h3 style="color: white; margin-bottom: 30px; text-align: center;">
+                <i class="fas fa-cogs"></i> Built-in Security Rules
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                
+                <div class="rule-card">
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <div style="width: 40px; height: 40px; background: rgba(239, 68, 68, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                            <i class="fas fa-docker" style="color: #f87171;"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; color: white;">Docker Integrity</div>
+                            <div style="font-size: 0.8rem; color: var(--gray);">SUPPLY-001</div>
+                        </div>
+                    </div>
+                    <p style="color: var(--gray); font-size: 0.9rem; line-height: 1.5;">
+                        Prohibits mutable :latest tags. Enforces pinned versions for build reproducibility.
+                    </p>
+                </div>
+                
+                <div class="rule-card">
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <div style="width: 40px; height: 40px; background: rgba(239, 68, 68, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                            <i class="fas fa-key" style="color: #f87171;"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; color: white;">Hardcoded Secrets</div>
+                            <div style="font-size: 0.8rem; color: var(--gray);">SEC-001</div>
+                        </div>
+                    </div>
+                    <p style="color: var(--gray); font-size: 0.9rem; line-height: 1.5;">
+                        Blocks AWS keys, private keys, bot tokens, and other credentials in code.
+                    </p>
+                </div>
+                
+                <div class="rule-card">
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <div style="width: 40px; height: 40px; background: rgba(239, 68, 68, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                            <i class="fab fa-github" style="color: #f87171;"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; color: white;">GitHub Actions Pinning</div>
+                            <div style="font-size: 0.8rem; color: var(--gray);">CICD-001</div>
+                        </div>
+                    </div>
+                    <p style="color: var(--gray); font-size: 0.9rem; line-height: 1.5;">
+                        Enforces SHA pinning for GitHub Actions to prevent supply chain attacks.
+                    </p>
+                </div>
+                
+                <div class="rule-card">
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <div style="width: 40px; height: 40px; background: rgba(239, 68, 68, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                            <i class="fas fa-server" style="color: #f87171;"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; color: white;">Kubernetes Security</div>
+                            <div style="font-size: 0.8rem; color: var(--gray);">INFRA-001</div>
+                        </div>
+                    </div>
+                    <p style="color: var(--gray); font-size: 0.9rem; line-height: 1.5;">
+                        Enforces runAsNonRoot and resource limits in K8s manifests.
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Zero-Leakage Guarantee -->
+<section class="section" style="padding: 100px 0; background: rgba(15, 23, 42, 0.7);">
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 20px; font-size: 2.8rem;">
+            <span class="text-gradient">Zero-Leakage</span> & Offline Guarantee
+        </h2>
+        <p style="text-align: center; color: var(--gray); margin-bottom: 60px; font-size: 1.1rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+            Sentinel forbids all network access at runtime by design. Safe for air-gapped environments.
+        </p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            
+            <div class="zero-leakage">
+                <div style="width: 80px; height: 80px; background: rgba(239, 68, 68, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+                    <i class="fas fa-ban" style="font-size: 2.5rem; color: #f87171;"></i>
+                </div>
+                <h3 style="margin-bottom: 15px; color: white;">No Telemetry</h3>
+                <p style="color: var(--gray); line-height: 1.6;">
+                    No usage data is ever collected. Sentinel operates without phoning home.
+                </p>
+            </div>
+            
+            <div class="zero-leakage">
+                <div style="width: 80px; height: 80px; background: rgba(74, 222, 128, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+                    <i class="fas fa-wifi-slash" style="font-size: 2.5rem; color: #4ade80;"></i>
+                </div>
+                <h3 style="margin-bottom: 15px; color: white;">Air-Gap Ready</h3>
+                <p style="color: var(--gray); line-height: 1.6;">
+                    Operates without internet access. Safe for highly restricted internal environments.
+                </p>
+            </div>
+            
+            <div class="zero-leakage">
+                <div style="width: 80px; height: 80px; background: rgba(52, 152, 219, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+                    <i class="fas fa-download" style="font-size: 2.5rem; color: var(--primary);"></i>
+                </div>
+                <h3 style="margin-bottom: 15px; color: white;">Immutable Logic</h3>
+                <p style="color: var(--gray); line-height: 1.6;">
+                    Never self-updates or pulls remote rules at runtime. Security logic is guaranteed.
+                </p>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<!-- Integration & Next Steps -->
+<section id="integration" style="padding: 100px 0; background: linear-gradient(135deg, #0f172a 0%, #14532d 100%); text-align: center;">
+    <div class="container">
+        <h2 style="font-size: 2.8rem; margin-bottom: 20px; color: white;">
+            Ready to <span class="text-gradient">Secure Your Perimeter?</span>
+        </h2>
+        
+        <p style="color: var(--gray); margin-bottom: 40px; font-size: 1.2rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Stop threats before they emerge. Sentinel creates an impenetrable development perimeter 
+            that blocks insecure code at the commit level.
+        </p>
+        
+        <div class="hero-buttons" style="justify-content: center; gap: 20px;">
+            <a href="https://github.com/DataWizual/sentinel-core" target="_blank" class="btn btn-primary btn-glow" style="background: rgba(74, 222, 128, 0.1); border: 1px solid #4ade80; color: #4ade80; padding: 16px 32px; font-size: 1.1rem;">
+                <i class="fab fa-github"></i> View Deployment Guide
+            </a>
+            <a href="compare.html" class="btn btn-secondary" style="padding: 16px 32px; font-size: 1.1rem;">
+                <i class="fas fa-layer-group"></i> Compare with Auditor Core
+            </a>
+        </div>
+        
+        <p style="margin-top: 40px; color: rgba(255,255,255,0.6); font-size: 0.9rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+            <i class="fas fa-info-circle"></i> Sentinel is designed for private-mirror environments. 
+            Admins host the core in a corporate repository, ensuring full sovereignty over security logic.
+        </p>
+    </div>
+</section>
+
+<!-- Add this section before the footer in sentinel.html -->
+<section style="padding: 100px 0; background: rgba(15, 23, 42, 0.8);">
+    <div class="container">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 50px; background: rgba(26, 28, 32, 0.9); padding: 50px; border-radius: 16px; border: 1px solid rgba(74, 222, 128, 0.3);">
+            
+            <div style="flex: 1; min-width: 300px;">
+                <h3 style="color: white; margin-bottom: 20px; font-size: 1.8rem;">
+                    <i class="fas fa-download"></i> Get Sentinel
+                </h3>
+                <p style="color: var(--gray); margin-bottom: 25px; line-height: 1.6;">
+                    Sentinel is delivered as a <strong>hardened archive</strong> via secure email. 
+                    This ensures complete sovereignty over your security logic and eliminates 
+                    external dependencies.
+                </p>
+                
+                <div style="background: rgba(74, 222, 128, 0.1); padding: 20px; border-radius: 8px; margin-bottom: 25px; border: 1px solid rgba(74, 222, 128, 0.2);">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <i class="fas fa-shield-alt" style="color: #4ade80; margin-right: 10px;"></i>
+                        <div style="font-weight: 600; color: white;">Delivery Method</div>
+                    </div>
+                    <div style="color: var(--gray); font-size: 0.95rem;">
+                        <i class="fas fa-envelope"></i> Secure email with encrypted archive<br>
+                        <i class="fas fa-key"></i> Includes installation guide and license key<br>
+                        <i class="fas fa-lock"></i> No GitHub dependencies or public repositories
+                    </div>
+                </div>
+            </div>
+            
+            <div style="flex: 1; min-width: 300px; text-align: center;">
+                <div style="background: rgba(0,0,0,0.3); padding: 30px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size: 4rem; color: #4ade80; margin-bottom: 20px;">
+                        <i class="fas fa-file-archive"></i>
+                    </div>
+                    
+                    <h4 style="color: white; margin-bottom: 15px;">Request Sentinel Archive</h4>
+                    
+                    <a href="mailto:eldorzufarov66@gmail.com?subject=Sentinel%20Archive%20Request&body=Please%20send%20me%20the%20Sentinel%20archive.%20I%20understand%20it%20will%20be%20delivered%20via%20secure%20email." 
+                       class="btn btn-primary btn-glow" 
+                       style="background: rgba(74, 222, 128, 0.1); border: 1px solid #4ade80; color: #4ade80; padding: 15px 30px; font-size: 1.1rem; width: 100%;">
+                        <i class="fas fa-envelope"></i> Request via Email
+                    </a>
+                    
+                    <p style="color: var(--gray); margin-top: 20px; font-size: 0.9rem;">
+                        Typically delivered within <strong>24 hours</strong><br>
+                        Includes comprehensive deployment guide
+                    </p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; padding-bottom: 60px;">
+            <div style="flex: 1; min-width: 250px;">
+                <h4 style="margin-bottom: 20px;">Sentinel</h4>
+                <p style="color: var(--gray);">Deterministic security gate for CI/CD pipelines.</p>
+                <p style="margin-top: 20px; color: #4ade80; font-weight: bold;">
+                    <i class="fas fa-envelope"></i> eldorzufarov66@gmail.com
+                </p>
+            </div>
+            
+            <div>
+                <h4 style="margin-bottom: 20px;">Quick Links</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <a href="index.html" style="color: var(--gray); text-decoration: none;">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="auditor-core.html" style="color: var(--gray); text-decoration: none;">
+                        <i class="fas fa-search"></i> Auditor Core
+                    </a>
+                    <a href="compare.html" style="color: var(--gray); text-decoration: none;">
+                        <i class="fas fa-layer-group"></i> Compare
+                    </a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 style="margin-bottom: 20px;">Resources</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <a href="methodology.html" style="color: var(--gray); text-decoration: none;">
+                        Methodology
+                    </a>
+                    <a href="sample-report.html" style="color: var(--gray); text-decoration: none;">
+                        Demo Report
+                    </a>
+                    <a href="security-policy.html" style="color: var(--gray); text-decoration: none;">
+                        Security Policy
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; color: #444; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px;">
+            &copy; 2026 DataWizual Security. Creating impenetrable development perimeters.
+        </div>
+    </div>
+    <section id="get-sentinel" style="padding: 100px 0; background: rgba(15, 23, 42, 0.8);">
+        <div class="container">
+            <a href="sentinel.html#get-sentinel" class="btn" style="width: 100%; text-align: center; background: rgba(74, 222, 128, 0.1); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3);">
+                <i class="fas fa-envelope"></i> Request Archive
+            </a>
+        </div>
+    </section>
+</footer>
+
+<script>
+    // Gate interaction demo
+    function toggleGate() {
+        const gate = document.getElementById('gateDemo');
+        const status = document.getElementById('gateStatus');
+        const message = document.getElementById('gateMessage');
+        const decisionStage = document.getElementById('decisionStage');
+        const decisionBadge = decisionStage.querySelector('.decision-badge');
+        
+        if (gate.classList.contains('gate-open')) {
+            // Reset to ALLOW
+            gate.classList.remove('gate-open');
+            status.textContent = 'ACTIVE';
+            status.style.color = '#4ade80';
+            message.innerHTML = '✓ Security policy satisfied';
+            message.style.color = '#4ade80';
+            
+            decisionStage.classList.remove('blocked');
+            decisionStage.classList.add('sentinel-active');
+            decisionBadge.className = 'decision-badge decision-allow';
+            decisionBadge.textContent = 'ALLOW';
+        } else {
+            // Simulate BLOCK
+            gate.classList.add('gate-open');
+            status.textContent = 'BLOCKED';
+            status.style.color = '#f87171';
+            message.innerHTML = '✗ Policy violation detected: SUPPLY-001';
+            message.style.color = '#f87171';
+            
+            decisionStage.classList.remove('sentinel-active');
+            decisionStage.classList.add('blocked');
+            decisionBadge.className = 'decision-badge decision-block';
+            decisionBadge.textContent = 'BLOCK';
+        }
+    }
+    
+    function resetGate() {
+        const gate = document.getElementById('gateDemo');
+        const status = document.getElementById('gateStatus');
+        const message = document.getElementById('gateMessage');
+        const decisionStage = document.getElementById('decisionStage');
+        const decisionBadge = decisionStage.querySelector('.decision-badge');
+        
+        gate.classList.remove('gate-open');
+        status.textContent = 'ACTIVE';
+        status.style.color = '#4ade80';
+        message.innerHTML = '✓ Security policy satisfied';
+        message.style.color = '#4ade80';
+        
+        decisionStage.classList.remove('blocked');
+        decisionStage.classList.add('sentinel-active');
+        decisionBadge.className = 'decision-badge decision-allow';
+        decisionBadge.textContent = 'ALLOW';
+    }
+    
+    // Initialize gate
+    document.addEventListener('DOMContentLoaded', function() {
+        const decisionStage = document.getElementById('decisionStage');
+        decisionStage.classList.add('sentinel-active');
+    });
+</script>
+
+</body>
+</html>
