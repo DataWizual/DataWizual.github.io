@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditor Core | Deep Security Analysis Engine | DataWizual</title>
+    <meta name="description" content="Professional SAST engine for exhaustive repository analysis. Find what automated tools miss with surgical precision.">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="security" href="https://datawizual.github.io/.well-known/security.txt">
+    <style>
+        /* All your original animations and styles preserved */
+        @keyframes auditor-scan {
+            0% { transform: translateX(-100%) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateX(100%) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes finding-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+        
+        .auditor-scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+            animation: auditor-scan 2s infinite linear;
+            z-index: 1;
+        }
+        
+        .finding-badge {
+            animation: finding-pulse 2s infinite;
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .tech-card {
+            background: rgba(26, 28, 32, 0.6);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 25px 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .tech-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .coverage-meter {
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .coverage-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #4ade80);
+            border-radius: 3px;
+            width: 0;
+            transition: width 1.5s ease-out;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), #8e44ad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+        }
+        
+        .detector-card {
+            background: rgba(26, 28, 32, 0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .detector-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .detector-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .severity-indicator {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        .severity-critical { background: rgba(220, 38, 38, 0.2); color: #f87171; border: 1px solid rgba(220, 38, 38, 0.3); }
+        .severity-high { background: rgba(234, 88, 12, 0.2); color: #fdba74; border: 1px solid rgba(234, 88, 12, 0.3); }
+        .severity-medium { background: rgba(202, 138, 4, 0.2); color: #fbbf24; border: 1px solid rgba(202, 138, 4, 0.3); }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i> DataWizual Security
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            
+            <div class="dropdown">
+                <a href="#" class="dropdown-trigger">Products <i class="fas fa-chevron-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="auditor-core.html" class="active"><i class="fas fa-search"></i> Auditor Core</a>
+                    <a href="sentinel.html"><i class="fas fa-shield-alt"></i> Sentinel</a>
+                    <a href="compare.html"><i class="fas fa-layer-group"></i> Compare Engines</a>
+                </div>
+            </div>
+
+            <a href="audit.html">Audit Service</a>
+
+            <div class="dropdown">
+                <a href="#" class="dropdown-trigger">Resources <i class="fas fa-chevron-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="methodology.html">Methodology</a>
+                    <a href="sample-report.html">Demo Report</a>
+                    <a href="security-policy.html">Security Policy</a>
+                </div>
+            </div>
+
+            <a href="get.html" class="nav-btn">Get Access</a>
+        </div>
+    </div>
+</nav>
+
+<header class="hero" style="padding: 120px 0; position: relative; overflow: hidden; background: linear-gradient(135deg, #0f172a 0%, #1a1c20 100%);">
+    <div class="auditor-scan-line"></div>
+    
+    <div class="container" style="position: relative; z-index: 2;">
+        <div class="hero-flex">
+            <div class="hero-content">
+                <div class="badge-new" style="display: inline-block; padding: 8px 16px; background: rgba(52, 152, 219, 0.1); border: 1px solid var(--primary); border-radius: 20px; color: var(--primary); font-size: 0.9rem; margin-bottom: 20px; font-weight: 600;">
+                    <i class="fas fa-search"></i> Deep Analysis Engine
+                </div>
+
+                <h1 class="hero-title">
+                    See Everything <span class="text-gradient">Others Miss</span>
+                </h1>
+
+                <p class="hero-subtitle" style="font-size: 1.2rem;">
+                    Auditor Core is a professional SAST engine designed for exhaustive repository analysis. 
+                    It performs deep security scans across your entire codebase, infrastructure, and supply chain 
+                    with <strong>surgical precision</strong> that automated tools can't match.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="get.html" class="btn btn-primary btn-glow">
+                        <i class="fas fa-key"></i> Request License
+                    </a>
+                    <a href="sample-report.html" class="btn btn-secondary">
+                        <i class="fas fa-file-alt"></i> Sample Report
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="scan-card" style="position: relative;">
+                    <div class="scan-header" style="background: #25282c; padding: 12px 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #333;">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span style="color: #aaa; font-family: monospace; margin-left: 10px; font-size: 13px;">auditor_core_v1.0 --deep-scan</span>
+                    </div>
+                    <div class="scan-body" style="padding: 30px; font-family: 'Courier New', monospace; color: #eee; font-size: 14px; line-height: 1.8; position: relative;">
+                        <p><span style="color: #3498db;">[*]</span> Initializing deep analysis engine...</p>
+                        <p><span style="color: #27ae60;">[✓]</span> Repository loaded: 2,847 files</p>
+                        <p><span style="color: #27ae60;">[✓]</span> Streaming engine: ACTIVE</p>
+                        
+                        <div style="margin: 20px 0;">
+                            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                <span style="color: #94a3b8;">Secret Detection:</span>
+                                <div style="flex-grow: 1; height: 4px; background: rgba(255,255,255,0.1); margin: 0 10px; border-radius: 2px; overflow: hidden;">
+                                    <div style="height: 100%; width: 92%; background: linear-gradient(90deg, #3498db, #4ade80);"></div>
+                                </div>
+                                <span style="color: #4ade80;">92%</span>
+                            </div>
+                        </div>
+                        
+                        <p class="finding-badge" style="color: #f87171; font-weight: bold; padding: 8px 12px; background: rgba(239, 68, 68, 0.1); border-radius: 6px; border-left: 3px solid #ef4444;">
+                            <i class="fas fa-exclamation-triangle"></i> CRITICAL: Hardcoded AWS key in config/prod.yml
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div style="margin-top: 40px; padding: 20px; border-left: 3px solid var(--primary); background: rgba(52, 152, 219, 0.05); font-style: italic; color: #94a3b8; font-size: 0.95rem;">
+    Auditor Core Baseline is a professional security audit engine 
+    distributed under a controlled licensing model. 
+    Licensing is provided upon individual request 
+    to ensure appropriate usage, compliance, and support.
+</div>
+
+<section id="demo" class="section" style="padding: 100px 0; background: rgba(15, 23, 42, 0.7);">
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 20px; font-size: 2.8rem;">
+            How <span class="text-gradient">Auditor Core Works</span>
+        </h2>
+        <p style="text-align: center; color: var(--gray); margin-bottom: 60px; font-size: 1.1rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+            A deterministic, streaming engine designed for precision and performance.
+        </p>
+        
+        <div style="display: flex; align-items: stretch; justify-content: space-between; flex-wrap: wrap; gap: 30px;">
+            <div style="flex: 1; min-width: 300px; background: rgba(26, 28, 32, 0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
+                <div style="width: 60px; height: 60px; background: rgba(52, 152, 219, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
+                    <span style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">1</span>
+                </div>
+                <h3 style="margin-bottom: 15px; color: white;">Streaming Analysis</h3>
+                <p style="color: var(--gray); line-height: 1.6;">
+                    Processes files incrementally to ensure stability on massive repositories without memory exhaustion.
+                </p>
+            </div>
+            
+            <div style="flex: 1; min-width: 300px; background: rgba(26, 28, 32, 0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
+                <div style="width: 60px; height: 60px; background: rgba(74, 222, 128, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
+                    <span style="font-size: 1.5rem; font-weight: bold; color: #4ade80;">2</span>
+                </div>
+                <h3 style="margin-bottom: 15px; color: white;">Smart Baseline</h3>
+                <p style="color: var(--gray); line-height: 1.6;">
+                    Intelligent noise reduction by focusing only on new findings compared to previous scan states.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section style="padding: 100px 0; background: linear-gradient(135deg, var(--dark) 0%, #1a1c20 100%); text-align: center;">
+    <div class="container">
+        <h2 style="font-size: 2.8rem; margin-bottom: 20px; color: white;">
+            Ready for <span class="text-gradient">Deep Analysis?</span>
+        </h2>
+        
+        <div class="hero-buttons" style="justify-content: center; gap: 20px;">
+            <a href="get.html" class="btn btn-primary btn-glow" style="padding: 16px 32px; font-size: 1.1rem;">
+                <i class="fas fa-key"></i> Get Engine License
+            </a>
+            <a href="audit.html" class="btn btn-secondary" style="padding: 16px 32px; font-size: 1.1rem;">
+                <i class="fas fa-search"></i> Schedule Professional Audit
+            </a>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; padding-bottom: 60px;">
+            <div style="flex: 1; min-width: 250px;">
+                <h4 style="margin-bottom: 20px;">Auditor Core</h4>
+                <p style="color: var(--gray);">Professional SAST engine for exhaustive repository analysis.</p>
+                <p style="margin-top: 20px; color: var(--primary); font-weight: bold;">
+                    <i class="fas fa-envelope"></i> eldorzufarov66@gmail.com
+                </p>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 20px;">Quick Links</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <a href="index.html" style="color: var(--gray); text-decoration: none;">Home</a>
+                    <a href="sentinel.html" style="color: var(--gray); text-decoration: none;">Sentinel</a>
+                    <a href="get.html" style="color: var(--gray); text-decoration: none;">Get Products</a>
+                </div>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 20px;">Resources</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <a href="methodology.html" style="color: var(--gray); text-decoration: none;">Methodology</a>
+                    <a href="sample-report.html" style="color: var(--gray); text-decoration: none;">Demo Report</a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; color: #444; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px;">
+            &copy; 2026 DataWizual Security. Part of the complete security ecosystem.
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Animation preserved
+    document.addEventListener('DOMContentLoaded', function() {
+        const coverageFill = document.querySelector('.coverage-fill');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    coverageFill.style.width = '95%';
+                }
+            });
+        }, { threshold: 0.5 });
+        if (coverageFill) observer.observe(coverageFill);
+    });
+</script>
+
+</body>
+</html>
