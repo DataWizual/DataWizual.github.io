@@ -3,24 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Disclosure Policy | DataWizual</title>
-    <meta name="description" content="Vulnerability Disclosure Policy and Safe Harbor principles for DataWizual Security.">
-    
+    <title>Security & Disclosure Policy | DataWizual Security</title>
+    <meta name="description" content="Vulnerability Disclosure Policy, Safe Harbor principles, product privacy commitments, and coordinated disclosure guidelines for DataWizual Security.">
+
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="security" href="https://datawizual.github.io/.well-known/security.txt">
-</head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <style>
+        @keyframes horizontal-scan {
+            0%   { width:0; left:0; opacity:0; }
+            50%  { width:100%; opacity:0.6; }
+            100% { width:0; left:100%; opacity:0; }
+        }
+        .scan-line {
+            position:absolute; top:0; left:0; right:0; height:2px;
+            background:linear-gradient(90deg,transparent,#3498db,transparent);
+            animation:horizontal-scan 2.5s infinite linear;
+        }
 
+        .policy-section {
+            margin-bottom: 60px;
+        }
+        .policy-h3 {
+            color: white; font-size:1.2rem; margin-bottom:14px;
+            border-left: 3px solid var(--primary); padding-left: 16px;
+        }
+        .policy-h3.green  { border-color:#4ade80; }
+        .policy-h3.red    { border-color:#f87171; }
+        .policy-h3.yellow { border-color:#f59e0b; }
+        .policy-h3.purple { border-color:#c084fc; }
+
+        .policy-p {
+            color:var(--gray); line-height:1.8; font-size:0.95rem; margin-bottom:16px;
+        }
+        .policy-ul {
+            list-style:none; padding:0; margin:0;
+        }
+        .policy-ul li {
+            display:flex; align-items:flex-start; gap:10px;
+            color:var(--gray); font-size:0.92rem; line-height:1.6;
+            margin-bottom:10px; padding-bottom:10px;
+            border-bottom:1px solid rgba(255,255,255,0.04);
+        }
+        .policy-ul li:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+        .policy-ul li i { flex-shrink:0; margin-top:3px; }
+
+        .scope-box {
+            border-radius:14px; padding:28px; border:1px solid;
+        }
+
+        .divider {
+            border:none; border-top:1px solid rgba(255,255,255,0.06);
+            margin: 50px 0;
+        }
+    </style>
+</head>
 <body>
 
 <nav class="navbar">
     <div class="container">
-        <div class="logo">
-            <i class="fas fa-shield-alt"></i> DataWizual Security
-        </div>
+        <div class="logo"><i class="fas fa-shield-alt"></i> DataWizual Security</div>
         <div class="nav-links">
             <a href="index.html">Home</a>
-            
             <div class="dropdown">
                 <a href="#" class="dropdown-trigger">Products <i class="fas fa-chevron-down"></i></a>
                 <div class="dropdown-content">
@@ -29,9 +74,7 @@
                     <a href="compare.html"><i class="fas fa-layer-group"></i> Compare Engines</a>
                 </div>
             </div>
-
             <a href="audit.html">Audit Service</a>
-
             <div class="dropdown">
                 <a href="#" class="dropdown-trigger">Resources <i class="fas fa-chevron-down"></i></a>
                 <div class="dropdown-content">
@@ -40,100 +83,281 @@
                     <a href="security-policy.html" class="active">Security Policy</a>
                 </div>
             </div>
-
             <a href="get.html" class="nav-btn">Get Access</a>
         </div>
     </div>
 </nav>
 
-<header class="hero" style="padding: 60px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-    <div class="container" style="max-width: 900px;">
-        <h1 class="hero-title" style="font-size: 2.5rem;">Vulnerability <span class="text-gradient">Disclosure Policy</span></h1>
-        <p style="color: var(--gray); margin-top: 10px;">Version 1.2 | Effective Date: January 1, 2026</p>
+<!-- ══════════════════════════════════════ HERO -->
+<header class="hero" style="padding:90px 0 60px; background:linear-gradient(135deg,#0f172a 0%,#1a1c20 100%); position:relative; overflow:hidden;">
+    <div class="scan-line"></div>
+    <div class="container" style="position:relative; z-index:2; max-width:860px;">
+        <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(52,152,219,0.1); border:1px solid rgba(52,152,219,0.3); border-radius:20px; padding:6px 16px; margin-bottom:22px; color:var(--primary); font-size:0.85rem; font-weight:700;">
+            <i class="fas fa-file-shield"></i> Version 1.3 · Effective January 1, 2026
+        </div>
+        <h1 class="hero-title" style="font-size:2.8rem; margin-bottom:16px;">
+            Security &amp; <span class="text-gradient">Disclosure Policy</span>
+        </h1>
+        <p style="color:var(--gray); font-size:1.05rem; line-height:1.8; max-width:720px;">
+            This document covers our vulnerability disclosure policy, Safe Harbor principles,
+            product privacy commitments, and research ethics guidelines.
+            It applies to DataWizual Security and all products — Auditor Core v2.1 and Sentinel Core v2.1.
+        </p>
     </div>
 </header>
 
-<main class="container" style="max-width: 900px; padding: 60px 20px; line-height: 1.8;">
-    
-    <section class="policy-intro" style="margin-bottom: 50px;">
-        <p style="font-size: 1.1rem; color: #cbd5e1;">
-            This policy governs <strong>good-faith security research</strong> conducted by DataWizual. 
-            Our mission is to identify systemic risks in CI/CD workflows and infrastructure while ensuring 
-            responsible, non-intrusive coordination with software vendors.
+<!-- ══════════════════════════════════════ MAIN CONTENT -->
+<main style="padding:80px 0 100px; background:rgba(15,23,42,0.6);">
+<div class="container" style="max-width:860px;">
+
+    <!-- SCOPE -->
+    <div class="policy-section">
+        <h2 style="color:white; font-size:1.8rem; margin-bottom:24px;">
+            <i class="fas fa-crosshairs" style="color:var(--primary);"></i> Research Scope
+        </h2>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:24px; margin-bottom:30px;">
+
+            <div class="scope-box" style="background:rgba(74,222,128,0.04); border-color:rgba(74,222,128,0.2);">
+                <h4 style="color:#4ade80; margin-bottom:14px;"><i class="fas fa-check-circle"></i> In Scope</h4>
+                <ul class="policy-ul">
+                    <li><i class="fas fa-check" style="color:#4ade80;"></i> Publicly accessible repositories and configurations</li>
+                    <li><i class="fas fa-check" style="color:#4ade80;"></i> CI/CD workflow definitions (GitHub Actions, GitLab CI, Jenkinsfiles)</li>
+                    <li><i class="fas fa-check" style="color:#4ade80;"></i> Infrastructure-as-Code files — Terraform, Kubernetes, Helm, Dockerfiles</li>
+                    <li><i class="fas fa-check" style="color:#4ade80;"></i> Dependency manifests — requirements.txt, package.json, Cargo.toml</li>
+                    <li><i class="fas fa-check" style="color:#4ade80;"></i> Environments explicitly authorized by the client in writing</li>
+                </ul>
+            </div>
+
+            <div class="scope-box" style="background:rgba(239,68,68,0.04); border-color:rgba(239,68,68,0.2);">
+                <h4 style="color:#f87171; margin-bottom:14px;"><i class="fas fa-times-circle"></i> Out of Scope</h4>
+                <ul class="policy-ul">
+                    <li><i class="fas fa-times" style="color:#f87171;"></i> Private infrastructure systems without written authorization</li>
+                    <li><i class="fas fa-times" style="color:#f87171;"></i> Live exploitation or payload execution against any system</li>
+                    <li><i class="fas fa-times" style="color:#f87171;"></i> Social engineering or phishing of any party</li>
+                    <li><i class="fas fa-times" style="color:#f87171;"></i> Denial-of-Service testing</li>
+                    <li><i class="fas fa-times" style="color:#f87171;"></i> Access to production data or credentials</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- RESEARCH PRINCIPLES -->
+    <div class="policy-section">
+        <h2 style="color:white; font-size:1.8rem; margin-bottom:24px;">
+            <i class="fas fa-flask" style="color:#4ade80;"></i> Research Principles
+        </h2>
+
+        <h3 class="policy-h3">Non-Intrusive Analysis</h3>
+        <p class="policy-p">
+            All analysis is limited to static artifacts — source code, configuration files, dependency manifests, and CI/CD definitions.
+            We never connect to, probe, or interact with live systems, APIs, or services in the course of an audit.
         </p>
-    </section>
 
-    
+        <h3 class="policy-h3">No Exploitation</h3>
+        <p class="policy-p">
+            We identify vulnerabilities and document them. We never execute payloads, attempt privilege escalation,
+            or demonstrate exploitability against any live environment. Proof-of-concept is limited to isolated, controlled reproduction where explicitly authorized.
+        </p>
 
-    <div class="policy-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 50px;">
-        <div style="background: rgba(34, 197, 94, 0.05); padding: 30px; border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.2);">
-            <h3 style="color: #4ade80; margin-bottom: 15px;"><i class="fas fa-check-circle"></i> In Scope</h3>
-            <ul style="list-style: none; padding: 0; color: #cbd5e1; font-size: 0.95rem;">
-                <li style="margin-bottom: 10px;">• Publicly accessible code repositories and configurations</li>
-                <li style="margin-bottom: 10px;">• CI/CD workflow definitions</li>
-                <li style="margin-bottom: 10px;">• Infrastructure-as-Code files (Terraform, CloudFormation, etc.)</li>
-                <li style="margin-bottom: 10px;">• Dependency manifests (package.json, requirements.txt, etc.)</li>
-            </ul>
-        </div>
+        <h3 class="policy-h3 green">Privacy-First</h3>
+        <p class="policy-p">
+            We do not collect, store, or transmit private user data encountered during analysis.
+            If sensitive data (credentials, PII, private keys) is found during an authorized audit,
+            it is documented in the confidential report and immediately purged from our local environment.
+        </p>
 
-        <div style="background: rgba(239, 68, 68, 0.05); padding: 30px; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.2);">
-            <h3 style="color: #f87171; margin-bottom: 15px;"><i class="fas fa-times-circle"></i> Out of Scope</h3>
-            <ul style="list-style: none; padding: 0; color: #cbd5e1; font-size: 0.95rem;">
-                <li style="margin-bottom: 10px;">• Private infrastructure systems</li>
-                <li style="margin-bottom: 10px;">• Live exploitation or interface misuse</li>
-                <li style="margin-bottom: 10px;">• Social engineering or phishing</li>
-                <li style="margin-bottom: 10px;">• Denial-of-Service testing</li>
-            </ul>
-        </div>
-    </div>
-    <h3>Safe Harbor</h3>
-    <p>
-    This policy is intended to provide Safe Harbor under applicable laws
-    for researchers acting in good faith and within the terms described
-    herein. DataWizual will not pursue legal action against good-faith
-    security research consistent with this policy.
-    </p>
-<br>
-    <h3>Response & Timeline</h3>
-    <p>
-    DataWizual commits to acknowledge reports within <strong>3–7 business days</strong>.
-    Findings will remain confidential until a fix is available or a maximum
-    of <strong>90 days</strong> has elapsed, unless mutually agreed otherwise.
-    </p>
-
-    <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">1. Research Principles</h3>
-    <p style="color: var(--gray); margin-bottom: 30px;">
-        <strong>Non-Intrusive:</strong> Analysis is limited to public artifacts. <br>
-        <strong>No Exploitation:</strong> We never execute payloads against live systems. <br>
-        <strong>Privacy-First:</strong> We do not collect or store private data.
-    </p>
-
-    <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">2. Disclosure Coordination</h3>
-    <ol style="color: var(--gray); padding-left: 20px; margin-bottom: 30px;">
-        <li style="margin-bottom: 10px;">Private notification via official security channels.</li>
-        <li style="margin-bottom: 10px;">Provision of detailed findings and remediation advice.</li>
-        <li style="margin-bottom: 10px;">Findings remain confidential for <strong>90 days</strong> or until a fix is released.</li>
-    </ol>
-
-    <h3 style="color: white; margin-top: 40px; border-left: 4px solid var(--primary); padding-left: 15px;">3. Safe Harbor</h3>
-    <p style="color: var(--gray); margin-bottom: 30px;">
-        We consider research conducted under these guidelines to be <strong>authorized</strong>. 
-        DataWizual will not initiate legal action against parties who coordinate in good faith.
-    </p>
-
-    <div style="background: #1a1c20; padding: 40px; border-radius: 12px; border: 1px solid #333; margin-top: 60px; text-align: center;">
-        <h3 style="margin-bottom: 10px;">Security Contact</h3>
-        <p style="color: var(--primary); font-weight: bold; font-size: 1.2rem;">eldorzufarov66@gmail.com</p>
-        <p style="font-size: 0.9rem; color: var(--gray); margin-top: 10px;">Standard response time: 3–7 business days.</p>
+        <h3 class="policy-h3 yellow">Coordinated Disclosure</h3>
+        <p class="policy-p">
+            All significant findings are reported privately to the authorized contact before any public disclosure.
+            We follow a <strong style="color:white;">90-day coordinated disclosure window</strong> — findings remain confidential
+            until a fix is released or 90 days elapse, whichever comes first, unless mutually agreed otherwise.
+        </p>
     </div>
 
+    <hr class="divider">
+
+    <!-- DISCLOSURE PROCESS -->
+    <div class="policy-section">
+        <h2 style="color:white; font-size:1.8rem; margin-bottom:24px;">
+            <i class="fas fa-route" style="color:var(--primary);"></i> Disclosure Process
+        </h2>
+
+        <div style="display:flex; flex-direction:column; gap:14px;">
+
+            <div style="display:flex; align-items:flex-start; gap:16px; padding:20px; background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.05); border-radius:12px;">
+                <div style="width:36px; height:36px; background:rgba(52,152,219,0.12); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:800; color:var(--primary);">1</div>
+                <div>
+                    <div style="font-weight:600; color:white; margin-bottom:4px;">Private Notification</div>
+                    <div style="color:var(--gray); font-size:0.9rem; line-height:1.6;">Findings are reported privately to the affected party via official security channels or the contact listed in their <code>security.txt</code>.</div>
+                </div>
+            </div>
+
+            <div style="display:flex; align-items:flex-start; gap:16px; padding:20px; background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.05); border-radius:12px;">
+                <div style="width:36px; height:36px; background:rgba(74,222,128,0.12); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:800; color:#4ade80;">2</div>
+                <div>
+                    <div style="font-weight:600; color:white; margin-bottom:4px;">Detailed Report Delivery</div>
+                    <div style="color:var(--gray); font-size:0.9rem; line-height:1.6;">A structured findings report is provided with severity ratings, CWE references, reproduction steps, and concrete remediation guidance.</div>
+                </div>
+            </div>
+
+            <div style="display:flex; align-items:flex-start; gap:16px; padding:20px; background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.05); border-radius:12px;">
+                <div style="width:36px; height:36px; background:rgba(245,158,11,0.12); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:800; color:#f59e0b;">3</div>
+                <div>
+                    <div style="font-weight:600; color:white; margin-bottom:4px;">90-Day Confidentiality Window</div>
+                    <div style="color:var(--gray); font-size:0.9rem; line-height:1.6;">Findings are kept strictly confidential for 90 days or until a fix is released. Extensions can be negotiated with written agreement from both parties.</div>
+                </div>
+            </div>
+
+            <div style="display:flex; align-items:flex-start; gap:16px; padding:20px; background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.05); border-radius:12px;">
+                <div style="width:36px; height:36px; background:rgba(192,132,252,0.12); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:800; color:#c084fc;">4</div>
+                <div>
+                    <div style="font-weight:600; color:white; margin-bottom:4px;">Acknowledgement Timeline</div>
+                    <div style="color:var(--gray); font-size:0.9rem; line-height:1.6;">DataWizual commits to acknowledging all inbound reports within <strong style="color:white;">3–7 business days</strong> of receipt.</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- PRODUCT PRIVACY -->
+    <div class="policy-section">
+        <h2 style="color:white; font-size:1.8rem; margin-bottom:24px;">
+            <i class="fas fa-lock" style="color:#c084fc;"></i> Product Privacy Commitments
+        </h2>
+        <p class="policy-p">
+            These commitments apply to all DataWizual products — Auditor Core v2.1 and Sentinel Core v2.1.
+        </p>
+
+        <h3 class="policy-h3 purple">Zero Telemetry</h3>
+        <p class="policy-p">
+            Neither product collects, transmits, or stores usage data of any kind.
+            There are no analytics, no crash reporters, no license phone-home checks after initial activation.
+            The engines operate in full silence.
+        </p>
+
+        <h3 class="policy-h3 purple">Source Code Never Leaves Your Machine</h3>
+        <p class="policy-p">
+            The AI advisory layer (Gemini / Groq) receives only structured finding summaries — never raw source code,
+            file contents, or repository paths. All full-text analysis runs locally.
+        </p>
+
+        <h3 class="policy-h3 purple">No Self-Update or Remote Rule Fetching</h3>
+        <p class="policy-p">
+            The detection logic is compiled into Cython binaries at build time.
+            The engines never download rule updates, fetch remote signatures, or modify themselves at runtime.
+            What you receive is what runs — permanently.
+        </p>
+
+        <h3 class="policy-h3 purple">Hardware-Bound Licensing — No Central Server</h3>
+        <p class="policy-p">
+            License validation is a local cryptographic operation against your Machine ID.
+            There is no license server, no activation call, and no revocation mechanism that requires internet access.
+        </p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- SAFE HARBOR -->
+    <div class="policy-section">
+        <h2 style="color:white; font-size:1.8rem; margin-bottom:24px;">
+            <i class="fas fa-anchor" style="color:#f59e0b;"></i> Safe Harbor
+        </h2>
+        <p class="policy-p">
+            This policy is intended to provide Safe Harbor under applicable laws for researchers acting in good faith
+            and within the terms described herein.
+        </p>
+        <p class="policy-p">
+            DataWizual will not pursue legal action, civil or criminal, against individuals who:
+        </p>
+        <ul class="policy-ul" style="margin-bottom:20px;">
+            <li><i class="fas fa-check" style="color:#f59e0b;"></i> Conduct research within the defined scope above</li>
+            <li><i class="fas fa-check" style="color:#f59e0b;"></i> Avoid accessing, modifying, or deleting data that does not belong to them</li>
+            <li><i class="fas fa-check" style="color:#f59e0b;"></i> Report findings promptly and in good faith via the security contact</li>
+            <li><i class="fas fa-check" style="color:#f59e0b;"></i> Do not publicly disclose findings before the 90-day window expires or a fix is released</li>
+        </ul>
+        <p class="policy-p">
+            Safe Harbor does not apply to research conducted outside the defined scope, research that causes harm,
+            or disclosure that violates the confidentiality agreement.
+        </p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- LICENSE TERMS SUMMARY -->
+    <div class="policy-section">
+        <h2 style="color:white; font-size:1.8rem; margin-bottom:24px;">
+            <i class="fas fa-file-contract" style="color:#2dd4bf;"></i> License Terms Summary
+        </h2>
+        <p class="policy-p">Full terms are provided with each product delivery. Key points:</p>
+        <ul class="policy-ul">
+            <li><i class="fas fa-check" style="color:#2dd4bf;"></i> Each License Key is bound to a single Machine ID — non-transferable</li>
+            <li><i class="fas fa-check" style="color:#2dd4bf;"></i> Reverse engineering, decompiling, or extracting Cython binaries is prohibited</li>
+            <li><i class="fas fa-check" style="color:#2dd4bf;"></i> Redistribution of any product component without written permission is prohibited</li>
+            <li><i class="fas fa-check" style="color:#2dd4bf;"></i> License is granted for use within the authorized organization only</li>
+            <li><i class="fas fa-check" style="color:#2dd4bf;"></i> Source code remains the intellectual property of DataWizual Security</li>
+        </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- CONTACT -->
+    <div style="background:rgba(26,28,32,0.9); border:1px solid rgba(52,152,219,0.25); border-radius:16px; padding:40px; text-align:center;">
+        <div style="width:56px; height:56px; background:rgba(52,152,219,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
+            <i class="fas fa-envelope" style="color:var(--primary); font-size:1.3rem;"></i>
+        </div>
+        <h3 style="color:white; margin-bottom:8px;">Security Contact</h3>
+        <p style="color:var(--primary); font-weight:700; font-size:1.2rem; margin-bottom:6px;">eldorzufarov66@gmail.com</p>
+        <p style="color:var(--gray); font-size:0.88rem; margin-bottom:24px;">Response time: 3–7 business days · PGP encryption available</p>
+        <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+            <a href="get.html#pgp" class="btn btn-secondary" style="padding:10px 20px; font-size:0.88rem;">
+                <i class="fas fa-key"></i> PGP Public Key
+            </a>
+            <a href="mailto:eldorzufarov66@gmail.com?subject=Security%20Report" class="btn btn-primary btn-glow" style="padding:10px 20px; font-size:0.88rem;">
+                <i class="fas fa-paper-plane"></i> Send Report
+            </a>
+        </div>
+    </div>
+
+</div>
 </main>
 
+<!-- ══════════════════════════════════════ FOOTER -->
 <footer class="footer">
-    <div class="container" style="text-align: center;">
-        <p style="color: var(--gray); font-size: 0.9rem;">
-            &copy; 2026 DataWizual Security. All research conducted for a safer supply chain.
-        </p>
+    <div class="container">
+        <div class="footer-grid" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:40px; padding-bottom:60px;">
+            <div style="flex:1; min-width:250px;">
+                <h4 style="margin-bottom:20px;">DataWizual Security</h4>
+                <p style="color:var(--gray);">Developing territories of confidence through rigorous engineering.</p>
+                <p style="margin-top:20px; color:#4ade80; font-weight:bold;">
+                    <i class="fas fa-envelope"></i> eldorzufarov66@gmail.com
+                </p>
+            </div>
+            <div>
+                <h4 style="margin-bottom:20px;">Our Ecosystem</h4>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.1</a>
+                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.1</a>
+                    <a href="compare.html"      style="color:var(--gray); text-decoration:none;"><i class="fas fa-layer-group"></i> Compare</a>
+                </div>
+            </div>
+            <div>
+                <h4 style="margin-bottom:20px;">Resources</h4>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <a href="methodology.html"     style="color:var(--gray); text-decoration:none;">Methodology</a>
+                    <a href="sample-report.html"   style="color:var(--gray); text-decoration:none;">Demo Report</a>
+                    <a href="security-policy.html" style="color:white;       text-decoration:none; font-weight:600;">Security Policy</a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center; color:#444; border-top:1px solid rgba(255,255,255,0.05); padding-top:30px;">
+            &copy; 2026 DataWizual Security Labs. Built with surgical precision.
+        </div>
     </div>
 </footer>
 

@@ -1,161 +1,1194 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sample Security Report | DataWizual</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Strict Professional Report Styling */
-        .report-container { background: #ffffff; color: #1a1a1a; padding: 50px; border-radius: 4px; font-family: 'Inter', -apple-system, sans-serif; }
-        .report-header { border-bottom: 3px solid #1a1a1a; margin-bottom: 30px; padding-bottom: 20px; }
-        .report-meta { display: flex; justify-content: space-between; align-items: baseline; color: #666; font-size: 0.9rem; }
-        
-        .severity-badges { margin: 25px 0; display: flex; gap: 10px; }
-        .s-badge { padding: 10px 20px; border-radius: 2px; font-weight: 800; letter-spacing: 0.5px; color: #fff; }
-        .bg-crit { background: #dc2626; }
-        .bg-high { background: #ea580c; }
-        .bg-med { background: #ca8a04; }
-        .bg-low { background: #2563eb; }
 
-        .table-wrapper { overflow-x: auto; margin-top: 40px; }
-        .audit-table { width: 100%; border-collapse: collapse; border: 1px solid #e5e7eb; }
-        .audit-table th { background: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; text-align: left; font-size: 0.85rem; text-transform: uppercase; color: #374151; }
-        .audit-table td { border: 1px solid #e5e7eb; padding: 15px; vertical-align: top; font-size: 0.9rem; }
-        
-        .t-crit { color: #dc2626; font-weight: 700; }
-        .path-text { font-family: 'SFMono-Regular', Consolas, monospace; color: #4b5563; font-size: 0.8rem; word-break: break-all; }
-        .rule-id { font-weight: 600; display: block; margin-bottom: 4px; color: #111827; }
-        
-        @media print {
-            .navbar, .footer, .no-print { display: none; }
-            .report-container { padding: 0; }
-        }
-    </style>
-</head>
-<body>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Auditor Core v2.1 — Demo Report: dvwa-test</title>
+            <style>
 
-<nav class="navbar">
-    <div class="container">
-        <div class="logo">
-            <i class="fas fa-shield-alt"></i> DataWizual Security
-        </div>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
+            /* =========================
+            FONTS
+            ========================= */
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+            :root{
+                --bg-main:#0b0f19;
+                --bg-card:#161b28;
+                --border:#242b3d;
+
+                --text-main:#e6edf3;
+                --text-dim:#8b949e;
+
+                --cyber-blue:#3ea6ff;
+                --neon-green:#00ffa6;
+                --neon-purple:#9b87ff;
+
+                --critical:#ff4d6d;
+                --high:#ff9e4f;
+                --medium:#ffd166;
+                --low:#06d6a0;
+                --info:#4dabf7;
+
+                --neutral:#3a4258;
+            }
+
+            /* =========================
+            BASE
+            ========================= */
+
+            body{
+                margin:0;
+                font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+                background:var(--bg-main);
+                color:var(--text-main);
+                -webkit-font-smoothing:antialiased;
+            }
+
+            .container{
+                max-width:1500px;
+                margin:auto;
+                padding:28px;
+            }
+
+            /* =========================
+            HEADER
+            ========================= */
+
+            .header{
+                background:linear-gradient(145deg,#121726,#0d1320);
+                border:1px solid var(--border);
+                border-radius:14px;
+                padding:28px 32px;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                box-shadow:0 10px 30px rgba(0,0,0,.45);
+
+                position:sticky;
+                top:0;
+                z-index:100;
+            }
+
+            .header h1{
+                margin:0;
+                font-weight:600;
+                letter-spacing:.4px;
+            }
+
+            /* =========================
+            CARDS
+            ========================= */
+
+            .decision-box{
+                background:var(--bg-card);
+                border:1px solid var(--border);
+                border-radius:14px;
+                padding:22px;
+                margin-top:22px;
+                backdrop-filter:blur(6px);
+            }
+
+            .methodology-grid{
+                display:grid;
+                grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+                gap:18px;
+            }
+
+            .methodology-card{
+                background:rgba(20,25,38,.85);
+                border:1px solid var(--border);
+                border-radius:12px;
+                padding:16px;
+                transition:.25s ease;
+            }
+
+            .methodology-card:hover{
+                border-color:var(--cyber-blue);
+                box-shadow:0 0 18px rgba(62,166,255,.15);
+            }
+
+            /* =========================
+            FORMULA (FIXED VISIBILITY)
+            ========================= */
+
+            .math-formula{
+                font-family:'JetBrains Mono','Fira Code','Consolas',monospace;
+                background:#0e1422;
+                border:1px solid #2b3550;
+                border-radius:10px;
+                padding:14px;
+                text-align:center;
+                margin:12px 0;
+                color:var(--neon-green);
+            }
+
+            /* =========================
+            SENSITIVITY SNAPSHOT FIX
+            ========================= */
+
+            .sensitivity{
+                background:linear-gradient(145deg,#0f1424,#0c1120);
+                border:1px solid #2b3550;
+                border-radius:12px;
+                padding:14px;
+            }
+
+            .sensitivity-value{
+                font-size:30px;
+                font-weight:600;
+                color:var(--critical);
+            }
+
+            /* =========================
+            SPI DISPLAY
+            ========================= */
+
+            .spi-display{
+                font-size:54px;
+                font-weight:600;
+            }
+
+            .grade-badge{
+                background:#0f1629;
+                border:1px solid var(--cyber-blue);
+                border-radius:8px;
+                padding:4px 12px;
+                margin-left:10px;
+            }
+
+            /* =========================
+            BADGES (CYBER STYLE)
+            ========================= */
+
+            .badge{
+                display:inline-block;
+                padding:4px 9px;
+                border-radius:8px;
+                font-size:10px;
+                letter-spacing:.6px;
+                border:1px solid transparent;
+                transition:.2s;
+            }
+
+            .badge:hover{
+                box-shadow:0 0 8px currentColor;
+            }
+
+            .badge-critical{background:rgba(255,77,109,.15);color:var(--critical);}
+            .badge-high{background:rgba(255,158,79,.15);color:var(--high);}
+            .badge-medium{background:rgba(255,209,102,.15);color:var(--medium);}
+            .badge-low{background:rgba(6,214,160,.15);color:var(--low);}
+            .badge-info{background:rgba(77,171,247,.15);color:var(--info);}
+
+            .badge-reach-safe{color:var(--neon-green);}
+            .badge-reach-risk{color:var(--critical);}
+            .badge-reach-unknown{color:var(--text-dim);}
+
+            /* =========================
+            TABLE (FIXED RESPONSIVE)
+            ========================= */
+
+            table{
+                width:100%;
+                border-collapse:collapse;
+                table-layout:fixed;
+                margin-top:24px;
+                background:var(--bg-card);
+                border:1px solid var(--border);
+                border-radius:12px;
+                overflow:hidden;
+            }
+
+            th{
+                text-align:left;
+                padding:14px;
+                font-size:11px;
+                color:var(--text-dim);
+                border-bottom:1px solid var(--border);
+                letter-spacing:.5px;
+            }
+
+            td{
+                padding:14px;
+                font-size:13px;
+                border-bottom:1px solid #1f2636;
+                vertical-align:top;
+
+                /* prevents layout breaking by long paths / hashes */
+                word-wrap:break-word;      /* legacy fallback */
+                overflow-wrap:anywhere;    /* modern browsers */
+            }
+
+            tr:hover{
+                background:rgba(62,166,255,.08);
+            }
+
+            /* =========================
+            PROGRESS BARS
+            ========================= */
+
+            .progress-fill{
+                transition: width .6s ease;
+            }
+
+            /* =========================
+            CODE STYLE
+            ========================= */
+
+            code{
+                font-family:'JetBrains Mono','Fira Code','Consolas',monospace;
+                background:rgba(255,255,255,.04);
+                padding:3px 6px;
+                border-radius:6px;
+                color:#9cdcfe;
+            }
+
+            /* =========================
+            AI TERMINAL BLOCK
+            ========================= */
+
+            .ai-guidance {
+                background: #0d1117; /* Глубокий черный фон для контраста */
+                border: 1px solid rgba(62, 166, 255, 0.3); /* Тонкая синяя граница */
+                border-left: 4px solid var(--cyber-blue); /* Акцентная полоса слева */
+                border-radius: 8px;
+                padding: 20px;
+                margin: 10px 20px 20px 20px; /* Отступы, чтобы блок не слипался с краями таблицы */
+                font-family: 'JetBrains Mono', 'Fira Code', monospace;
+                line-height: 1.6;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .ai-guidance::before {
+                content: "AI_ANALYSIS_VERIFIED";
+                position: absolute;
+                top: 5px;
+                right: 10px;
+                font-size: 8px;
+                color: var(--cyber-blue);
+                opacity: 0.5;
+                letter-spacing: 1px;
+            }
+
+            .ai-title {
+                color: var(--cyber-blue); /* Изменил на синий, так как это основной цвет твоего бренда */
+                font-weight: 600;
+                font-size: 0.85rem;
+                margin-bottom: 12px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            .ai-content {
+                color: #d1d5db; /* Светло-серый для текста, чтобы глаза не уставали */
+                font-size: 0.85rem;
+                white-space: pre-wrap; /* Сохраняет переносы строк из Python */
+            }
+
+            /* =========================
+            FILTER BUTTONS
+            ========================= */
+
+            .filter-btn{
+                background:#121726;
+                border:1px solid var(--border);
+                color:var(--text-main);
+                padding:8px 14px;
+                border-radius:10px;
+                cursor:pointer;
+                transition:.25s;
+            }
+
+            .filter-btn:hover{
+                border-color:var(--cyber-blue);
+            }
+
+            .filter-btn.active{
+                background:rgba(62,166,255,.15);
+                border-color:var(--cyber-blue);
+                box-shadow:0 0 12px rgba(62,166,255,.3);
+            }
+
+            /* =========================
+            FOOTER
+            ========================= */
+
+            .footer{
+                text-align:center;
+                margin-top:40px;
+                color:var(--text-dim);
+                font-size:12px;
+            }
+
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <div><h1>dvwa-test</h1><p>Auditor Core v2.1 · Security Posture Report</p></div>
+                    <div style="text-align: right;"><p>Generated: 2026-03-06 18:21</p></div>
+                </div>
+
+                <div class="decision-box" style="display: flex; justify-content: space-between; align-items: center; margin-top:20px;">
+                    <div style="flex: 2;">
+                        <h2>Security Posture Report</h2>
+                        <p><strong>Project:</strong> dvwa-test | <strong>Findings:</strong> 46</p>
+                        <p><strong>Credibility:</strong> STABLE (100/100)</p>
+                    </div>
+                    <div style="flex: 1; text-align: center; border-left: 1px solid var(--border);">
+                        <p style="font-size: 12px; color: var(--text-dim);">SECURITY POSTURE INDEX (SPI)</p>
+                        <h2 class="spi-display">64.51 <span class="grade-badge">C</span></h2>
+                        <p style="font-weight: bold; color: var(--cyber-blue);">NEEDS_ATTENTION</p>
+                    </div>
+                </div>
+
+                <div class="decision-box" style="border-left-color: var(--neutral);">
+                    <h3>🛡️ WSPM v2.2 Methodology Declaration</h3>
+                    <div class="methodology-grid">
+                        <div class="methodology-card" style="grid-column: span 2; border-left: 5px solid #17a2b8;">
+                            <strong>🧠 Strategic Model Identification</strong><br>
+                            <span style="font-size: 0.85em;">Model: Stabilized Multiplicative Risk with Dynamic K-Factor (WSPM v2.2)</span>
+                        </div>
+
+                        <div class="methodology-card" style="border-left: 5px solid var(--info);">
+                            <strong>📐 Risk Exposure Formula</strong>
+                            <div class="math-formula" style="font-size: 1.1em; margin: 10px 0;">
+                                SPI = 100 &times; e<sup>-(71.59 / 163.32)</sup>
+                            </div>
+                            <div style="font-size: 10px; color: var(--text-dim); border-top: 1px solid var(--border); pt-5px; margin-top: 5px;">
+                                Weighted Exposure: <b>71.59</b> | K: <b>163.32</b>
+                            </div>
+                        </div>
+
+                        <div class="methodology-card" style="border-left: 5px solid var(--cyber-blue);">
+                            <strong>📊 Context Distribution</strong>
+
+                            <div style="margin-top:10px; font-size:11px;">
+
+                                <div style="margin-bottom:8px;">
+                                    Core/Prod: 0.0%
+                                    <div style="background:var(--border); height:8px; border-radius:4px; margin-top:4px;">
+                                        <div class="progress-fill"
+                                            style="background:var(--critical); width:0.0%; height:100%; border-radius:4px;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    Test/Noise: 100.0%
+                                    <div style="background:var(--border); height:8px; border-radius:4px; margin-top:4px;">
+                                        <div class="progress-fill"
+                                            style="background:var(--neutral); width:100.0%; height:100%; border-radius:4px;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="methodology-card" style="border-left: 5px solid var(--neutral);">
+                            <strong>🔗 Reachability Breakdown</strong>
+                            <div style="margin-top:10px; font-size:11px;">
+                                Reachable: 0% 
+                                <div style="background:var(--border); height:6px; border-radius:3px; margin-bottom:4px;">
+                                    <div style="background:var(--critical); width:0%; height:100%; border-radius:3px;"></div>
+                                </div>
+                                Static-Safe: 0% 
+                                <div style="background:var(--border); height:6px; border-radius:3px; margin-bottom:4px;">
+                                    <div style="background:var(--low); width:0%; height:100%; border-radius:3px;"></div>
+                                </div>
+                                Unknown: 0% 
+                                <div style="background:var(--border); height:6px; border-radius:3px;">
+                                    <div style="background:var(--neutral); width:0%; height:100%; border-radius:3px;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="methodology-card sensitivity">
+                            <strong>🔬 Sensitivity Snapshot</strong>
+                            <div style="margin-top:5px; font-size:11px; line-height: 1.4;">
+                                If all <b>UNKNOWN</b> became <b>EXPLOITABLE</b>, SPI would drop to: <br>
+                                <div class="sensitivity-value">
+                                    100.0
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="decision-box" style="border-left-color: #1a2a3a;">
+                    <h3 style="margin-top:0; font-size:14px;">🔎 Quick Analysis Filters</h3>
+                    <button class="filter-btn active" style="background:#1a2a3a; color:white;" onclick="filterTable('all', this)">ALL (46)</button>
+                    <button class="filter-btn" style="background:#ff4d4d; color:white;" onclick="filterTable('critical', this)">CRITICAL (0)</button>
+                    <button class="filter-btn" style="background:#ff944d; color:white;" onclick="filterTable('high', this)">HIGH (0)</button>
+                    <button class="filter-btn" style="background:#ffdb4d; color:#333;" onclick="filterTable('medium', this)">MEDIUM (0)</button>
+                    <button class="filter-btn" style="background:#4dff88; color:#333;" onclick="filterTable('low', this)">LOW (46)</button>
+                    <button class="filter-btn" style="background:var(--cyber-blue); color:white;" onclick="filterTable('info', this)">INFO (0)</button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr><th style="width:120px;">Severity</th><th style="width:180px;">Rule ID</th><th style="width:250px;">Location</th><th>Detector</th><th>Description</th><th style="width:90px;">CWE</th><th style="width:60px;">CVSS</th></tr>
+                    </thead>
+                    <tbody id="findings-table">
+                        
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    <br><span class="badge" style="background:var(--critical); color:white; font-size:9px;">🔥 AI VERIFIED (0%)</span>
+                </td>
+                <td><code>SECRET_GENERIC_SECRET</code></td>
+                <td><code>database/create_sqlite_db.sql:21</code></td>
+                <td><code>SecretDetector</code></td>
+                <td>Potential secret pattern matched: generic_secret</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">1.54</td>
+            </tr>
             
-            <div class="dropdown">
-                <a href="#" class="dropdown-trigger">Products <i class="fas fa-chevron-down"></i></a>
-                <div class="dropdown-content">
-                    <a href="auditor-core.html"><i class="fas fa-search"></i> Auditor Core</a>
-                    <a href="sentinel.html"><i class="fas fa-shield-alt"></i> Sentinel</a>
-                    <a href="compare.html"><i class="fas fa-layer-group"></i> Compare Engines</a>
-                </div>
+                <tr class="finding-row severity-low ai-details" data-severity="low">
+                    <td colspan="7">
+                        <div class="ai-guidance" style="border-left: 4px solid var(--critical);">
+                            <div class="ai-title">🧠 ARCHITECTURAL ANALYSIS (Verdict: SUPPORTED)</div>
+                            <div class="ai-content">【VERDICT: SUPPORTED】 (Confidence: 100%)
+CHAIN: Hardcoded string literal (&#x27;password&#x27;, &#x27;abc123&#x27;, &#x27;charley&#x27;, &#x27;letmein&#x27;) in SQL script. -&gt; The &#x27;password&#x27; column in the &#x27;users&#x27; table.
+
+ANALYSIS: The code block contains hardcoded generic passwords (&#x27;password&#x27;, &#x27;abc123&#x27;, &#x27;charley&#x27;, &#x27;letmein&#x27;) within an `INSERT INTO users` statement in a database creation script. These are weak, easily guessable credentials. If this script is used to initialize a production database, these hardcoded secrets could be exploited, leading to unauthorized access. Even in development or test environments, exposing such credentials poses a security risk.</div>
+                            
+                        </div>
+                    </td>
+                </tr>
+                
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    <br><span class="badge" style="background:var(--critical); color:white; font-size:9px;">🔥 AI VERIFIED (0%)</span>
+                </td>
+                <td><code>SECRET_GENERIC_SECRET</code></td>
+                <td><code>database/create_sqlite_db.sql:25</code></td>
+                <td><code>SecretDetector</code></td>
+                <td>Potential secret pattern matched: generic_secret</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">1.54</td>
+            </tr>
+            
+                <tr class="finding-row severity-low ai-details" data-severity="low">
+                    <td colspan="7">
+                        <div class="ai-guidance" style="border-left: 4px solid var(--critical);">
+                            <div class="ai-title">🧠 ARCHITECTURAL ANALYSIS (Verdict: SUPPORTED)</div>
+                            <div class="ai-content">【VERDICT: SUPPORTED】 (Confidence: 100%)
+CHAIN: Hardcoded string literal (&#x27;password&#x27;, &#x27;abc123&#x27;, &#x27;charley&#x27;, &#x27;letmein&#x27;) in SQL script. -&gt; The &#x27;password&#x27; column in the &#x27;users&#x27; table.
+
+ANALYSIS: The code block contains hardcoded generic passwords (&#x27;password&#x27;, &#x27;abc123&#x27;, &#x27;charley&#x27;, &#x27;letmein&#x27;) within an `INSERT INTO users` statement in a database creation script. These are weak, easily guessable credentials. If this script is used to initialize a production database, these hardcoded secrets could be exploited, leading to unauthorized access. Even in development or test environments, exposing such credentials poses a security risk.</div>
+                            
+                        </div>
+                    </td>
+                </tr>
+                
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    <br><span class="badge" style="background:var(--critical); color:white; font-size:9px;">🔥 AI VERIFIED (0%)</span>
+                </td>
+                <td><code>SECRET_GENERIC_SECRET</code></td>
+                <td><code>database/create_postgresql_db.sql:3</code></td>
+                <td><code>SecretDetector</code></td>
+                <td>Potential secret pattern matched: generic_secret</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">1.54</td>
+            </tr>
+            
+                <tr class="finding-row severity-low ai-details" data-severity="low">
+                    <td colspan="7">
+                        <div class="ai-guidance" style="border-left: 4px solid var(--critical);">
+                            <div class="ai-title">🧠 ARCHITECTURAL ANALYSIS (Verdict: SUPPORTED)</div>
+                            <div class="ai-content">【VERDICT: SUPPORTED】 (Confidence: 100%)
+CHAIN: Hardcoded string literal (&#x27;password&#x27;, &#x27;abc123&#x27;, &#x27;charley&#x27;, &#x27;letmein&#x27;) in SQL script. -&gt; The &#x27;password&#x27; column in the &#x27;users&#x27; table (after weak MD5 hashing).
+
+ANALYSIS: The code block contains hardcoded generic passwords (&#x27;password&#x27;, &#x27;abc123&#x27;, &#x27;charley&#x27;, &#x27;letmein&#x27;) within an `INSERT INTO users` statement in a database creation script. These passwords are then hashed using MD5, which is a cryptographically weak and deprecated hashing algorithm. This makes the stored passwords vulnerable to rainbow table attacks or brute-forcing, even if hashed. If this script is used to initialize a production database, these weak, hardcoded credentials could be exploited, leading to unauthorized access. Even in development or test environments, exposing such credentials poses a security risk.</div>
+                            
+                        </div>
+                    </td>
+                </tr>
+                
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    <br><span class="badge" style="background:var(--critical); color:white; font-size:9px;">🔥 AI VERIFIED (0%)</span>
+                </td>
+                <td><code>SECRET_GENERIC_SECRET</code></td>
+                <td><code>database/create_oracle_db.sql:21</code></td>
+                <td><code>SecretDetector</code></td>
+                <td>Potential secret pattern matched: generic_secret</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">1.54</td>
+            </tr>
+            
+                <tr class="finding-row severity-low ai-details" data-severity="low">
+                    <td colspan="7">
+                        <div class="ai-guidance" style="border-left: 4px solid var(--critical);">
+                            <div class="ai-title">🧠 ARCHITECTURAL ANALYSIS (Verdict: SUPPORTED)</div>
+                            <div class="ai-content">【VERDICT: SUPPORTED】 (Confidence: 100%)
+CHAIN: Hardcoded string literal (&#x27;password&#x27;, &#x27;abc123&#x27;, &#x27;charley&#x27;, &#x27;letmein&#x27;) in SQL script. -&gt; The &#x27;password&#x27; column in the &#x27;users&#x27; table.
+
+ANALYSIS: The code block contains hardcoded generic passwords (&#x27;password&#x27;, &#x27;abc123&#x27;, &#x27;charley&#x27;, &#x27;letmein&#x27;) within an `INSERT INTO users` statement in a database creation script. These are weak, easily guessable credentials. If this script is used to initialize a production database, these hardcoded secrets could be exploited, leading to unauthorized access. Even in development or test environments, exposing such credentials poses a security risk.</div>
+                            
+                        </div>
+                    </td>
+                </tr>
+                
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    <br><span class="badge" style="background:var(--critical); color:white; font-size:9px;">🔥 AI VERIFIED (0%)</span>
+                </td>
+                <td><code>SECRET_GENERIC_SECRET</code></td>
+                <td><code>database/create_oracle_db.sql:25</code></td>
+                <td><code>SecretDetector</code></td>
+                <td>Potential secret pattern matched: generic_secret</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">1.54</td>
+            </tr>
+            
+                <tr class="finding-row severity-low ai-details" data-severity="low">
+                    <td colspan="7">
+                        <div class="ai-guidance" style="border-left: 4px solid var(--critical);">
+                            <div class="ai-title">🧠 ARCHITECTURAL ANALYSIS (Verdict: SUPPORTED)</div>
+                            <div class="ai-content">【VERDICT: SUPPORTED】 (Confidence: 100%)
+CHAIN: Hardcoded string literal (&#x27;password&#x27;, &#x27;abc123&#x27;, &#x27;charley&#x27;, &#x27;letmein&#x27;) in SQL script. -&gt; The &#x27;password&#x27; column in the &#x27;users&#x27; table.
+
+ANALYSIS: The code block contains hardcoded generic passwords (&#x27;password&#x27;, &#x27;abc123&#x27;, &#x27;charley&#x27;, &#x27;letmein&#x27;) within an `INSERT INTO users` statement in a database creation script. These are weak, easily guessable credentials. If this script is used to initialize a production database, these hardcoded secrets could be exploited, leading to unauthorized access. Even in development or test environments, exposing such credentials poses a security risk.</div>
+                            
+                        </div>
+                    </td>
+                </tr>
+                
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SECRET_GENERIC_SECRET</code></td>
+                <td><code>vulnerabilities/sqli/test.php:4</code></td>
+                <td><code>SecretDetector</code></td>
+                <td>Potential secret pattern matched: generic_secret</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">0.08</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>BANDIT_B113</code></td>
+                <td><code>tests/test_url.py:32</code></td>
+                <td><code>BanditDetector</code></td>
+                <td>Call to requests without timeout</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">0.05</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>BANDIT_B101</code></td>
+                <td><code>tests/test_url.py:90</code></td>
+                <td><code>BanditDetector</code></td>
+                <td>Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">0.02</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>generic-api-key</code></td>
+                <td><code>vulnerabilities/csrf/help/help.php:54</code></td>
+                <td><code>GitleaksDetector</code></td>
+                <td>SECRET EXPOSURE: Generic API Key identified.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">1.01</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>GHA_UNPINNED_ACTION</code></td>
+                <td><code>.github/workflows/vulnerable.yml:1</code></td>
+                <td><code>cicd_analyzer</code></td>
+                <td>Unpinned action &#x27;actions/checkout@v4&#x27;. Use a full SHA hash to prevent supply chain attacks.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">0.67</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>GHA_UNPINNED_ACTION</code></td>
+                <td><code>.github/workflows/shiftleft-analysis.yml:1</code></td>
+                <td><code>cicd_analyzer</code></td>
+                <td>Unpinned action &#x27;actions/checkout@v3&#x27;. Use a full SHA hash to prevent supply chain attacks.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">0.67</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>GHA_UNPINNED_ACTION</code></td>
+                <td><code>.github/workflows/codeql-analysis.yml:1</code></td>
+                <td><code>cicd_analyzer</code></td>
+                <td>Unpinned action &#x27;actions/checkout@v3&#x27;. Use a full SHA hash to prevent supply chain attacks.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">0.67</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>GHA_UNPINNED_ACTION</code></td>
+                <td><code>.github/workflows/pytest.yml:1</code></td>
+                <td><code>cicd_analyzer</code></td>
+                <td>Unpinned action &#x27;actions/checkout@v3&#x27;. Use a full SHA hash to prevent supply chain attacks.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">0.05</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>GHA_UNPINNED_ACTION</code></td>
+                <td><code>.github/workflows/docker-image.yml:1</code></td>
+                <td><code>cicd_analyzer</code></td>
+                <td>Unpinned action &#x27;actions/checkout@v5&#x27;. Use a full SHA hash to prevent supply chain attacks.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">0.67</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_COMMAND_INJECTION</code></td>
+                <td><code>vulnerabilities/view_help.php:20</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential command injection detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.26</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_COMMAND_INJECTION</code></td>
+                <td><code>vulnerabilities/view_help.php:22</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential command injection detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.26</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/api/source/medium.php:14</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.07</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/api/source/medium.php:25</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.07</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/api/source/low.php:26</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.07</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/api/source/low.php:34</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.07</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/api/source/low.php:81</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.07</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/api/source/low.php:94</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.07</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_COMMAND_INJECTION</code></td>
+                <td><code>vulnerabilities/exec/source/impossible.php:22</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential command injection detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.26</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_COMMAND_INJECTION</code></td>
+                <td><code>vulnerabilities/exec/source/impossible.php:26</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential command injection detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.26</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_COMMAND_INJECTION</code></td>
+                <td><code>vulnerabilities/exec/source/high.php:26</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential command injection detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.26</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    <br><span class="badge" style="background:var(--critical); color:white; font-size:9px;">🔥 AI VERIFIED (0%)</span>
+                </td>
+                <td><code>SAST_COMMAND_INJECTION</code></td>
+                <td><code>vulnerabilities/exec/source/high.php:30</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential command injection detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.26</td>
+            </tr>
+            
+                <tr class="finding-row severity-low ai-details" data-severity="low">
+                    <td colspan="7">
+                        <div class="ai-guidance" style="border-left: 4px solid var(--critical);">
+                            <div class="ai-title">🧠 ARCHITECTURAL ANALYSIS (Verdict: SUPPORTED)</div>
+                            <div class="ai-content">【VERDICT: SUPPORTED】 (Confidence: 95%)
+CHAIN: User-controlled input assigned to `$target` (e.g., from `$_GET`, `$_POST`) -&gt; `shell_exec()` directly concatenates `$target` into the command string without sanitization.
+
+ANALYSIS: The `$target` variable, which is assumed to be user-controlled input (given the file name &#x27;high.php&#x27; suggesting an intentionally vulnerable context), is directly concatenated into the `shell_exec()` command. This allows an attacker to inject arbitrary shell commands by appending special characters like `&amp;`, `|`, `&amp;&amp;`, `||`, or `;` followed by their desired command. For example, if `$target` is `127.0.0.1; rm -rf /`, the `rm -rf /` command would be executed.</div>
+                            
+                        </div>
+                    </td>
+                </tr>
+                
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    <br><span class="badge" style="background:var(--critical); color:white; font-size:9px;">🔥 AI VERIFIED (0%)</span>
+                </td>
+                <td><code>SAST_COMMAND_INJECTION</code></td>
+                <td><code>vulnerabilities/exec/source/medium.php:19</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential command injection detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.26</td>
+            </tr>
+            
+                <tr class="finding-row severity-low ai-details" data-severity="low">
+                    <td colspan="7">
+                        <div class="ai-guidance" style="border-left: 4px solid var(--critical);">
+                            <div class="ai-title">🧠 ARCHITECTURAL ANALYSIS (Verdict: SUPPORTED)</div>
+                            <div class="ai-content">【VERDICT: SUPPORTED】 (Confidence: 95%)
+CHAIN: User-controlled input assigned to `$target` (e.g., from `$_GET`, `$_POST`) -&gt; `shell_exec()` directly concatenates `$target` into the command string without sanitization.
+
+ANALYSIS: The `$target` variable, which is assumed to be user-controlled input (given the file name &#x27;medium.php&#x27; suggesting an intentionally vulnerable context), is directly concatenated into the `shell_exec()` command. This allows an attacker to inject arbitrary shell commands by appending special characters like `&amp;`, `|`, `&amp;&amp;`, `||`, or `;` followed by their desired command. For example, if `$target` is `127.0.0.1; rm -rf /`, the `rm -rf /` command would be executed.</div>
+                            
+                        </div>
+                    </td>
+                </tr>
+                
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    <br><span class="badge" style="background:var(--critical); color:white; font-size:9px;">🔥 AI VERIFIED (0%)</span>
+                </td>
+                <td><code>SAST_COMMAND_INJECTION</code></td>
+                <td><code>vulnerabilities/exec/source/medium.php:23</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential command injection detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.26</td>
+            </tr>
+            
+                <tr class="finding-row severity-low ai-details" data-severity="low">
+                    <td colspan="7">
+                        <div class="ai-guidance" style="border-left: 4px solid var(--critical);">
+                            <div class="ai-title">🧠 ARCHITECTURAL ANALYSIS (Verdict: SUPPORTED)</div>
+                            <div class="ai-content">【VERDICT: SUPPORTED】 (Confidence: 95%)
+CHAIN: User-controlled input assigned to `$target` (e.g., from `$_GET`, `$_POST`) -&gt; `shell_exec()` directly concatenates `$target` into the command string without sanitization.
+
+ANALYSIS: The `$target` variable, which is assumed to be user-controlled input (given the file name &#x27;medium.php&#x27; suggesting an intentionally vulnerable context), is directly concatenated into the `shell_exec()` command. This allows an attacker to inject arbitrary shell commands by appending special characters like `&amp;`, `|`, `&amp;&amp;`, `||`, or `;` followed by their desired command. For example, if `$target` is `127.0.0.1; rm -rf /`, the `rm -rf /` command would be executed.</div>
+                            
+                        </div>
+                    </td>
+                </tr>
+                
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    <br><span class="badge" style="background:var(--critical); color:white; font-size:9px;">🔥 AI VERIFIED (0%)</span>
+                </td>
+                <td><code>SAST_COMMAND_INJECTION</code></td>
+                <td><code>vulnerabilities/exec/source/low.php:10</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential command injection detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.26</td>
+            </tr>
+            
+                <tr class="finding-row severity-low ai-details" data-severity="low">
+                    <td colspan="7">
+                        <div class="ai-guidance" style="border-left: 4px solid var(--critical);">
+                            <div class="ai-title">🧠 ARCHITECTURAL ANALYSIS (Verdict: SUPPORTED)</div>
+                            <div class="ai-content">【VERDICT: SUPPORTED】 (Confidence: 95%)
+CHAIN: User-controlled input assigned to `$target` (e.g., from `$_GET`, `$_POST`) -&gt; `shell_exec()` directly concatenates `$target` into the command string without sanitization.
+
+ANALYSIS: The `$target` variable, which is assumed to be user-controlled input (given the file name &#x27;low.php&#x27; suggesting an intentionally vulnerable context), is directly concatenated into the `shell_exec()` command. This allows an attacker to inject arbitrary shell commands by appending special characters like `&amp;`, `|`, `&amp;&amp;`, `||`, or `;` followed by their desired command. For example, if `$target` is `127.0.0.1; rm -rf /`, the `rm -rf /` command would be executed.</div>
+                            
+                        </div>
+                    </td>
+                </tr>
+                
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    <br><span class="badge" style="background:var(--critical); color:white; font-size:9px;">🔥 AI VERIFIED (0%)</span>
+                </td>
+                <td><code>SAST_COMMAND_INJECTION</code></td>
+                <td><code>vulnerabilities/exec/source/low.php:14</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential command injection detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.26</td>
+            </tr>
+            
+                <tr class="finding-row severity-low ai-details" data-severity="low">
+                    <td colspan="7">
+                        <div class="ai-guidance" style="border-left: 4px solid var(--critical);">
+                            <div class="ai-title">🧠 ARCHITECTURAL ANALYSIS (Verdict: SUPPORTED)</div>
+                            <div class="ai-content">【VERDICT: SUPPORTED】 (Confidence: 95%)
+CHAIN: User-controlled input assigned to `$target` (e.g., from `$_GET`, `$_POST`) -&gt; `shell_exec()` directly concatenates `$target` into the command string without sanitization.
+
+ANALYSIS: The `$target` variable, which is assumed to be user-controlled input (given the file name &#x27;low.php&#x27; suggesting an intentionally vulnerable context), is directly concatenated into the `shell_exec()` command. This allows an attacker to inject arbitrary shell commands by appending special characters like `&amp;`, `|`, `&amp;&amp;`, `||`, or `;` followed by their desired command. For example, if `$target` is `127.0.0.1; rm -rf /`, the `rm -rf /` command would be executed.</div>
+                            
+                        </div>
+                    </td>
+                </tr>
+                
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/authbypass/authbypass.js:43</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in javascript code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.07</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/authbypass/authbypass.js:45</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in javascript code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.07</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/authbypass/authbypass.js:47</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in javascript code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.07</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/authbypass/authbypass.js:49</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in javascript code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.07</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/xss_d/index.php:53</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">1.92</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/xss_d/index.php:54</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">1.92</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/xss_d/index.php:57</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">1.92</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/xss_d/index.php:58</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">1.92</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/xss_d/index.php:59</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">1.92</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/xss_d/index.php:60</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">1.92</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_COMMAND_INJECTION</code></td>
+                <td><code>vulnerabilities/javascript/source/high.js:1</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential command injection detected in javascript code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.26</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_COMMAND_INJECTION</code></td>
+                <td><code>vulnerabilities/javascript/source/high_unobfuscated.js:83</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential command injection detected in javascript code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.26</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_COMMAND_INJECTION</code></td>
+                <td><code>vulnerabilities/javascript/source/high_unobfuscated.js:84</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential command injection detected in javascript code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.26</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_COMMAND_INJECTION</code></td>
+                <td><code>vulnerabilities/cryptography/source/oracle_attack.php:57</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential command injection detected in php code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.26</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/csp/source/high.js:9</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in javascript code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.07</td>
+            </tr>
+            
+            <tr class="severity-low finding-row" data-severity="low">
+                <td>
+                    <span class="badge badge-low">LOW</span>
+                    
+                </td>
+                <td><code>SAST_XSS</code></td>
+                <td><code>vulnerabilities/csp/source/impossible.js:9</code></td>
+                <td><code>SastScanner</code></td>
+                <td>Potential xss detected in javascript code.</td>
+                <td style="text-align:center;">CWE-UNKNOWN</td>
+                <td style="text-align: center; font-weight: bold;">3.07</td>
+            </tr>
+            
+                    </tbody>
+                </table>
+                
+                <div class="footer">&copy; 2026 DataWizual Security Labs · Auditor Core v2.1</div>
             </div>
 
-            <a href="audit.html">Audit Service</a>
-
-            <div class="dropdown">
-                <a href="#" class="dropdown-trigger">Resources <i class="fas fa-chevron-down"></i></a>
-                <div class="dropdown-content">
-                    <a href="methodology.html">Methodology</a>
-                    <a href="sample-report.html" class="active">Demo Report</a>
-                    <a href="security-policy.html">Security Policy</a>
-                </div>
-            </div>
-
-            <a href="get.html" class="nav-btn">Get Access</a>
-        </div>
-    </div>
-</nav>
-
-<div class="container" style="margin-top: 40px; margin-bottom: 40px;">
-    <div class="report-container">
-        <div class="report-header">
-            <div class="report-meta">
-                <span>AUDIT_ID: DW-2026-ALPHA</span>
-                <span>Generated: 1/2/26, 18:37</span>
-            </div>
-            <h1 style="font-size: 2rem; margin-top: 10px;">Security Audit Report: <span style="color: #6366f1;">COMPLETED</span></h1>
-
-            <p style="margin-top: 5px;">Target Environment: <strong>production-cluster-alpha</strong></p>
-            <p style="font-size:0.9rem; color:#777;">
-            This report is a sanitized demonstration generated from authorized test data.
-            No real customer infrastructure is disclosed.
-            </p>
-        </div>
-
-        <div class="severity-badges">
-            <div class="s-badge bg-crit">CRITICAL: 155</div>
-            <div class="s-badge bg-high">HIGH: 40</div>
-            <div class="s-badge bg-med">MEDIUM: 15</div>
-            <div class="s-badge bg-low">LOW: 0</div>
-        </div>
-
-        <div class="table-wrapper">
-            <table class="audit-table">
-                <thead>
-                    <tr>
-                        <th style="width: 35%;">Rule & Description</th>
-                        <th style="width: 15%;">Severity</th>
-                        <th style="width: 15%;">CWE</th>
-                        <th style="width: 35%;">Location</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <span class="rule-id">secret.generic_credential</span>
-                            Potential hardcoded authentication token found in source code.
-                        </td>
-                        <td class="t-crit">CRITICAL</td>
-                        <td>CWE-798</td>
-                        <td class="path-text">src/auth/providers/client-config.ts:46</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="rule-id">secret.api_key_exposure</span>
-                            Hardcoded API key detected. Potential for unauthorized service access.
-                        </td>
-                        <td class="t-crit">CRITICAL</td>
-                        <td>CWE-798</td>
-                        <td class="path-text">modules/connector/v2/gateway.py:102</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="rule-id">ci.privileged_container</span>
-                            Container running with privileged access in CI pipeline definition.
-                        </td>
-                        <td style="color: #ea580c; font-weight: 700;">HIGH</td>
-                        <td>CWE-269</td>
-                        <td class="path-text">.github/workflows/deploy-main.yml:24</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="rule-id">infra.unencrypted_transport</span>
-                            Internal microservice communication detected over plaintext HTTP.
-                        </td>
-                        <td style="color: #ca8a04; font-weight: 700;">MEDIUM</td>
-                        <td>CWE-319</td>
-                        <td class="path-text">infrastructure/terraform/service-mesh.tf:88</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div style="margin-top: 50px; padding: 30px; background: #f8fafc; border-radius: 4px; text-align: center;" class="no-print">
-            <h3>Protect your infrastructure.</h3>
-            <p style="color: #64748b; margin-bottom: 20px;">This is a redacted sample. A full audit includes detailed remediation code and impact analysis.</p>
-            <a href="mailto:eldorzufarov66@gmail.com" class="btn btn-primary" style="text-decoration: none;">Request Expert Consultation</a>
-        </div>
-    </div>
-</div>
-
-<footer class="footer no-print">
-    <div class="container" style="text-align: center;">
-        <p>&copy; 2026 DataWizual Security. Private & Confidential.</p>
-    </div>
-</footer>
-
-</body>
-</html>
+            <script>
+                function filterTable(severity, btn) {
+                    // Update buttons
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Filter rows
+                    const rows = document.querySelectorAll('.finding-row');
+                    rows.forEach(row => {
+                        if (severity === 'all' || row.getAttribute('data-severity') === severity) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                }
+            </script>
+        </body>
+        </html>
+        

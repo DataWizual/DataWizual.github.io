@@ -3,24 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Security Audit | DataWizual</title>
-    <meta name="description" content="Discrete security assessments for CI/CD and infrastructure.">
-    
+    <title>Professional Security Audit Service | DataWizual Security</title>
+    <meta name="description" content="Discrete, NDA-bound security audit for CI/CD pipelines and infrastructure. Powered by Auditor Core v2.1 — 11 detectors, AI advisory, human validation, remediation roadmap.">
+
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="security" href="https://datawizual.github.io/.well-known/security.txt">
-</head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <style>
+        @keyframes horizontal-scan {
+            0%   { width:0; left:0; opacity:0; }
+            50%  { width:100%; opacity:0.6; }
+            100% { width:0; left:100%; opacity:0; }
+        }
+        .scan-line {
+            position:absolute; top:0; left:0; right:0; height:2px;
+            background:linear-gradient(90deg,transparent,#3498db,transparent);
+            animation:horizontal-scan 2.5s infinite linear;
+        }
 
+        .service-card {
+            background:rgba(26,28,32,0.85); border:1px solid rgba(255,255,255,0.06);
+            border-radius:14px; padding:32px; transition:all 0.3s ease;
+            position:relative; overflow:hidden; height:100%;
+        }
+        .service-card::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:3px;
+            opacity:0; transition:opacity 0.3s;
+        }
+        .service-card:hover { transform:translateY(-4px); }
+        .service-card:hover::before { opacity:1; }
+        .service-card.blue::before   { background:linear-gradient(90deg,var(--primary),#60a5fa); }
+        .service-card.green::before  { background:linear-gradient(90deg,#4ade80,#22c55e); }
+        .service-card.yellow::before { background:linear-gradient(90deg,#f59e0b,#fcd34d); }
+        .service-card.purple::before { background:linear-gradient(90deg,#c084fc,#a855f7); }
+        .service-card.teal::before   { background:linear-gradient(90deg,#2dd4bf,#14b8a6); }
+        .service-card.red::before    { background:linear-gradient(90deg,#f87171,#ef4444); }
+        .service-card:hover.blue   { border-color:rgba(52,152,219,0.3); }
+        .service-card:hover.green  { border-color:rgba(74,222,128,0.3); }
+        .service-card:hover.yellow { border-color:rgba(245,158,11,0.3); }
+        .service-card:hover.purple { border-color:rgba(192,132,252,0.3); }
+        .service-card:hover.teal   { border-color:rgba(45,212,191,0.3); }
+        .service-card:hover.red    { border-color:rgba(248,113,113,0.3); }
+
+        .icon-circle {
+            width:52px; height:52px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            margin-bottom:18px; font-size:1.3rem; flex-shrink:0;
+        }
+
+        .step-flow {
+            display:flex; align-items:flex-start; gap:20px;
+            padding:22px; background:rgba(26,28,32,0.8);
+            border:1px solid rgba(255,255,255,0.05); border-radius:14px;
+            transition:border-color 0.3s;
+        }
+        .step-flow:hover { border-color:rgba(52,152,219,0.2); }
+        .step-num {
+            width:44px; height:44px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-weight:800; font-size:1rem; flex-shrink:0;
+        }
+
+        .check-list { list-style:none; padding:0; margin:16px 0 0; }
+        .check-list li {
+            display:flex; align-items:flex-start; gap:9px;
+            color:var(--gray); font-size:0.88rem; line-height:1.6; margin-bottom:8px;
+        }
+        .check-list li i { flex-shrink:0; margin-top:3px; }
+
+        .scope-badge {
+            display:inline-flex; align-items:center; gap:6px;
+            background:rgba(52,152,219,0.1); border:1px solid rgba(52,152,219,0.25);
+            border-radius:8px; padding:5px 12px; font-size:0.8rem; color:var(--primary);
+            margin:3px;
+        }
+
+        .nda-box {
+            background:rgba(26,28,32,0.9); border:1px solid rgba(74,222,128,0.2);
+            border-radius:14px; padding:32px; display:flex; align-items:flex-start; gap:20px;
+        }
+    </style>
+</head>
 <body>
 
 <nav class="navbar">
     <div class="container">
-        <div class="logo">
-            <i class="fas fa-shield-alt"></i> DataWizual Security
-        </div>
+        <div class="logo"><i class="fas fa-shield-alt"></i> DataWizual Security</div>
         <div class="nav-links">
             <a href="index.html">Home</a>
-            
             <div class="dropdown">
                 <a href="#" class="dropdown-trigger">Products <i class="fas fa-chevron-down"></i></a>
                 <div class="dropdown-content">
@@ -29,9 +100,7 @@
                     <a href="compare.html"><i class="fas fa-layer-group"></i> Compare Engines</a>
                 </div>
             </div>
-
             <a href="audit.html" class="active">Audit Service</a>
-
             <div class="dropdown">
                 <a href="#" class="dropdown-trigger">Resources <i class="fas fa-chevron-down"></i></a>
                 <div class="dropdown-content">
@@ -40,103 +109,349 @@
                     <a href="security-policy.html">Security Policy</a>
                 </div>
             </div>
-
             <a href="get.html" class="nav-btn">Get Access</a>
         </div>
     </div>
 </nav>
 
-<header class="hero" style="padding: 100px 0; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05);">
-    <div class="container">
-        <h1 class="hero-title">Discrete <span class="text-gradient">Security Assessment</span></h1>
-        <p class="hero-subtitle" style="margin: 0 auto; max-width: 800px;">
-            Identifying the noise so you can enjoy the silence. 
-            Independent security validation for modern engineering teams.
+<!-- ══════════════════════════════════════ HERO -->
+<header class="hero" style="padding:110px 0 80px; background:linear-gradient(135deg,#0f172a 0%,#1a1c20 100%); text-align:center; position:relative; overflow:hidden;">
+    <div class="scan-line"></div>
+    <div class="container" style="position:relative; z-index:2;">
+        <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(52,152,219,0.1); border:1px solid rgba(52,152,219,0.3); border-radius:20px; padding:6px 16px; margin-bottom:24px; color:var(--primary); font-size:0.85rem; font-weight:700;">
+            <i class="fas fa-user-secret"></i> Discrete · NDA-Bound · Offline-First
+        </div>
+        <h1 class="hero-title" style="font-size:3.2rem;">
+            Professional <span class="text-gradient">Security Audit</span>
+        </h1>
+        <p class="hero-subtitle" style="max-width:800px; margin:0 auto 36px; font-size:1.15rem;">
+            Identifying the noise so you can enjoy the silence.
+            Full-spectrum audit powered by <strong>Auditor Core v2.1</strong> —
+            11 detectors, AI false-positive filter, and human validation with a
+            remediation roadmap delivered to your inbox.
         </p>
+        <div class="hero-buttons" style="justify-content:center; gap:16px;">
+            <a href="mailto:eldorzufarov66@gmail.com?subject=Security%20Audit%20Request&body=Hello%2C%0A%0AI%20would%20like%20to%20request%20a%20professional%20security%20audit.%0A%0AProject%20scope%3A%20%5Bdescribe%5D%0ARepository%20URL%2Farchive%3A%20%5Blink%20or%20attachment%5D"
+               class="btn btn-primary btn-glow" style="padding:15px 30px;">
+                <i class="fas fa-file-signature"></i> Request an Audit
+            </a>
+            <a href="sample-report.html" class="btn btn-secondary" style="padding:15px 30px;">
+                <i class="fas fa-file-alt"></i> View Demo Report
+            </a>
+        </div>
     </div>
 </header>
 
-<section class="section">
+<!-- ══════════════════════════════════════ WHAT'S INCLUDED -->
+<section style="padding:100px 0; background:rgba(15,23,42,0.75);">
     <div class="container">
-        <h2 style="text-align: center; margin-bottom: 50px;">Beyond Automated Scanning</h2>
-        
-        <div class="products-grid"> <div class="product-card">
-                <div class="product-icon"><i class="fas fa-search-dollar"></i></div>
-                <h3 class="product-title">Supply Chain Audit</h3>
-                <p class="product-description">Analysis of third-party dependencies, Docker base images, and GitHub Actions permissions to prevent backdoors and poisoning.</p>
-                <div class="product-features">
-                    <span><i class="fas fa-check t-green"></i> Dependency Graph Review</span>
-                    <span><i class="fas fa-check t-green"></i> Base Image Hardening</span>
-                    <span><i class="fas fa-check t-green"></i> Artifact Integrity</span>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-icon"><i class="fas fa-project-diagram"></i></div>
-                <h3 class="product-title">CI/CD Logic Review</h3>
-                <p class="product-description">Manual review of pipeline logic. We find race conditions and privilege escalations that no automated tool can detect.</p>
-                <div class="product-features">
-                    <span><i class="fas fa-check t-green"></i> Pipeline Trust Boundaries</span>
-                    <span><i class="fas fa-check t-green"></i> Runner Security</span>
-                    <span><i class="fas fa-check t-green"></i> Logic Flaw Detection</span>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-icon"><i class="fas fa-file-invoice-dollar"></i></div>
-                <h3 class="product-title">Remediation Support</h3>
-                <p class="product-description">We don't just leave you with a PDF. We provide code snippets and direct guidance on how to secure your specific stack.</p>
-                <div class="product-features">
-                    <span><i class="fas fa-check t-green"></i> Custom Code Snippets</span>
-                    <span><i class="fas fa-check t-green"></i> Architecture Guidance</span>
-                    <span><i class="fas fa-check t-green"></i> Priority Support</span>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-<section style="padding: 100px 0; background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05);">
-    <div class="container" style="text-align: center;">
-        <h2 style="font-size: 2.5rem; margin-bottom: 20px;">The Process of Peace</h2>
-        <p style="color: var(--gray); margin-bottom: 40px; font-size: 1.1rem; max-width: 700px; margin-left: auto; margin-right: auto;">
-            Every engagement is confidential and bound by a strict NDA. 
-            We work offline and respect your perimeter. 
-            <span style="display: block; margin-top: 15px; color: var(--primary); font-style: italic;">
-                Licensing is provided upon individual request to ensure appropriate usage, compliance, and support.
-            </span>
+        <h2 style="text-align:center; margin-bottom:16px; font-size:2.6rem;">
+            What's <span class="text-gradient">Included</span>
+        </h2>
+        <p style="text-align:center; color:var(--gray); margin-bottom:60px; max-width:700px; margin-left:auto; margin-right:auto;">
+            Every engagement covers the full security surface — code, infrastructure, CI/CD pipeline, and supply chain.
         </p>
-        
-        <div class="hero-buttons" style="justify-content: center;">
-            <a href="get.html" class="btn btn-primary btn-glow">
-                <i class="fas fa-key"></i> Request Professional Licensing
-            </a>
-            <a href="compare.html" class="btn btn-secondary">
-                <i class="fas fa-layer-group"></i> Compare Engines
-            </a>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:22px;">
+
+            <div class="service-card blue">
+                <div class="icon-circle" style="background:rgba(52,152,219,0.1);">
+                    <i class="fas fa-code" style="color:var(--primary);"></i>
+                </div>
+                <h4 style="color:white; margin-bottom:10px;">Static Code Analysis</h4>
+                <p style="color:var(--gray); font-size:0.88rem; line-height:1.6; margin-bottom:12px;">
+                    Full SAST scan via Bandit (Python) and Semgrep (multi-language) — SQL injection, XSS, command injection, insecure crypto, and more.
+                </p>
+                <ul class="check-list">
+                    <li><i class="fas fa-check" style="color:var(--primary);"></i> 50+ vulnerability patterns across Python, JS, Go, Java</li>
+                    <li><i class="fas fa-check" style="color:var(--primary);"></i> CWE mapping for every finding</li>
+                    <li><i class="fas fa-check" style="color:var(--primary);"></i> AI verification of critical findings</li>
+                </ul>
+            </div>
+
+            <div class="service-card red">
+                <div class="icon-circle" style="background:rgba(239,68,68,0.1);">
+                    <i class="fas fa-key" style="color:#f87171;"></i>
+                </div>
+                <h4 style="color:white; margin-bottom:10px;">Secret & Credential Detection</h4>
+                <p style="color:var(--gray); font-size:0.88rem; line-height:1.6; margin-bottom:12px;">
+                    Full git history scan plus live file analysis — AWS keys, API tokens, private keys, passwords, connection strings.
+                </p>
+                <ul class="check-list">
+                    <li><i class="fas fa-check" style="color:#f87171;"></i> Gitleaks — entire commit history</li>
+                    <li><i class="fas fa-check" style="color:#f87171;"></i> Secret Detector — 30+ patterns, all file types</li>
+                    <li><i class="fas fa-check" style="color:#f87171;"></i> Hardcoded credential map with file:line references</li>
+                </ul>
+            </div>
+
+            <div class="service-card yellow">
+                <div class="icon-circle" style="background:rgba(245,158,11,0.1);">
+                    <i class="fas fa-project-diagram" style="color:#f59e0b;"></i>
+                </div>
+                <h4 style="color:white; margin-bottom:10px;">CI/CD Pipeline Review</h4>
+                <p style="color:var(--gray); font-size:0.88rem; line-height:1.6; margin-bottom:12px;">
+                    Manual review of pipeline logic — race conditions, privilege escalation, unpinned actions, and misconfigurations no automated tool catches.
+                </p>
+                <ul class="check-list">
+                    <li><i class="fas fa-check" style="color:#f59e0b;"></i> GitHub Actions SHA pinning audit</li>
+                    <li><i class="fas fa-check" style="color:#f59e0b;"></i> Pipeline trust boundaries and runner security</li>
+                    <li><i class="fas fa-check" style="color:#f59e0b;"></i> Secret injection and env variable exposure</li>
+                </ul>
+            </div>
+
+            <div class="service-card green">
+                <div class="icon-circle" style="background:rgba(74,222,128,0.1);">
+                    <i class="fas fa-cubes" style="color:#4ade80;"></i>
+                </div>
+                <h4 style="color:white; margin-bottom:10px;">Supply Chain Audit</h4>
+                <p style="color:var(--gray); font-size:0.88rem; line-height:1.6; margin-bottom:12px;">
+                    Dependencies, Docker base images, and third-party integrations — mapping every external trust boundary and CVE exposure.
+                </p>
+                <ul class="check-list">
+                    <li><i class="fas fa-check" style="color:#4ade80;"></i> CVE lookup across pip, npm, cargo requirements</li>
+                    <li><i class="fas fa-check" style="color:#4ade80;"></i> GPL / copyleft license exposure</li>
+                    <li><i class="fas fa-check" style="color:#4ade80;"></i> Docker :latest tag and unpinned image audit</li>
+                </ul>
+            </div>
+
+            <div class="service-card teal">
+                <div class="icon-circle" style="background:rgba(45,212,191,0.1);">
+                    <i class="fas fa-server" style="color:#2dd4bf;"></i>
+                </div>
+                <h4 style="color:white; margin-bottom:10px;">Infrastructure Security</h4>
+                <p style="color:var(--gray); font-size:0.88rem; line-height:1.6; margin-bottom:12px;">
+                    Full IaC scan — Terraform, Kubernetes manifests, Helm charts, Dockerfiles. Misconfigurations, privilege issues, missing security controls.
+                </p>
+                <ul class="check-list">
+                    <li><i class="fas fa-check" style="color:#2dd4bf;"></i> Kubernetes runAsNonRoot, resource limits, RBAC</li>
+                    <li><i class="fas fa-check" style="color:#2dd4bf;"></i> Terraform state exposure and IAM misconfig</li>
+                    <li><i class="fas fa-check" style="color:#2dd4bf;"></i> Dockerfile hardening — privilege, secrets, layers</li>
+                </ul>
+            </div>
+
+            <div class="service-card purple">
+                <div class="icon-circle" style="background:rgba(192,132,252,0.1);">
+                    <i class="fas fa-tools" style="color:#c084fc;"></i>
+                </div>
+                <h4 style="color:white; margin-bottom:10px;">Remediation Support</h4>
+                <p style="color:var(--gray); font-size:0.88rem; line-height:1.6; margin-bottom:12px;">
+                    Not just a PDF. Concrete code snippets, configuration fixes, and a prioritised remediation roadmap tailored to your specific stack.
+                </p>
+                <ul class="check-list">
+                    <li><i class="fas fa-check" style="color:#c084fc;"></i> Custom code snippets per finding</li>
+                    <li><i class="fas fa-check" style="color:#c084fc;"></i> Priority matrix — Critical → Low action order</li>
+                    <li><i class="fas fa-check" style="color:#c084fc;"></i> Technical debriefing session on request</li>
+                </ul>
+            </div>
+
         </div>
     </div>
 </section>
 
+<!-- ══════════════════════════════════════ DELIVERABLES -->
+<section style="padding:100px 0; background:var(--dark);">
+    <div class="container">
+        <h2 style="text-align:center; margin-bottom:16px; font-size:2.6rem;">
+            What You <span class="text-gradient">Receive</span>
+        </h2>
+        <p style="text-align:center; color:var(--gray); margin-bottom:60px; max-width:700px; margin-left:auto; margin-right:auto;">
+            Every engagement produces the same structured deliverables — reproducible, machine-readable, and human-readable.
+        </p>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:20px; max-width:1000px; margin:0 auto;">
+
+            <div style="background:rgba(26,28,32,0.85); border:1px solid rgba(52,152,219,0.2); border-radius:14px; padding:28px; text-align:center;">
+                <div style="font-size:2.5rem; margin-bottom:14px;">📊</div>
+                <h4 style="color:white; margin-bottom:8px;">Interactive HTML Report</h4>
+                <p style="color:var(--gray); font-size:0.87rem; line-height:1.6;">Full findings with AI VERIFIED / AI FALSE POSITIVE badges, severity breakdown, and architectural analysis block.</p>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.85); border:1px solid rgba(74,222,128,0.2); border-radius:14px; padding:28px; text-align:center;">
+                <div style="font-size:2.5rem; margin-bottom:14px;">🎯</div>
+                <h4 style="color:white; margin-bottom:8px;">SPI Score (0–100)</h4>
+                <p style="color:var(--gray); font-size:0.87rem; line-height:1.6;">WSPM v2.2-calculated Security Posture Index with posture label — from Critical Risk to Hardened.</p>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.85); border:1px solid rgba(245,158,11,0.2); border-radius:14px; padding:28px; text-align:center;">
+                <div style="font-size:2.5rem; margin-bottom:14px;">🔧</div>
+                <h4 style="color:white; margin-bottom:8px;">Remediation Roadmap</h4>
+                <p style="color:var(--gray); font-size:0.87rem; line-height:1.6;">Prioritised action plan with concrete code snippets and configuration fixes for your specific stack.</p>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.85); border:1px solid rgba(192,132,252,0.2); border-radius:14px; padding:28px; text-align:center;">
+                <div style="font-size:2.5rem; margin-bottom:14px;">📄</div>
+                <h4 style="color:white; margin-bottom:8px;">JSON Raw Findings</h4>
+                <p style="color:var(--gray); font-size:0.87rem; line-height:1.6;">Machine-readable output for integration into your own tooling, ticketing systems, or compliance workflows.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════ PROCESS -->
+<section style="padding:100px 0; background:rgba(15,23,42,0.75);">
+    <div class="container">
+        <h2 style="text-align:center; margin-bottom:16px; font-size:2.6rem;">
+            Engagement <span class="text-gradient">Process</span>
+        </h2>
+        <p style="text-align:center; color:var(--gray); margin-bottom:60px; max-width:700px; margin-left:auto; margin-right:auto;">
+            Confidential from first contact to final delivery.
+        </p>
+
+        <div style="max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:16px;">
+
+            <div class="step-flow">
+                <div class="step-num" style="background:rgba(52,152,219,0.12); color:var(--primary);">1</div>
+                <div>
+                    <h4 style="color:white; margin-bottom:6px;">Initial Contact & Scope</h4>
+                    <p style="color:var(--gray); font-size:0.9rem; line-height:1.6; margin:0;">
+                        Email with a brief description of your project and what you want covered. We agree on scope, timeline, and NDA before anything begins.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step-flow">
+                <div class="step-num" style="background:rgba(74,222,128,0.12); color:#4ade80;">2</div>
+                <div>
+                    <h4 style="color:white; margin-bottom:6px;">Secure Repository Access</h4>
+                    <p style="color:var(--gray); font-size:0.9rem; line-height:1.6; margin:0;">
+                        You provide a read-only clone URL or encrypted archive. We never request write access. All analysis happens locally — your code never leaves a controlled environment.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step-flow">
+                <div class="step-num" style="background:rgba(192,132,252,0.12); color:#c084fc;">3</div>
+                <div>
+                    <h4 style="color:white; margin-bottom:6px;">Full Scan + AI Advisory</h4>
+                    <p style="color:var(--gray); font-size:0.9rem; line-height:1.6; margin:0;">
+                        Auditor Core v2.1 runs all 11 detectors. Critical findings are verified by Gemini 2.5 / Groq to eliminate false positives before scoring.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step-flow">
+                <div class="step-num" style="background:rgba(245,158,11,0.12); color:#f59e0b;">4</div>
+                <div>
+                    <h4 style="color:white; margin-bottom:6px;">Human Validation</h4>
+                    <p style="color:var(--gray); font-size:0.9rem; line-height:1.6; margin:0;">
+                        Every significant finding is manually reviewed for real-world exploitability. Race conditions, logic flaws, and pipeline misconfigurations are assessed by hand.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step-flow">
+                <div class="step-num" style="background:rgba(45,212,191,0.12); color:#2dd4bf;">5</div>
+                <div>
+                    <h4 style="color:white; margin-bottom:6px;">Delivery</h4>
+                    <p style="color:var(--gray); font-size:0.9rem; line-height:1.6; margin:0;">
+                        HTML report + JSON + remediation roadmap delivered via secure email. Debrief session available on request.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════ SCOPE -->
+<section style="padding:100px 0; background:var(--dark);">
+    <div class="container">
+        <h2 style="text-align:center; margin-bottom:16px; font-size:2.6rem;">
+            Typical <span class="text-gradient">Audit Scope</span>
+        </h2>
+        <p style="text-align:center; color:var(--gray); margin-bottom:50px; max-width:700px; margin-left:auto; margin-right:auto;">
+            We audit these surfaces. Scope is agreed before engagement — nothing is scanned without explicit authorisation.
+        </p>
+
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; max-width:860px; margin:0 auto 60px;">
+            <span class="scope-badge"><i class="fas fa-code-branch"></i> GitHub / GitLab Repositories</span>
+            <span class="scope-badge"><i class="fab fa-github"></i> GitHub Actions Workflows</span>
+            <span class="scope-badge"><i class="fas fa-docker"></i> Dockerfiles & Images</span>
+            <span class="scope-badge"><i class="fas fa-server"></i> Kubernetes Manifests</span>
+            <span class="scope-badge"><i class="fas fa-cloud"></i> Terraform / IaC Files</span>
+            <span class="scope-badge"><i class="fas fa-box"></i> pip / npm / cargo Dependencies</span>
+            <span class="scope-badge"><i class="fas fa-key"></i> Secrets & Credential Files</span>
+            <span class="scope-badge"><i class="fas fa-history"></i> Full Git History</span>
+            <span class="scope-badge"><i class="fas fa-puzzle-piece"></i> Third-Party Integrations</span>
+            <span class="scope-badge"><i class="fas fa-wifi"></i> MQTT / IoT Infrastructure</span>
+            <span class="scope-badge"><i class="fas fa-file-code"></i> CI/CD Configuration Files</span>
+        </div>
+
+        <!-- NDA -->
+        <div class="nda-box" style="max-width:760px; margin:0 auto;">
+            <div style="width:52px; height:52px; background:rgba(74,222,128,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fas fa-user-secret" style="color:#4ade80; font-size:1.3rem;"></i>
+            </div>
+            <div>
+                <h4 style="color:white; margin-bottom:10px;">Confidentiality Guarantee</h4>
+                <p style="color:var(--gray); font-size:0.92rem; line-height:1.7; margin:0;">
+                    Every engagement is governed by a strict NDA before any code is reviewed.
+                    All analysis runs offline — your source code is never uploaded, transmitted, or stored on any external server.
+                    AI API calls contain only anonymised findings — never raw source.
+                    Findings are delivered exclusively to the authorised contact.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════ CTA -->
+<section style="padding:100px 0; background:linear-gradient(135deg,#0f172a 0%,#1a1c20 100%); text-align:center; position:relative; overflow:hidden;">
+    <div class="scan-line"></div>
+    <div class="container" style="position:relative; z-index:2;">
+        <h2 style="font-size:2.6rem; margin-bottom:20px; color:white;">
+            Ready to Find Out <span class="text-gradient">What's Really There?</span>
+        </h2>
+        <p style="color:var(--gray); margin-bottom:40px; font-size:1.05rem; max-width:600px; margin-left:auto; margin-right:auto; line-height:1.7;">
+            Send a brief description of your project and scope.
+            We'll agree on terms, sign NDA, and begin.
+        </p>
+        <div class="hero-buttons" style="justify-content:center; gap:16px;">
+            <a href="mailto:eldorzufarov66@gmail.com?subject=Security%20Audit%20Request&body=Hello%2C%0A%0AI%20would%20like%20to%20request%20a%20professional%20security%20audit.%0A%0AProject%20scope%3A%20%5Bdescribe%5D%0ARepository%20URL%2Farchive%3A%20%5Blink%20or%20attachment%5D"
+               class="btn btn-primary btn-glow" style="padding:15px 30px; font-size:1.05rem;">
+                <i class="fas fa-envelope"></i> Request an Audit
+            </a>
+            <a href="methodology.html" class="btn btn-secondary" style="padding:15px 30px; font-size:1.05rem;">
+                <i class="fas fa-flask"></i> Read Methodology
+            </a>
+        </div>
+        <p style="margin-top:24px; color:#555; font-size:0.82rem;">
+            NDA-bound · Offline analysis · Powered by Auditor Core v2.1 · 11 detectors · AI advisory
+        </p>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════ FOOTER -->
 <footer class="footer">
     <div class="container">
-        <div class="footer-grid" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 30px;">
-            <div>
-                <h4 style="margin-bottom: 10px;">DataWizual Security</h4>
-                <p style="color: var(--gray); font-size: 0.9rem;">Independent CI/CD & Infrastructure Security.</p>
+        <div class="footer-grid" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:40px; padding-bottom:60px;">
+            <div style="flex:1; min-width:250px;">
+                <h4 style="margin-bottom:20px;">DataWizual Security</h4>
+                <p style="color:var(--gray);">Developing territories of confidence through rigorous engineering.</p>
+                <p style="margin-top:20px; color:#4ade80; font-weight:bold;">
+                    <i class="fas fa-envelope"></i> eldorzufarov66@gmail.com
+                </p>
             </div>
-            <div style="display: flex; gap: 20px;">
-                <a href="security-policy.html" style="color: var(--gray); font-size: 0.9rem; text-decoration: none;">
-                    <i class="fas fa-shield-alt"></i> Safe Harbor
-                </a>
-                <a href="sample-report.html" style="color: var(--gray); font-size: 0.9rem; text-decoration: none;">
-                    Demo Report
-                </a>
+            <div>
+                <h4 style="margin-bottom:20px;">Our Ecosystem</h4>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.1</a>
+                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.1</a>
+                    <a href="compare.html"      style="color:var(--gray); text-decoration:none;"><i class="fas fa-layer-group"></i> Compare</a>
+                </div>
+            </div>
+            <div>
+                <h4 style="margin-bottom:20px;">Resources</h4>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <a href="methodology.html"     style="color:var(--gray); text-decoration:none;">Methodology</a>
+                    <a href="sample-report.html"   style="color:var(--gray); text-decoration:none;">Demo Report</a>
+                    <a href="security-policy.html" style="color:var(--gray); text-decoration:none;">Security Policy</a>
+                </div>
             </div>
         </div>
-        <div style="text-align: center; margin-top: 50px; color: #444; font-size: 0.8rem;">
-            &copy; 2026 DataWizual Security. All rights reserved.
+        <div style="text-align:center; color:#444; border-top:1px solid rgba(255,255,255,0.05); padding-top:30px;">
+            &copy; 2026 DataWizual Security Labs. Built with surgical precision.
         </div>
     </div>
 </footer>

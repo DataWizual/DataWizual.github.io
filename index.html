@@ -4,71 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DataWizual Security | Territory of Confidence</title>
-    <meta name="description" content="Transform security anxiety into engineering confidence. Complete DevSecOps ecosystem for modern teams.">
-    
+    <meta name="description" content="Enterprise DevSecOps ecosystem. Auditor Core v2.1 + Sentinel Core v2.1 — hardware-bound licensing, AI-powered analysis, deterministic enforcement.">
+
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="security" href="https://datawizual.github.io/.well-known/security.txt">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
     <style>
-        /* All animations preserved exactly as original */
         @keyframes pulse-glow {
             0% { transform: scale(1); opacity: 0.8; }
             50% { transform: scale(1.05); opacity: 1; }
             100% { transform: scale(1); opacity: 0.8; }
         }
-        
+
         @keyframes horizontal-scan {
             0% { width: 0; left: 0; opacity: 0; }
             50% { width: 100%; opacity: 0.7; }
             100% { width: 0; left: 100%; opacity: 0; }
         }
-        
-        @keyframes shield-block {
-            0% { transform: translateX(0) scale(1); }
-            25% { transform: translateX(-5px) scale(1.1); }
-            50% { transform: translateX(5px) scale(1.1); }
-            75% { transform: translateX(-5px) scale(1.1); }
-            100% { transform: translateX(0) scale(1); }
-        }
-        
+
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
         }
-        
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
         .hero-shield {
             animation: pulse-glow 3s infinite ease-in-out;
-            filter: drop-shadow(0 0 20px rgba(52, 152, 219, 0.3));
+            filter: drop-shadow(0 0 30px rgba(52, 152, 219, 0.5));
         }
-        
+
         .scan-line {
             position: absolute;
             height: 2px;
             background: linear-gradient(90deg, transparent, #3498db, transparent);
             animation: horizontal-scan 2s infinite linear;
             top: 0;
+            left: 0;
+            right: 0;
         }
-        
-        .shield-block {
-            animation: shield-block 0.5s ease;
-        }
-        
+
         .float-animation {
             animation: float 3s infinite ease-in-out;
         }
-        
+
+        .float-animation-delayed {
+            animation: float 3s infinite ease-in-out 1.5s;
+        }
+
         .territory-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
-        
+
         .territory-card:hover {
             transform: translateY(-5px);
             border-color: var(--primary);
         }
-        
+
         .territory-card::before {
             content: '';
             position: absolute;
@@ -79,19 +82,11 @@
             background: linear-gradient(90deg, transparent, var(--primary), transparent);
             transition: 0.5s;
         }
-        
+
         .territory-card:hover::before {
             left: 100%;
         }
-        
-        .ecosystem-connector {
-            position: relative;
-            height: 2px;
-            background: rgba(52, 152, 219, 0.2);
-            margin: 0 20px;
-            flex-grow: 1;
-        }
-        
+
         .ecosystem-connector::after {
             content: '';
             position: absolute;
@@ -99,13 +94,126 @@
             left: 0;
             right: 0;
             height: 8px;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(52, 152, 219, 0.3) 50%, 
-                transparent 100%);
+            background: linear-gradient(90deg, transparent 0%, rgba(52,152,219,0.3) 50%, transparent 100%);
             animation: horizontal-scan 3s infinite linear;
         }
 
+        .version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(52, 152, 219, 0.15);
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .version-badge.green {
+            background: rgba(74, 222, 128, 0.15);
+            border-color: rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+        }
+
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, rgba(168,85,247,0.15), rgba(52,152,219,0.15));
+            border: 1px solid rgba(168,85,247,0.3);
+            color: #c084fc;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .stat-highlight {
+            background: linear-gradient(135deg, rgba(52,152,219,0.1), rgba(74,222,128,0.1));
+            border: 1px solid rgba(52,152,219,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .shimmer-text {
+            background: linear-gradient(90deg, var(--primary) 0%, #4ade80 50%, var(--primary) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        .protect-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .protect-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            color: var(--gray);
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .protect-list li:last-child { border-bottom: none; }
+
+        .protect-list li i {
+            color: #4ade80;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        .ai-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .ai-flow-step {
+            background: rgba(26,28,32,0.9);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 0.8rem;
+            color: var(--gray);
+            white-space: nowrap;
+        }
+
+        .ai-flow-arrow {
+            color: rgba(52,152,219,0.5);
+            font-size: 0.8rem;
+        }
+
+        .ai-flow-step.primary { border-color: rgba(52,152,219,0.4); color: var(--primary); }
+        .ai-flow-step.fallback { border-color: rgba(168,85,247,0.4); color: #c084fc; }
+        .ai-flow-step.success { border-color: rgba(74,222,128,0.4); color: #4ade80; }
+
+        .hardware-lock {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(239,68,68,0.05);
+            border: 1px solid rgba(239,68,68,0.15);
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-top: 15px;
+        }
+
+        .hardware-lock i { color: #f87171; font-size: 1.2rem; flex-shrink: 0; }
+        .hardware-lock span { color: #fca5a5; font-size: 0.85rem; line-height: 1.4; }
     </style>
 </head>
 
@@ -118,7 +226,7 @@
         </div>
         <div class="nav-links">
             <a href="index.html" class="active">Home</a>
-            
+
             <div class="dropdown">
                 <a href="#" class="dropdown-trigger">Products <i class="fas fa-chevron-down"></i></a>
                 <div class="dropdown-content">
@@ -144,44 +252,51 @@
     </div>
 </nav>
 
+<!-- ═══════════════════════════════════════════════ HERO -->
 <header class="hero" style="min-height: 90vh; display: flex; align-items: center; position: relative; overflow: hidden;">
     <div class="scan-line"></div>
     <div class="container" style="position: relative; z-index: 2;">
-        <div style="text-align: center; max-width: 900px; margin: 0 auto;">
-            
+        <div style="text-align: center; max-width: 960px; margin: 0 auto;">
+
             <div class="hero-shield" style="margin-bottom: 30px;">
                 <i class="fas fa-shield-alt" style="font-size: 5rem; color: var(--primary);"></i>
             </div>
-            
+
+            <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 28px;">
+                <span class="version-badge"><i class="fas fa-search"></i> Auditor Core v2.1</span>
+                <span class="version-badge green"><i class="fas fa-shield-alt"></i> Sentinel Core v2.1</span>
+                <span class="ai-badge"><i class="fas fa-brain"></i> AI-Powered · Gemini + Groq</span>
+            </div>
+
             <h1 class="hero-title" style="font-size: 3.5rem; line-height: 1.2; margin-bottom: 20px;">
                 Your Code is Hardened.<br>
                 Your Infrastructure is Resilient.<br>
                 <span class="text-gradient">This is DataWizual Territory.</span>
             </h1>
-            
-            <p class="hero-subtitle" style="font-size: 1.3rem; max-width: 700px; margin: 0 auto 40px;">
-                Transform security anxiety into engineering velocity. 
-                A professional DevSecOps ecosystem designed for high-performance teams that value 
-                <strong>transparency, automation, and peace of mind.</strong>
+
+            <p class="hero-subtitle" style="font-size: 1.2rem; max-width: 720px; margin: 0 auto 40px;">
+                Enterprise DevSecOps ecosystem with deterministic enforcement, hardware-bound licensing,
+                and <strong>AI-powered false positive elimination</strong> — built for teams that ship without compromise.
             </p>
-            
+
             <div class="hero-buttons" style="justify-content: center; gap: 20px;">
                 <a href="#ecosystem" class="btn btn-primary btn-glow">
                     <i class="fas fa-compass"></i> Explore Our Ecosystem
                 </a>
-                <a href="audit.html" class="btn btn-secondary">
-                    <i class="fas fa-file-signature"></i> Professional Audit
+                <a href="sample-report.html" class="btn btn-secondary">
+                    <i class="fas fa-file-alt"></i> View Demo Report
                 </a>
             </div>
-            
+
         </div>
     </div>
-    
-    <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 200px; 
+
+    <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
                 background: linear-gradient(to top, var(--dark), transparent); z-index: 1;">
     </div>
 </header>
 
+<!-- ═══════════════════════════════════════════════ THREE PILLARS -->
 <section class="section" style="padding: 100px 0; background: rgba(15, 23, 42, 0.7);">
     <div class="container">
         <h2 style="text-align: center; margin-bottom: 20px; font-size: 2.8rem;">
@@ -190,16 +305,16 @@
         <p style="text-align: center; color: var(--gray); margin-bottom: 60px; font-size: 1.1rem; max-width: 800px; margin-left: auto; margin-right: auto;">
             We don't just find flaws. We create hardened environments where security is a standard, not a hurdle.
         </p>
-        
+
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px;">
-            
-            <div class="territory-card" style="background: rgba(26, 28, 32, 0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); text-align: center;">
-                <div style="width: 80px; height: 80px; background: rgba(52, 152, 219, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+
+            <div class="territory-card" style="background: rgba(26,28,32,0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); text-align: center;">
+                <div style="width: 80px; height: 80px; background: rgba(52,152,219,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
                     <i class="fas fa-microscope" style="font-size: 2rem; color: var(--primary);"></i>
                 </div>
                 <h3 style="margin-bottom: 15px; color: white; font-size: 1.5rem;">Exhaustive Analysis</h3>
                 <p style="color: var(--gray); line-height: 1.6;">
-                    Multi-engine deep dives into your codebase, infrastructure-as-code, and supply chain vulnerabilities.
+                    11 detection engines covering SAST, secrets, IaC, CI/CD pipelines, dependencies and supply chain — unified into one calibrated SPI score.
                 </p>
                 <div style="margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.05);">
                     <a href="auditor-core.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">
@@ -207,14 +322,14 @@
                     </a>
                 </div>
             </div>
-            
-            <div class="territory-card" style="background: rgba(26, 28, 32, 0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); text-align: center;">
-                <div style="width: 80px; height: 80px; background: rgba(74, 222, 128, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+
+            <div class="territory-card" style="background: rgba(26,28,32,0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); text-align: center;">
+                <div style="width: 80px; height: 80px; background: rgba(74,222,128,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
                     <i class="fas fa-door-closed" style="font-size: 2rem; color: #4ade80;"></i>
                 </div>
                 <h3 style="margin-bottom: 15px; color: white; font-size: 1.5rem;">Automated Gates</h3>
                 <p style="color: var(--gray); line-height: 1.6;">
-                    Sentinel enforces custom security policies at the commit level, ensuring no risk reaches your production.
+                    Sentinel enforces custom security policies at the commit level — deterministic ALLOW or BLOCK with zero ambiguity, zero silent bypass.
                 </p>
                 <div style="margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.05);">
                     <a href="sentinel.html" style="color: #4ade80; text-decoration: none; font-weight: 600;">
@@ -222,14 +337,14 @@
                     </a>
                 </div>
             </div>
-            
-            <div class="territory-card" style="background: rgba(26, 28, 32, 0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); text-align: center;">
-                <div style="width: 80px; height: 80px; background: rgba(168, 85, 247, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
-                    <i class="fas fa-file-shield" style="font-size: 2rem; color: #a855f7;"></i>
+
+            <div class="territory-card" style="background: rgba(26,28,32,0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); text-align: center;">
+                <div style="width: 80px; height: 80px; background: rgba(168,85,247,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+                    <i class="fas fa-brain" style="font-size: 2rem; color: #a855f7;"></i>
                 </div>
-                <h3 style="margin-bottom: 15px; color: white; font-size: 1.5rem;">CWE-Aligned Reporting</h3>
+                <h3 style="margin-bottom: 15px; color: white; font-size: 1.5rem;">AI False Positive Filter</h3>
                 <p style="color: var(--gray); line-height: 1.6;">
-                    Clear, actionable insights mapped to industry security standards for immediate remediation.
+                    Gemini + Groq fallback automatically verifies top findings — eliminating noise and surfacing only real, exploitable threats.
                 </p>
                 <div style="margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.05);">
                     <a href="methodology.html" style="color: #a855f7; text-decoration: none; font-weight: 600;">
@@ -237,122 +352,162 @@
                     </a>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </section>
 
+<!-- ═══════════════════════════════════════════════ ECOSYSTEM -->
 <section id="ecosystem" class="section" style="padding: 100px 0; background: var(--dark);">
     <div class="container">
         <h2 style="text-align: center; margin-bottom: 20px; font-size: 2.8rem;">
             The Complete <span class="text-gradient">Security Ecosystem</span>
         </h2>
         <p style="text-align: center; color: var(--gray); margin-bottom: 80px; font-size: 1.1rem; max-width: 800px; margin-left: auto; margin-right: auto;">
-            Orchestrating professional SAST, Secret Scanning, and SCA engines into one unified barrier.
+            Orchestrating <strong>Semgrep, Bandit, Gitleaks</strong> and 8 more engines into one unified, AI-verified barrier.
         </p>
-        
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 40px; position: relative;">
-            
-            <div class="territory-card float-animation" style="flex: 1; min-width: 300px; background: rgba(26, 28, 32, 0.9); padding: 40px; border-radius: 20px; border: 1px solid rgba(52, 152, 219, 0.3); position: relative; overflow: hidden;">
-                <div style="position: absolute; top: 0; right: 0; padding: 10px 20px; background: rgba(52, 152, 219, 0.1); border-bottom-left-radius: 20px; font-size: 0.8rem; color: var(--primary);">
+
+        <div style="display: flex; align-items: stretch; justify-content: space-between; flex-wrap: wrap; gap: 40px; position: relative;">
+
+            <!-- AUDITOR CORE CARD -->
+            <div class="territory-card float-animation" style="flex: 1; min-width: 300px; background: rgba(26,28,32,0.9); padding: 40px; border-radius: 20px; border: 1px solid rgba(52,152,219,0.3); position: relative; overflow: hidden;">
+                <div style="position: absolute; top: 0; right: 0; padding: 10px 20px; background: rgba(52,152,219,0.1); border-bottom-left-radius: 20px; font-size: 0.8rem; color: var(--primary);">
                     <i class="fas fa-search"></i> Discovery Engine
                 </div>
-                
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <div style="width: 100px; height: 100px; background: rgba(52, 152, 219, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+
+                <div style="text-align: center; margin-bottom: 25px; margin-top: 10px;">
+                    <div style="width: 100px; height: 100px; background: rgba(52,152,219,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
                         <i class="fas fa-search" style="font-size: 3rem; color: var(--primary);"></i>
                     </div>
+                    <h3 style="color: white; font-size: 1.8rem; margin-bottom: 5px;">Auditor Core</h3>
+                    <span class="version-badge">v2.1</span>
                 </div>
-                
-                <h3 style="text-align: center; margin-bottom: 15px; color: white; font-size: 1.8rem;">
-                    Auditor Core
-                </h3>
-                
+
                 <p style="text-align: center; color: var(--gray); margin-bottom: 25px; line-height: 1.6;">
-                    Multi-engine SAST platform with **Smart Baseline** logic. Effectively eliminates technical debt noise.
+                    Multi-engine SAST platform with <strong>Smart Baseline</strong> logic. Produces a mathematically reproducible Security Posture Index via WSPM v2.2.
                 </p>
-                
-                <div style="height: 4px; background: rgba(52, 152, 219, 0.2); border-radius: 2px; margin: 30px 0; overflow: hidden;">
-                    <div style="height: 100%; width: 70%; background: linear-gradient(90deg, var(--primary), #4ade80); border-radius: 2px; animation: horizontal-scan 2s infinite linear;"></div>
+
+                <div style="height: 4px; background: rgba(52,152,219,0.2); border-radius: 2px; margin: 20px 0; overflow: hidden; position: relative;">
+                    <div style="height: 100%; width: 70%; background: linear-gradient(90deg, var(--primary), #4ade80); border-radius: 2px; animation: horizontal-scan 2s infinite linear; position: absolute;"></div>
                 </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">160+</div>
-                        <div style="font-size: 0.8rem; color: var(--gray);">Active Detectors</div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 25px;">
+                    <div class="stat-highlight">
+                        <div style="font-size: 1.4rem; font-weight: bold; color: var(--primary);">11</div>
+                        <div style="font-size: 0.75rem; color: var(--gray);">Detectors</div>
                     </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #4ade80;">Smart</div>
-                        <div style="font-size: 0.8rem; color: var(--gray);">Baseline Logic</div>
+                    <div class="stat-highlight">
+                        <div style="font-size: 1.4rem; font-weight: bold; color: #4ade80;">WSPM</div>
+                        <div style="font-size: 0.75rem; color: var(--gray);">v2.2 Score</div>
+                    </div>
+                    <div class="stat-highlight">
+                        <div style="font-size: 1.4rem; font-weight: bold; color: #c084fc;">AI</div>
+                        <div style="font-size: 0.75rem; color: var(--gray);">Advisory</div>
                     </div>
                 </div>
-                
-                <a href="get.html" 
-                   class="btn btn-primary" 
-                   style="width: 100%; text-align: center;">
+
+                <ul class="protect-list" style="margin-bottom: 25px;">
+                    <li><i class="fas fa-check"></i> Secrets &amp; credentials in source and git history</li>
+                    <li><i class="fas fa-check"></i> Python vulnerabilities — injection, crypto, deserialization</li>
+                    <li><i class="fas fa-check"></i> Infrastructure-as-Code: K8s, Terraform, Docker</li>
+                    <li><i class="fas fa-check"></i> CI/CD pipelines — Actions, GitLab CI, Jenkinsfile</li>
+                    <li><i class="fas fa-check"></i> Dependencies &amp; supply chain risks</li>
+                </ul>
+
+                <div class="hardware-lock">
+                    <i class="fas fa-lock"></i>
+                    <span>Hardware-bound license. Cryptographically tied to your Machine ID — non-transferable.</span>
+                </div>
+
+                <a href="get.html" class="btn btn-primary" style="width: 100%; text-align: center; margin-top: 25px;">
                     <i class="fas fa-key"></i> Request License
                 </a>
             </div>
-            
-            <div class="territory-card float-animation" style="flex: 1; min-width: 300px; background: rgba(26, 28, 32, 0.9); padding: 40px; border-radius: 20px; border: 1px solid rgba(74, 222, 128, 0.3); position: relative; overflow: hidden;">
-                <div style="position: absolute; top: 0; right: 0; padding: 10px 20px; background: rgba(74, 222, 128, 0.1); border-bottom-left-radius: 20px; font-size: 0.8rem; color: #4ade80;">
+
+            <!-- SENTINEL CARD -->
+            <div class="territory-card float-animation-delayed" style="flex: 1; min-width: 300px; background: rgba(26,28,32,0.9); padding: 40px; border-radius: 20px; border: 1px solid rgba(74,222,128,0.3); position: relative; overflow: hidden;">
+                <div style="position: absolute; top: 0; right: 0; padding: 10px 20px; background: rgba(74,222,128,0.1); border-bottom-left-radius: 20px; font-size: 0.8rem; color: #4ade80;">
                     <i class="fas fa-shield-alt"></i> Protection Layer
                 </div>
-                
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <div style="width: 100px; height: 100px; background: rgba(74, 222, 128, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+
+                <div style="text-align: center; margin-bottom: 25px; margin-top: 10px;">
+                    <div style="width: 100px; height: 100px; background: rgba(74,222,128,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
                         <i class="fas fa-shield-alt" style="font-size: 3rem; color: #4ade80;"></i>
                     </div>
+                    <h3 style="color: white; font-size: 1.8rem; margin-bottom: 5px;">Sentinel Core</h3>
+                    <span class="version-badge green">v2.1</span>
                 </div>
-                
-                <h3 style="text-align: center; margin-bottom: 15px; color: white; font-size: 1.8rem;">
-                    Sentinel
-                </h3>
-                
+
                 <p style="text-align: center; color: var(--gray); margin-bottom: 25px; line-height: 1.6;">
-                    Deterministic security gate for CI/CD pipelines. Enforces organizational security policies in real-time.
+                    Deterministic security gate for CI/CD pipelines. Intercepts every commit, runs Auditor Core internally, and enforces policy in real-time.
                 </p>
-                
-                <div style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 8px; margin: 30px 0; text-align: center; border: 1px solid rgba(239, 68, 68, 0.2);">
-                    <i class="fas fa-ban" style="color: #ef4444; font-size: 1.5rem; margin-bottom: 10px;"></i>
-                    <div style="font-size: 0.9rem; color: #fca5a5;">
-                        Policy-Driven: Block Insecure Code
+
+                <div style="background: rgba(239,68,68,0.08); padding: 15px; border-radius: 10px; margin: 20px 0; text-align: center; border: 1px solid rgba(239,68,68,0.2);">
+                    <i class="fas fa-ban" style="color: #ef4444; font-size: 1.3rem; margin-bottom: 8px;"></i>
+                    <div style="font-size: 0.9rem; color: #fca5a5; font-weight: 600;">ALLOW or BLOCK — no ambiguity</div>
+                    <div style="font-size: 0.8rem; color: #666; margin-top: 4px;">Pre-commit hook + CI/CD pipeline enforcement</div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px;">
+                    <div class="stat-highlight">
+                        <div style="font-size: 1.1rem; font-weight: bold; color: #4ade80;">Real-time</div>
+                        <div style="font-size: 0.75rem; color: var(--gray);">Commit Guard</div>
+                    </div>
+                    <div class="stat-highlight">
+                        <div style="font-size: 1.1rem; font-weight: bold; color: #ef4444;">Hard Fail</div>
+                        <div style="font-size: 0.75rem; color: var(--gray);">Policy Engine</div>
                     </div>
                 </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #4ade80;">Verify</div>
-                        <div style="font-size: 0.8rem; color: var(--gray);">Integrity Check</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #ef4444;">Hard</div>
-                        <div style="font-size: 0.8rem; color: var(--gray);">Fail Policy</div>
-                    </div>
+
+                <ul class="protect-list" style="margin-bottom: 25px;">
+                    <li><i class="fas fa-check"></i> Secrets — passwords, API keys, tokens in commits</li>
+                    <li><i class="fas fa-check"></i> CI/CD configurations &amp; workflow files</li>
+                    <li><i class="fas fa-check"></i> Infrastructure misconfigurations at PR level</li>
+                    <li><i class="fas fa-check"></i> Supply chain — unpinned deps, unsafe base images</li>
+                    <li><i class="fas fa-check"></i> GitHub Issues alert on every blocked commit</li>
+                </ul>
+
+                <div class="hardware-lock">
+                    <i class="fas fa-lock"></i>
+                    <span>Hardware-bound license. Each machine requires its own key — non-transferable.</span>
                 </div>
-                
-                <a href="get.html" class="btn" style="width: 100%; text-align: center; background: rgba(74, 222, 128, 0.1); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3);">
+
+                <a href="get.html" class="btn" style="width: 100%; text-align: center; margin-top: 25px; background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.3);">
                     <i class="fas fa-lock"></i> Get Professional Access
                 </a>
             </div>
-            
+
         </div>
-        
+
+        <!-- AI FLOW -->
         <div style="text-align: center; margin-top: 80px;">
-            <div style="max-width: 600px; margin: 0 auto; background: rgba(26, 28, 32, 0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
-                <h3 style="margin-bottom: 20px; color: white;">Together, They Define Confidence</h3>
-                <p style="color: var(--gray); margin-bottom: 25px;">
-                    Combining world-class engines like **Semgrep, Bandit, and Gitleaks** with proprietary filtering to create a resilient DevSecOps workflow.
+            <div style="max-width: 700px; margin: 0 auto; background: rgba(26,28,32,0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(168,85,247,0.2);">
+                <div class="ai-badge" style="margin-bottom: 20px; display: inline-flex;">
+                    <i class="fas fa-brain"></i> AI Advisory Pipeline
+                </div>
+                <h3 style="margin-bottom: 15px; color: white;">Intelligent False Positive Elimination</h3>
+                <p style="color: var(--gray); margin-bottom: 25px; font-size: 0.95rem;">
+                    Top findings are automatically sent for AI verification. Gemini analyzes first — if daily quota is exhausted, Groq takes over seamlessly. Zero manual intervention.
                 </p>
-                <a href="compare.html" class="btn btn-primary btn-glow">
-                    <i class="fas fa-layer-group"></i> Ecosystem Integration
+                <div class="ai-flow">
+                    <div class="ai-flow-step">Scan Complete</div>
+                    <div class="ai-flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="ai-flow-step primary"><i class="fas fa-robot"></i> Gemini 2.5</div>
+                    <div class="ai-flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="ai-flow-step fallback"><i class="fas fa-random"></i> Groq Fallback</div>
+                    <div class="ai-flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="ai-flow-step success">Verified Report</div>
+                </div>
+                <a href="compare.html" class="btn btn-primary btn-glow" style="margin-top: 10px;">
+                    <i class="fas fa-layer-group"></i> Full Ecosystem Comparison
                 </a>
             </div>
         </div>
-        
+
     </div>
 </section>
 
+<!-- ═══════════════════════════════════════════════ SOCIAL PROOF -->
 <section class="section" style="padding: 100px 0; background: rgba(15, 23, 42, 0.7);">
     <div class="container">
         <h2 style="text-align: center; margin-bottom: 20px; font-size: 2.8rem;">
@@ -361,12 +516,12 @@
         <p style="text-align: center; color: var(--gray); margin-bottom: 60px; font-size: 1.1rem; max-width: 800px; margin-left: auto; margin-right: auto;">
             Professional results for security-conscious organizations.
         </p>
-        
+
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;">
-            
-            <div class="territory-card" style="background: rgba(26, 28, 32, 0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
+
+            <div class="territory-card" style="background: rgba(26,28,32,0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
                 <div style="display: flex; align-items: center; margin-bottom: 25px;">
-                    <div style="width: 60px; height: 60px; background: rgba(52, 152, 219, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px;">
+                    <div style="width: 60px; height: 60px; background: rgba(52,152,219,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px;">
                         <i class="fas fa-cloud" style="color: var(--primary);"></i>
                     </div>
                     <div>
@@ -374,11 +529,9 @@
                         <div style="color: var(--gray); font-size: 0.9rem;">500+ Microservices</div>
                     </div>
                 </div>
-                
                 <p style="color: var(--gray); line-height: 1.6; margin-bottom: 25px;">
                     "Identified 15+ high-risk exposures within legacy code during initial baseline setup. Sentinel now prevents secrets from ever reaching our main branches."
                 </p>
-                
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">Clean</div>
@@ -389,10 +542,10 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="territory-card" style="background: rgba(26, 28, 32, 0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
+
+            <div class="territory-card" style="background: rgba(26,28,32,0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
                 <div style="display: flex; align-items: center; margin-bottom: 25px;">
-                    <div style="width: 60px; height: 60px; background: rgba(74, 222, 128, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px;">
+                    <div style="width: 60px; height: 60px; background: rgba(74,222,128,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px;">
                         <i class="fas fa-server" style="color: #4ade80;"></i>
                     </div>
                     <div>
@@ -400,11 +553,9 @@
                         <div style="color: var(--gray); font-size: 0.9rem;">Global Deployment</div>
                     </div>
                 </div>
-                
                 <p style="color: var(--gray); line-height: 1.6; margin-bottom: 25px;">
                     "Blocked 40+ insecure configurations at the PR level. Developers now fix infrastructure-as-code issues before the security review, reducing lead time."
                 </p>
-                
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <div style="font-size: 2rem; font-weight: bold; color: #4ade80;">Active</div>
@@ -415,37 +566,39 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </section>
 
+<!-- ═══════════════════════════════════════════════ CTA -->
 <section style="padding: 100px 0; background: linear-gradient(135deg, var(--dark) 0%, #1a1c20 100%); text-align: center; position: relative; overflow: hidden;">
+    <div class="scan-line"></div>
     <div class="container" style="position: relative; z-index: 2;">
         <h2 style="font-size: 3rem; margin-bottom: 20px; color: white;">
             Transform <span class="text-gradient">Risk into Resilience</span>
         </h2>
-        
+
         <p style="color: var(--gray); margin-bottom: 40px; font-size: 1.2rem; max-width: 700px; margin-left: auto; margin-right: auto;">
-            Secure your development lifecycle with professional-grade analysis. Start building on territory 
-            you know is protected.
+            Secure your development lifecycle with professional-grade analysis. Start building on territory you know is protected.
         </p>
-        
+
         <div class="hero-buttons" style="justify-content: center; gap: 20px;">
-            <a href="audit.html" class="btn btn-primary btn-glow" style="padding: 16px 32px; font-size: 1.1rem;">
-                <i class="fas fa-shield-halved"></i> Audit Your Repository
+            <a href="get.html" class="btn btn-primary btn-glow" style="padding: 16px 32px; font-size: 1.1rem;">
+                <i class="fas fa-key"></i> Get License
             </a>
             <a href="sample-report.html" class="btn btn-secondary" style="padding: 16px 32px; font-size: 1.1rem;">
-                <i class="fas fa-file-alt"></i> View Sample Report
+                <i class="fas fa-file-alt"></i> View Demo Report
             </a>
         </div>
-        
-        <p style="margin-top: 40px; color: #666; font-size: 0.9rem;">
-            Trusted by security-focused engineering teams. No telemetry, 100% privacy.
+
+        <p style="margin-top: 40px; color: #555; font-size: 0.9rem;">
+            No telemetry. No cloud dependency. 100% local execution. Hardware-bound licensing.
         </p>
     </div>
 </section>
 
+<!-- ═══════════════════════════════════════════════ FOOTER -->
 <footer class="footer">
     <div class="container">
         <div class="footer-grid" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; padding-bottom: 60px;">
@@ -456,40 +609,34 @@
                     <i class="fas fa-envelope"></i> eldorzufarov66@gmail.com
                 </p>
             </div>
-            
+
             <div>
                 <h4 style="margin-bottom: 20px;">Our Ecosystem</h4>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <a href="auditor-core.html" style="color: var(--gray); text-decoration: none;">
-                        <i class="fas fa-search"></i> Auditor Core
+                        <i class="fas fa-search"></i> Auditor Core v2.1
                     </a>
                     <a href="sentinel.html" style="color: var(--gray); text-decoration: none;">
-                        <i class="fas fa-shield-alt"></i> Sentinel
+                        <i class="fas fa-shield-alt"></i> Sentinel Core v2.1
                     </a>
                     <a href="compare.html" style="color: var(--gray); text-decoration: none;">
                         <i class="fas fa-layer-group"></i> Compare
                     </a>
                 </div>
             </div>
-            
+
             <div>
                 <h4 style="margin-bottom: 20px;">Resources</h4>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <a href="methodology.html" style="color: var(--gray); text-decoration: none;">
-                        Methodology
-                    </a>
-                    <a href="sample-report.html" style="color: var(--gray); text-decoration: none;">
-                        Demo Report
-                    </a>
-                    <a href="security-policy.html" style="color: var(--gray); text-decoration: none;">
-                        Security Policy
-                    </a>
+                    <a href="methodology.html" style="color: var(--gray); text-decoration: none;">Methodology</a>
+                    <a href="sample-report.html" style="color: var(--gray); text-decoration: none;">Demo Report</a>
+                    <a href="security-policy.html" style="color: var(--gray); text-decoration: none;">Security Policy</a>
                 </div>
             </div>
         </div>
-        
+
         <div style="text-align: center; color: #444; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px;">
-            &copy; 2026 DataWizual Security. Built with surgical precision.
+            &copy; 2026 DataWizual Security Labs. Built with surgical precision.
         </div>
     </div>
 </footer>

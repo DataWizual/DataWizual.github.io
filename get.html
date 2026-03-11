@@ -3,85 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Licensing & Delivery | DataWizual Security</title>
-    <meta name="description" content="Professional licensing and secure delivery for Auditor Core and Sentinel.">
-    
+    <title>Get Access | Auditor Core v2.1 & Sentinel Core v2.1 | DataWizual Security</title>
+    <meta name="description" content="Request a license for Auditor Core v2.1 or Sentinel Core v2.1. Hardware-bound licensing, secure delivery, individual professional agreements.">
+
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="security" href="https://datawizual.github.io/.well-known/security.txt">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
     <style>
-        .delivery-card {
-            background: rgba(26, 28, 32, 0.9);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 40px;
-            height: 100%;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
+        @keyframes horizontal-scan {
+            0%   { width:0; left:0; opacity:0; }
+            50%  { width:100%; opacity:0.6; }
+            100% { width:0; left:100%; opacity:0; }
         }
-        
-        .delivery-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            background: rgba(30, 32, 38, 0.95);
-        }
-        
-        .license-tag {
-            display: inline-block;
-            padding: 6px 14px;
-            background: rgba(52, 152, 219, 0.1);
-            border: 1px solid var(--primary);
-            border-radius: 20px;
-            color: var(--primary);
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .tag-sentinel { border-color: #4ade80; color: #4ade80; background: rgba(74, 222, 128, 0.1); }
-        
-        .step-list {
-            color: var(--gray);
-            padding-left: 20px;
-            margin: 25px 0;
-            flex-grow: 1;
-        }
-        
-        .step-list li {
-            margin-bottom: 12px;
-            line-height: 1.5;
-        }
-        
-        .legal-note {
-            background: rgba(0,0,0,0.3);
-            padding: 20px;
-            border-radius: 8px;
-            margin: 25px 0;
-            border-left: 3px solid var(--primary);
-            font-size: 0.9rem;
-            color: var(--gray);
+        .scan-line {
+            position:absolute; top:0; left:0; right:0; height:2px;
+            background:linear-gradient(90deg,transparent,#3498db,transparent);
+            animation:horizontal-scan 2.5s infinite linear;
         }
 
-        .text-gradient {
-            background: linear-gradient(90deg, #3498db, #4ade80);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .delivery-card {
+            background: rgba(26,28,32,0.9);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px; padding: 40px;
+            display: flex; flex-direction: column;
+            transition: all 0.3s ease; position: relative; overflow: hidden;
+        }
+        .delivery-card::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:3px;
+            opacity:0; transition:opacity 0.3s ease;
+        }
+        .delivery-card.auditor-card::before { background:linear-gradient(90deg,var(--primary),#60a5fa); }
+        .delivery-card.sentinel-card::before { background:linear-gradient(90deg,#4ade80,#22c55e); }
+        .delivery-card:hover { transform:translateY(-5px); }
+        .delivery-card.auditor-card:hover { border-color:rgba(52,152,219,0.35); }
+        .delivery-card.sentinel-card:hover { border-color:rgba(74,222,128,0.35); }
+        .delivery-card:hover::before { opacity:1; }
+
+        .license-tag {
+            display: inline-flex; align-items:center; gap:6px;
+            padding: 5px 14px; border-radius: 20px;
+            font-size: 0.78rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 20px;
+        }
+        .tag-auditor  { background:rgba(52,152,219,0.15); border:1px solid rgba(52,152,219,0.35); color:var(--primary); }
+        .tag-sentinel { background:rgba(74,222,128,0.15); border:1px solid rgba(74,222,128,0.35); color:#4ade80; }
+
+        .step-list { color:var(--gray); list-style:none; padding:0; margin:20px 0; flex-grow:1; }
+        .step-list li { display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; line-height:1.5; }
+
+        .hw-note {
+            display:flex; align-items:center; gap:12px;
+            background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.18);
+            border-radius:10px; padding:14px 18px; margin:20px 0;
+        }
+        .hw-note i    { color:#f87171; font-size:1.1rem; flex-shrink:0; }
+        .hw-note span { color:#fca5a5; font-size:0.83rem; line-height:1.5; }
+
+        .how-step {
+            text-align:center; padding:28px 20px;
+            background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.05);
+            border-radius:14px; transition:border-color 0.3s;
+        }
+        .how-step:hover { border-color:rgba(52,152,219,0.25); }
+        .how-num {
+            font-size:2rem; font-weight:800; margin-bottom:14px;
+            background:linear-gradient(135deg,var(--primary),#4ade80);
+            -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
         }
     </style>
 </head>
-
 <body>
 
 <nav class="navbar">
     <div class="container">
-        <div class="logo">
-            <i class="fas fa-shield-alt"></i> DataWizual Security
-        </div>
+        <div class="logo"><i class="fas fa-shield-alt"></i> DataWizual Security</div>
         <div class="nav-links">
             <a href="index.html">Home</a>
-            
             <div class="dropdown">
                 <a href="#" class="dropdown-trigger">Products <i class="fas fa-chevron-down"></i></a>
                 <div class="dropdown-content">
@@ -90,9 +88,7 @@
                     <a href="compare.html"><i class="fas fa-layer-group"></i> Compare Engines</a>
                 </div>
             </div>
-
             <a href="audit.html">Audit Service</a>
-
             <div class="dropdown">
                 <a href="#" class="dropdown-trigger">Resources <i class="fas fa-chevron-down"></i></a>
                 <div class="dropdown-content">
@@ -101,232 +97,310 @@
                     <a href="security-policy.html">Security Policy</a>
                 </div>
             </div>
-
-            <a href="get.html" class="nav-btn">Get Access</a>
+            <a href="get.html" class="nav-btn active">Get Access</a>
         </div>
     </div>
 </nav>
 
-<header class="hero" style="padding: 100px 0 60px; background: linear-gradient(135deg, #0f172a 0%, #1a1c20 100%); text-align: center;">
-    <div class="container">
-        <h1 style="font-size: 3.5rem; margin-bottom: 20px;">
-            Professional <span class="text-gradient">Licensing</span>
+<!-- ══════════════════════════════════════ HERO -->
+<header class="hero" style="padding:100px 0 70px; background:linear-gradient(135deg,#0f172a 0%,#1a1c20 100%); text-align:center; position:relative; overflow:hidden;">
+    <div class="scan-line"></div>
+    <div class="container" style="position:relative; z-index:2;">
+        <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(52,152,219,0.1); border:1px solid rgba(52,152,219,0.3); border-radius:20px; padding:6px 16px; margin-bottom:24px; color:var(--primary); font-size:0.85rem; font-weight:700;">
+            <i class="fas fa-key"></i> Hardware-Bound Licensing
+        </div>
+        <h1 style="font-size:3.2rem; margin-bottom:20px;">
+            Get <span class="text-gradient">Access</span>
         </h1>
-        <p style="color: var(--gray); font-size: 1.2rem; max-width: 800px; margin: 0 auto;">
-            Our core engines are distributed under a controlled licensing model to ensure 
-            operational integrity, compliance, and professional support.
+        <p style="color:var(--gray); font-size:1.1rem; max-width:700px; margin:0 auto;">
+            Both products use individual, hardware-bound licenses.
+            Every key is tied to a specific Machine ID and non-transferable by design.
         </p>
     </div>
 </header>
 
-<section class="section" style="padding: 80px 0; background: rgba(15, 23, 42, 0.7);">
+<!-- ══════════════════════════════════════ PRODUCT CARDS -->
+<section style="padding:80px 0; background:rgba(15,23,42,0.75);">
     <div class="container">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px;">
-            
-            <div class="delivery-card">
-                <div class="license-tag">Auditor Core Baseline</div>
-                
-                <h3 style="color: white; margin-bottom: 15px;">Security Audit Engine</h3>
-                <p style="color: var(--gray); line-height: 1.6;">
-                    Professional, offline-first security audit engine. Licensing is provided upon individual request to ensure appropriate usage and operational context.
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px,1fr)); gap:36px;">
+
+            <!-- Auditor Core -->
+            <div class="delivery-card auditor-card">
+                <span class="license-tag tag-auditor"><i class="fas fa-search"></i> Auditor Core v2.1</span>
+                <h3 style="color:white; margin-bottom:14px;">Deep Security Audit Engine</h3>
+                <p style="color:var(--gray); line-height:1.7; margin-bottom:4px;">
+                    On-demand forensic scanner for any repository.
+                    11 detectors, WSPM v2.2 scoring, Gemini + Groq AI advisory,
+                    full HTML report. Runs 100% locally — no code leaves your machine.
                 </p>
-                
                 <ul class="step-list">
-                    <li><i class="fas fa-check" style="color: var(--primary); margin-right: 10px;"></i> Comprehensive baseline analysis</li>
-                    <li><i class="fas fa-check" style="color: var(--primary); margin-right: 10px;"></i> Deterministic security reviews</li>
-                    <li><i class="fas fa-check" style="color: var(--primary); margin-right: 10px;"></i> Offline-first execution logic</li>
+                    <li><i class="fas fa-check" style="color:var(--primary); margin-top:2px; flex-shrink:0;"></i> 11 detectors — Bandit, Semgrep, Gitleaks, IaC, Supply Chain and more</li>
+                    <li><i class="fas fa-check" style="color:var(--primary); margin-top:2px; flex-shrink:0;"></i> WSPM v2.2 → SPI score (0–100) with posture label</li>
+                    <li><i class="fas fa-check" style="color:var(--primary); margin-top:2px; flex-shrink:0;"></i> AI false-positive filter — Gemini 2.5 + Groq fallback</li>
+                    <li><i class="fas fa-check" style="color:var(--primary); margin-top:2px; flex-shrink:0;"></i> Interactive HTML report with AI VERIFIED badges</li>
+                    <li><i class="fas fa-check" style="color:var(--primary); margin-top:2px; flex-shrink:0;"></i> 0 telemetry — no data ever leaves your environment</li>
                 </ul>
-                
-                <div class="legal-note">
-                    <strong>Note:</strong> Distributed for individual security researchers and organizational audit teams.
+                <div class="hw-note">
+                    <i class="fas fa-lock"></i>
+                    <span>License is cryptographically bound to your Machine ID. Run <code>python3 get_id.py</code> and include it in your request.</span>
                 </div>
-                
-                <a href="mailto:eldorzufarov66@gmail.com?subject=Auditor%20Core%20License%20Request" 
-                   class="btn btn-primary btn-glow" 
-                   style="width: 100%; text-align: center;">
-                    <i class="fas fa-paper-plane"></i> Request License
+                <a href="mailto:eldorzufarov66@gmail.com?subject=Auditor%20Core%20v2.1%20License%20Request&body=Hello%2C%0A%0AI%20would%20like%20to%20request%20a%20license%20for%20Auditor%20Core%20v2.1.%0A%0AMy%20Machine%20ID%3A%20%5Bpaste%20here%5D%0A%0AUse%20case%3A%20%5Bdescribe%5D"
+                   class="btn btn-primary btn-glow" style="width:100%; text-align:center; margin-top:auto;">
+                    <i class="fas fa-paper-plane"></i> Request Auditor Core License
                 </a>
             </div>
-            
-            <div class="delivery-card">
-                <div class="license-tag tag-sentinel">Sentinel</div>
-                
-                <h3 style="color: white; margin-bottom: 15px;">Security Enforcement Gate</h3>
-                <p style="color: var(--gray); line-height: 1.6;">
-                    Deterministic security gate for CI/CD environments. Distributed exclusively under individual professional or enterprise licensing agreements.
+
+            <!-- Sentinel Core -->
+            <div class="delivery-card sentinel-card">
+                <span class="license-tag tag-sentinel"><i class="fas fa-shield-alt"></i> Sentinel Core v2.1</span>
+                <h3 style="color:white; margin-bottom:14px;">Real-Time CI/CD Enforcement Gate</h3>
+                <p style="color:var(--gray); line-height:1.7; margin-bottom:4px;">
+                    Intercepts every commit. Runs Auditor Core internally.
+                    ALLOW or BLOCK with zero ambiguity.
+                    GitHub Issue alert on every blocked commit. Hardware-bound.
                 </p>
-                
                 <ul class="step-list">
-                    <li><i class="fas fa-check" style="color: #4ade80; margin-right: 10px;"></i> Real-time ALLOW / BLOCK logic</li>
-                    <li><i class="fas fa-check" style="color: #4ade80; margin-right: 10px;"></i> CI/CD pipeline integration</li>
-                    <li><i class="fas fa-check" style="color: #4ade80; margin-right: 10px;"></i> Policy-driven enforcement</li>
+                    <li><i class="fas fa-check" style="color:#4ade80; margin-top:2px; flex-shrink:0;"></i> Pre-commit hook + CI/CD pipeline — two enforcement layers</li>
+                    <li><i class="fas fa-check" style="color:#4ade80; margin-top:2px; flex-shrink:0;"></i> ALLOW / BLOCK decision — exit 0 / exit 1</li>
+                    <li><i class="fas fa-check" style="color:#4ade80; margin-top:2px; flex-shrink:0;"></i> Immutable audit trail — GitHub Issue on every BLOCK</li>
+                    <li><i class="fas fa-check" style="color:#4ade80; margin-top:2px; flex-shrink:0;"></i> Audit-first exception model via <code>sentinel.yaml</code></li>
+                    <li><i class="fas fa-check" style="color:#4ade80; margin-top:2px; flex-shrink:0;"></i> Air-gap compatible — 100% offline capable</li>
                 </ul>
-                
-                <div class="legal-note" style="border-left-color: #4ade80;">
-                    <strong>Note:</strong> Targeted at high-performance engineering teams requiring strict security gates.
+                <div class="hw-note">
+                    <i class="fas fa-lock"></i>
+                    <span>Distributed via secure email archive. License is tied to your Machine ID. Run <code>python3 get_id.py</code> and include it in your request.</span>
                 </div>
-                
-                <a href="mailto:eldorzufarov66@gmail.com?subject=Sentinel%20License%20Request" 
-                   class="btn" 
-                   style="width: 100%; text-align: center; background: rgba(74, 222, 128, 0.1); color: #4ade80; border: 1px solid #4ade80;">
-                    <i class="fas fa-envelope"></i> Request Access
+                <a href="mailto:eldorzufarov66@gmail.com?subject=Sentinel%20Core%20v2.1%20License%20Request&body=Hello%2C%0A%0AI%20would%20like%20to%20request%20a%20license%20for%20Sentinel%20Core%20v2.1.%0A%0AMy%20Machine%20ID%3A%20%5Bpaste%20here%5D%0A%0AUse%20case%3A%20%5Bdescribe%5D"
+                   class="btn" style="width:100%; text-align:center; margin-top:auto; background:rgba(74,222,128,0.1); border:1px solid #4ade80; color:#4ade80;">
+                    <i class="fas fa-envelope"></i> Request Sentinel Core License
                 </a>
             </div>
-            
+
         </div>
-        
-        <div style="margin-top: 80px; background: rgba(26, 28, 32, 0.8); padding: 50px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
-            <div style="max-width: 800px; margin: 0 auto;">
-                <h2 style="text-align: center; margin-bottom: 40px;">How it Works</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center;">
-                    <div>
-                        <div style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;">01</div>
-                        <h4 style="color: white; margin-bottom: 10px;">Contact</h4>
-                        <p style="color: var(--gray); font-size: 0.9rem;">Reach out via email or LinkedIn with your use case.</p>
-                    </div>
-                    <div>
-                        <div style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;">02</div>
-                        <h4 style="color: white; margin-bottom: 10px;">Agreement</h4>
-                        <p style="color: var(--gray); font-size: 0.9rem;">We discuss licensing terms and operational context.</p>
-                    </div>
-                    <div>
-                        <div style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;">03</div>
-                        <h4 style="color: white; margin-bottom: 10px;">Delivery</h4>
-                        <p style="color: var(--gray); font-size: 0.9rem;">Receive secure access to the engine and documentation.</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-#
-        <div style="margin-top: 50px; padding: 30px; background: rgba(52, 152, 219, 0.03); border: 1px dashed rgba(52, 152, 219, 0.2); border-radius: 12px; text-align: left;">
-            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                <div style="width: 40px; height: 40px; background: rgba(52, 152, 219, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-key" style="color: var(--primary); font-size: 1.2rem;"></i>
-                </div>
-                <div>
-                    <h4 style="color: white; margin: 0; font-size: 1.1rem;">Secure Communication</h4>
-                    <p style="color: var(--gray); margin: 0; font-size: 0.85rem;">Encrypt your sensitive inquiries using PGP</p>
-                </div>
-            </div>
-            
-            <div style="background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px;">
-                <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <span style="color: #94a3b8; display: block; margin-bottom: 8px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">PGP Fingerprint:</span>
-                    <code style="font-family: 'Courier New', monospace; font-size: 0.9rem; color: #4ade80; font-weight: bold; letter-spacing: 1px;">
-                        9D85 CFD5 E412 EC12 D2D6 FF2E 2A56 3188 9967 959C
-                    </code>
-                </div>
-                <span style="color: #94a3b8; display: block; margin-bottom: 8px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">Public Key Block:</span>
-                <div style="font-family: monospace; font-size: 0.95rem; color: #4ade80; word-break: break-all; line-height: 1.2; max-height: 150px; overflow-y: auto; padding-right: 10px;">
-                    -----BEGIN PGP PUBLIC KEY BLOCK-----<br>
-
-                    mQINBGlrw9IBEADdGmswgOWC3XB1fLQglpGvJn1uEncUwtYPoLHJopgpyGioV1x+<br>
-                    /MZevd81LL3PucNLoFb7vTmdhTY0FCKxcd17q9JSBkz4kwuDIsgFk+33LOnak9Bq<br>
-                    qCERrfMLowYbMzqwlbaZe4M0JkJRYvu14OxvarIqpSeLVzRfkMxv9pMLdjQuf96f<br>
-                    n584A6gr5MI9IukDhsU5wd0KHliXbuMBe+kXQXX9hTcK1wQhMii4FOyDa6MeQJP+<br>
-                    cbv0wWxecvPurGgfb8Tfy9GxNCXqpuaZ98NUBub5vdd1/tkthZEKYAOw8t7P9xve<br>
-                    w1QaeioP71oS3YOI17nBK5wFbQ4IxeDcAnwhCat6PFZKqrwt+ucQMmUAvyVoaiQJ<br>
-                    K4AxJmmdR5UAN8ITbHdeX1lH8UdZpea0+iNHk29DA5+Z94p9gZl7Ng34psNxr8m6<br>
-                    9NHGWa0CWOVs3sXtlcUK6X0GjXSqOAIyfbrnQwZgGsOXd40FTfN4jMFBZmmgz//C<br>
-                    UVGegBbuVUaUWsKJI9vWrlN0sh2eKS6M81GoXHUU7axJRlWACTSHCCGEFvdOjc6c<br>
-                    A8pNdU0Gr8DvTYpn6KJOzIBxtRP6DKJK3F8MRE1c4yItv2ZaISgCZfKntrVnR8uh<br>
-                    ZngZ3jTBlplhhBqHizDHCH7h3aLH0JMaediFu+ThY4/VL0397PlG/Hvo0wARAQAB<br>
-                    tHBFbGRvciBadWZhcm92IChJIGNhbiBwcm92aWRlIGEgcHVibGljIFBHUCBrZXkg<br>
-                    Zm9yIGVuY3J5cHRlZCBjb21tdW5pY2F0aW9uIGlmIG5lZWRlZC4pIDxlbGRvcnp1<br>
-                    ZmFyb3Y2NkBnbWFpbC5jb20+iQJRBBMBCgA7FiEEnYXP1eQS7BLS1v8uKlYxiJln<br>
-                    lZwFAmlrw9ICGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQKlYxiJln<br>
-                    lZzbnhAAxLQmvxCDeqtUKpYK9T5/qGldkecZlWcTJDa73xam5pqR8nEtKjo7GONk<br>
-                    wnZNEr4kWwmeciOdYYmnoSsXeZqcXn+ZLtB0VEcwbJPFtcxMGXEXUYRNflRgX4o2<br>
-                    CWJ9G1uTHS61CJ3aVV1vPMSqV0fK2KmBxmfnGgJfKH3FL/g8/8qsXLTShG8SomGF<br>
-                    NXpYmk6CIrPMBlYWWpKFCg9hsKX8kQwC8qiEZdDgWXuuQ45EvqcDxqmBBP/5Getz<br>
-                    KN+PuDQIwusni1wlUuAjjLGR2gjh+pRSXNOfDLmV6runk8Rq6meqgG6rNdDJ8jGh<br>
-                    369YXTDe21VkFjMp2a2Fm0w99tAJ7e/i36THkWhrsBEGWmHB9qDFHP/Hw8wEO5OY<br>
-                    nL8D3LNLzlI5O9Rr7pQL10lCShD1sdLE6lerDOfTvcRAFdtYb5obdVvQczbKH4iC<br>
-                    hiKhzLOzJWQSVyp5VVN/iTek5HjoLw4xfKV2tWA0/x0q2fRka2y1fmGMlQ5NoWYf<br>
-                    HKO2adsqtHmpF7trEBBmu3RiILsQ//0gA345/SnCY2E5Gk2UyZGpS4w3up7bamVn<br>
-                    m1uAazzqnyTasFSVUdBCrjkq23LxTbGcxX8gPDbeQ6dKF4m7dcYGeqBj0XMrUHLY<br>
-                    CKt34P7eKYgqTWPXnHuTPE/McWqNheZdYZ2tOM/5RwA6SAbe+ii5Ag0EaWvD0gEQ<br>
-                    AMC02iIF+xxesABfrx1I05WKi5OsYbHY6nrE7VdmBwLZ2BUOMSyKcVg55Rt0+NYh<br>
-                    D9QdIzPHVmp77ZHw62hMaMaUbxEXqK7yjYgwZa6Nm8Q/1SpUSz4VHmHjVawSjo1p<br>
-                    d5gbkUceP14miA/ctKAdgyQhcDTr0WGY2i5VXnLY6CocjXGxaA05xaVGcu/C5Nuw<br>
-                    QRt7yXU3DvEe2DJZjPltRP5vNeph7Y8p19HqGg8YLUI1aDR7EHNEaJYazQ8ZvMjy<br>
-                    hxO8tOQSm1MjGX0EenXF4iGI7JNediBPEktkqU7EcQlSEE1ETu3CbQyx3GkZOVCk<br>
-                    6/GdjxujTqkMSUcfq4jSwxW9ehkfFXKNmubJ+5XIqfTYDRPctRnhSveYychjswmw<br>
-                    DYE9n+SFeaU5wRoiyfBa9AZ5N5jng8NT3u4Fhcqs/0rH2X3O1x/qYWLFhd+y55XV<br>
-                    1NAoH2wWehh6xpN230E+F4YnLlnG3yl5TVRgVFEeTHq0YktUyzOnqYMhGvU2qzh6<br>
-                    KHhkDO3lwoOUvFSlA8jCAF1ipJOX6Udm2pw4imlt00vKAW6kXLMJ1ngAmRcHiG/0<br>
-                    iK6evt3y0k9OY/o6raayF+P7E0WRM+1yvN1ObmsEZHsc5dNPnP8j0nwA3LCqWJfS<br>
-                    7bEvBBs1ap/VaGBGz2bJS9ubCIfhrAHkx+V2C9izB5yRABEBAAGJAjYEGAEKACAW<br>
-                    IQSdhc/V5BLsEtLW/y4qVjGImWeVnAUCaWvD0gIbDAAKCRAqVjGImWeVnNWKD/0a<br>
-                    y2/HCU9ZtkGZzPmWgdp+LYnFJO3ZqH4X9bBbIvtEKxAKXbd1215I2dCFyBwskpka<br>
-                    QHhyFbNRmaFz0LzY3mA2aVm4hj1swNCw9V6qV4+bfWq0b1d7RwJ5xCpq5XR8vpDC<br>
-                    ZN7VsANUQ/cKGxM4bGz8cUFYxv1MxmdLl6+BfS3PXuLGxQwr/vFlezNJwVlR6H6J<br>
-                    4n68px/bleWUjQa6IgSIWYxysnQuDU/LLu9S0d95sUg5wIe0KmkIBlPalfFcfRo6<br>
-                    1JOqukVgK5p81A5yfcoBO6mSuyvqxl7afq+Qp+oOddZkkm5Eyeg0o2gibhHU3d1Z<br>
-                    Sk7CJphlqGOZA/ocEM2D72LdYJzd0LwIejEdNZ8CVwYGjdRthyvoKeRZHxRDxiXf<br>
-                    26QIANZ4KpMJCekmrBmDSKGgNY5vbgXLQJF++I8JiuSVvPdb++8Q1LATlPPJkgaH<br>
-                    5rTJl41SgHKq6exQDfv2hcVnEri45hGwp+XihjvPzOdoNeZzz+Ox1aXKermlI6ht<br>
-                    Fig2iGJh6Z3q5ovwbu/xaxeDtVKzkWjTsrW9CTFUOb7+UPtFGCu4OQBMkahvvufb<br>
-                    TlojBAL7qhWFCs4Lu221d1u/MZ1Fq34wG4G1Z3/JZkzzMXIzVlZ/1jrPv/vQqG1q<br>
-                    F/c4s63TAot29/S86sU0Uzeljzt6297zm6bNPVdz6A==<br>
-                    =dlWh<br>
-                    -----END PGP PUBLIC KEY BLOCK-----
-                </div>
-            </div>
-
-            <a href="files/publickey.asc" download style="display: inline-flex; align-items: center; gap: 8px; color: var(--primary); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: opacity 0.2s;">
-                <i class="fas fa-download"></i> Download Public Key (.asc)
-            </a>
-        </div> 
-        </div> </div> </section> 
-#               
     </div>
 </section>
 
+<!-- ══════════════════════════════════════ HOW IT WORKS -->
+<section style="padding:100px 0; background:var(--dark);">
+    <div class="container">
+        <h2 style="text-align:center; margin-bottom:16px; font-size:2.6rem;">
+            How <span class="text-gradient">It Works</span>
+        </h2>
+        <p style="text-align:center; color:var(--gray); margin-bottom:60px; max-width:600px; margin-left:auto; margin-right:auto;">
+            From first contact to a running license in under 24 hours.
+        </p>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:20px; max-width:900px; margin:0 auto;">
+            <div class="how-step">
+                <div class="how-num">01</div>
+                <h4 style="color:white; margin-bottom:10px;">Get Machine ID</h4>
+                <p style="color:var(--gray); font-size:0.88rem; line-height:1.6;">Run <code>python3 get_id.py</code> on the target machine. Copy the output.</p>
+            </div>
+            <div class="how-step">
+                <div class="how-num">02</div>
+                <h4 style="color:white; margin-bottom:10px;">Send Request</h4>
+                <p style="color:var(--gray); font-size:0.88rem; line-height:1.6;">Email Machine ID + product name + brief use case description.</p>
+            </div>
+            <div class="how-step">
+                <div class="how-num">03</div>
+                <h4 style="color:white; margin-bottom:10px;">Receive Archive</h4>
+                <p style="color:var(--gray); font-size:0.88rem; line-height:1.6;">Get the product archive + License Key via secure email within 24 hours.</p>
+            </div>
+            <div class="how-step">
+                <div class="how-num">04</div>
+                <h4 style="color:white; margin-bottom:10px;">Run start.sh</h4>
+                <p style="color:var(--gray); font-size:0.88rem; line-height:1.6;">One command installs, configures .env, and verifies your license automatically.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════ PGP -->
+<section style="padding:100px 0; background:rgba(15,23,42,0.75);">
+    <div class="container">
+        <div style="max-width:800px; margin:0 auto;">
+            <h2 style="text-align:center; margin-bottom:16px; font-size:2.6rem;">
+                Secure <span class="text-gradient">Communication</span>
+            </h2>
+            <p style="text-align:center; color:var(--gray); margin-bottom:50px;">
+                Sensitive requests and license deliveries can be PGP-encrypted.
+            </p>
+
+            <div style="background:rgba(26,28,32,0.9); border:1px solid rgba(52,152,219,0.2); border-radius:16px; padding:36px;">
+                <div style="display:flex; align-items:center; gap:14px; margin-bottom:28px;">
+                    <div style="width:46px; height:46px; background:rgba(52,152,219,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        <i class="fas fa-key" style="color:var(--primary); font-size:1.2rem;"></i>
+                    </div>
+                    <div>
+                        <h4 style="color:white; margin:0 0 4px;">PGP Public Key</h4>
+                        <p style="color:var(--gray); margin:0; font-size:0.85rem;">Eldor Zufarov · eldorzufarov66@gmail.com</p>
+                    </div>
+                </div>
+
+                <div style="background:rgba(15,23,42,0.7); padding:16px 20px; border-radius:10px; border:1px solid rgba(255,255,255,0.05); margin-bottom:20px;">
+                    <span style="color:#94a3b8; display:block; margin-bottom:8px; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em;">Fingerprint</span>
+                    <code style="font-family:'Courier New',monospace; font-size:0.9rem; color:#4ade80; font-weight:700; letter-spacing:1px; word-break:break-all;">
+                        9D85 CFD5 E412 EC12 D2D6 FF2E 2A56 3188 9967 959C
+                    </code>
+                </div>
+
+                <div style="background:rgba(15,23,42,0.7); padding:16px 20px; border-radius:10px; border:1px solid rgba(255,255,255,0.05); margin-bottom:24px;">
+                    <span style="color:#94a3b8; display:block; margin-bottom:10px; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em;">Public Key Block</span>
+                    <div style="font-family:'Courier New',monospace; font-size:0.78rem; color:#4ade80; word-break:break-all; line-height:1.4; max-height:180px; overflow-y:auto; padding-right:8px;">
+                        -----BEGIN PGP PUBLIC KEY BLOCK-----<br><br>
+                        mQINBGlrw9IBEADdGmswgOWC3XB1fLQglpGvJn1uEncUwtYPoLHJopgpyGioV1x+<br>
+                        /MZevd81LL3PucNLoFb7vTmdhTY0FCKxcd17q9JSBkz4kwuDIsgFk+33LOnak9Bq<br>
+                        qCERrfMLowYbMzqwlbaZe4M0JkJRYvu14OxvarIqpSeLVzRfkMxv9pMLdjQuf96f<br>
+                        n584A6gr5MI9IukDhsU5wd0KHliXbuMBe+kXQXX9hTcK1wQhMii4FOyDa6MeQJP+<br>
+                        cbv0wWxecvPurGgfb8Tfy9GxNCXqpuaZ98NUBub5vdd1/tkthZEKYAOw8t7P9xve<br>
+                        w1QaeioP71oS3YOI17nBK5wFbQ4IxeDcAnwhCat6PFZKqrwt+ucQMmUAvyVoaiQJ<br>
+                        K4AxJmmdR5UAN8ITbHdeX1lH8UdZpea0+iNHk29DA5+Z94p9gZl7Ng34psNxr8m6<br>
+                        9NHGWa0CWOVs3sXtlcUK6X0GjXSqOAIyfbrnQwZgGsOXd40FTfN4jMFBZmmgz//C<br>
+                        UVGegBbuVUaUWsKJI9vWrlN0sh2eKS6M81GoXHUU7axJRlWACTSHCCGEFvdOjc6c<br>
+                        A8pNdU0Gr8DvTYpn6KJOzIBxtRP6DKJK3F8MRE1c4yItv2ZaISgCZfKntrVnR8uh<br>
+                        ZngZ3jTBlplhhBqHizDHCH7h3aLH0JMaediFu+ThY4/VL0397PlG/Hvo0wARAQAB<br>
+                        tHBFbGRvciBadWZhcm92IChJIGNhbiBwcm92aWRlIGEgcHVibGljIFBHUCBrZXkg<br>
+                        Zm9yIGVuY3J5cHRlZCBjb21tdW5pY2F0aW9uIGlmIG5lZWRlZC4pIDxlbGRvcnp1<br>
+                        ZmFyb3Y2NkBnbWFpbC5jb20+iQJRBBMBCgA7FiEEnYXP1eQS7BLS1v8uKlYxiJln<br>
+                        lZwFAmlrw9ICGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQKlYxiJln<br>
+                        lZzbnhAAxLQmvxCDeqtUKpYK9T5/qGldkecZlWcTJDa73xam5pqR8nEtKjo7GONk<br>
+                        wnZNEr4kWwmeciOdYYmnoSsXeZqcXn+ZLtB0VEcwbJPFtcxMGXEXUYRNflRgX4o2<br>
+                        CWJ9G1uTHS61CJ3aVV1vPMSqV0fK2KmBxmfnGgJfKH3FL/g8/8qsXLTShG8SomGF<br>
+                        NXpYmk6CIrPMBlYWWpKFCg9hsKX8kQwC8qiEZdDgWXuuQ45EvqcDxqmBBP/5Getz<br>
+                        KN+PuDQIwusni1wlUuAjjLGR2gjh+pRSXNOfDLmV6runk8Rq6meqgG6rNdDJ8jGh<br>
+                        369YXTDe21VkFjMp2a2Fm0w99tAJ7e/i36THkWhrsBEGWmHB9qDFHP/Hw8wEO5OY<br>
+                        nL8D3LNLzlI5O9Rr7pQL10lCShD1sdLE6lerDOfTvcRAFdtYb5obdVvQczbKH4iC<br>
+                        hiKhzLOzJWQSVyp5VVN/iTek5HjoLw4xfKV2tWA0/x0q2fRka2y1fmGMlQ5NoWYf<br>
+                        HKO2adsqtHmpF7trEBBmu3RiILsQ//0gA345/SnCY2E5Gk2UyZGpS4w3up7bamVn<br>
+                        m1uAazzqnyTasFSVUdBCrjkq23LxTbGcxX8gPDbeQ6dKF4m7dcYGeqBj0XMrUHLY<br>
+                        CKt34P7eKYgqTWPXnHuTPE/McWqNheZdYZ2tOM/5RwA6SAbe+ii5Ag0EaWvD0gEQ<br>
+                        AMC02iIF+xxesABfrx1I05WKi5OsYbHY6nrE7VdmBwLZ2BUOMSyKcVg55Rt0+NYh<br>
+                        D9QdIzPHVmp77ZHw62hMaMaUbxEXqK7yjYgwZa6Nm8Q/1SpUSz4VHmHjVawSjo1p<br>
+                        d5gbkUceP14miA/ctKAdgyQhcDTr0WGY2i5VXnLY6CocjXGxaA05xaVGcu/C5Nuw<br>
+                        QRt7yXU3DvEe2DJZjPltRP5vNeph7Y8p19HqGg8YLUI1aDR7EHNEaJYazQ8ZvMjy<br>
+                        hxO8tOQSm1MjGX0EenXF4iGI7JNediBPEktkqU7EcQlSEE1ETu3CbQyx3GkZOVCk<br>
+                        6/GdjxujTqkMSUcfq4jSwxW9ehkfFXKNmubJ+5XIqfTYDRPctRnhSveYychjswmw<br>
+                        DYE9n+SFeaU5wRoiyfBa9AZ5N5jng8NT3u4Fhcqs/0rH2X3O1x/qYWLFhd+y55XV<br>
+                        1NAoH2wWehh6xpN230E+F4YnLlnG3yl5TVRgVFEeTHq0YktUyzOnqYMhGvU2qzh6<br>
+                        KHhkDO3lwoOUvFSlA8jCAF1ipJOX6Udm2pw4imlt00vKAW6kXLMJ1ngAmRcHiG/0<br>
+                        iK6evt3y0k9OY/o6raayF+P7E0WRM+1yvN1ObmsEZHsc5dNPnP8j0nwA3LCqWJfS<br>
+                        7bEvBBs1ap/VaGBGz2bJS9ubCIfhrAHkx+V2C9izB5yRABEBAAGJAjYEGAEKACAW<br>
+                        IQSdhc/V5BLsEtLW/y4qVjGImWeVnAUCaWvD0gIbDAAKCRAqVjGImWeVnNWKD/0a<br>
+                        y2/HCU9ZtkGZzPmWgdp+LYnFJO3ZqH4X9bBbIvtEKxAKXbd1215I2dCFyBwskpka<br>
+                        QHhyFbNRmaFz0LzY3mA2aVm4hj1swNCw9V6qV4+bfWq0b1d7RwJ5xCpq5XR8vpDC<br>
+                        ZN7VsANUQ/cKGxM4bGz8cUFYxv1MxmdLl6+BfS3PXuLGxQwr/vFlezNJwVlR6H6J<br>
+                        4n68px/bleWUjQa6IgSIWYxysnQuDU/LLu9S0d95sUg5wIe0KmkIBlPalfFcfRo6<br>
+                        1JOqukVgK5p81A5yfcoBO6mSuyvqxl7afq+Qp+oOddZkkm5Eyeg0o2gibhHU3d1Z<br>
+                        Sk7CJphlqGOZA/ocEM2D72LdYJzd0LwIejEdNZ8CVwYGjdRthyvoKeRZHxRDxiXf<br>
+                        26QIANZ4KpMJCekmrBmDSKGgNY5vbgXLQJF++I8JiuSVvPdb++8Q1LATlPPJkgaH<br>
+                        5rTJl41SgHKq6exQDfv2hcVnEri45hGwp+XihjvPzOdoNeZzz+Ox1aXKermlI6ht<br>
+                        Fig2iGJh6Z3q5ovwbu/xaxeDtVKzkWjTsrW9CTFUOb7+UPtFGCu4OQBMkahvvufb<br>
+                        TlojBAL7qhWFCs4Lu221d1u/MZ1Fq34wG4G1Z3/JZkzzMXIzVlZ/1jrPv/vQqG1q<br>
+                        F/c4s63TAot29/S86sU0Uzeljzt6297zm6bNPVdz6A==<br>
+                        =dlWh<br>
+                        -----END PGP PUBLIC KEY BLOCK-----
+                    </div>
+                </div>
+
+                <a href="files/publickey.asc" download style="display:inline-flex; align-items:center; gap:8px; color:var(--primary); text-decoration:none; font-size:0.9rem; font-weight:600;">
+                    <i class="fas fa-download"></i> Download Public Key (.asc)
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════ FAQ -->
+<section style="padding:100px 0; background:var(--dark);">
+    <div class="container">
+        <h2 style="text-align:center; margin-bottom:50px; font-size:2.6rem;">
+            Licensing <span class="text-gradient">FAQ</span>
+        </h2>
+        <div style="max-width:750px; margin:0 auto; display:flex; flex-direction:column; gap:14px;">
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:26px;">
+                <h4 style="color:white; margin-bottom:8px;"><i class="fas fa-question-circle" style="color:#4ade80;"></i> Can I use one license on multiple machines?</h4>
+                <p style="color:var(--gray); line-height:1.7; margin:0;">No. Each License Key is cryptographically bound to one Machine ID. A separate license is required for each machine where the product will run.</p>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:26px;">
+                <h4 style="color:white; margin-bottom:8px;"><i class="fas fa-question-circle" style="color:#4ade80;"></i> What happens if my machine changes?</h4>
+                <p style="color:var(--gray); line-height:1.7; margin:0;">If your hardware changes significantly (e.g. new server, OS reinstall that changes Machine ID), contact us. We will issue a replacement key after verification.</p>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:26px;">
+                <h4 style="color:white; margin-bottom:8px;"><i class="fas fa-question-circle" style="color:#4ade80;"></i> How long does delivery take?</h4>
+                <p style="color:var(--gray); line-height:1.7; margin:0;">Typically within 24 hours of receiving your Machine ID. You will receive the product archive and License Key via secure email.</p>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:26px;">
+                <h4 style="color:white; margin-bottom:8px;"><i class="fas fa-question-circle" style="color:#4ade80;"></i> Do I need a license for both products?</h4>
+                <p style="color:var(--gray); line-height:1.7; margin:0;">Yes. Auditor Core and Sentinel Core are licensed separately. Sentinel Core embeds Auditor Core internally — but its license is distinct and machine-specific.</p>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:26px;">
+                <h4 style="color:white; margin-bottom:8px;"><i class="fas fa-question-circle" style="color:#4ade80;"></i> Is Sentinel Core available on GitHub?</h4>
+                <p style="color:var(--gray); line-height:1.7; margin:0;">No. Sentinel Core is distributed exclusively via secure email archive. This ensures full sovereignty over your security logic and eliminates external repository dependencies.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════ CTA -->
+<section style="padding:80px 0; background:linear-gradient(135deg,#0f172a 0%,#1a1c20 100%); text-align:center; position:relative; overflow:hidden;">
+    <div class="scan-line"></div>
+    <div class="container" style="position:relative; z-index:2;">
+        <h2 style="font-size:2.2rem; margin-bottom:16px; color:white;">
+            Ready to <span class="text-gradient">Get Started?</span>
+        </h2>
+        <p style="color:var(--gray); margin-bottom:32px; max-width:540px; margin-left:auto; margin-right:auto; line-height:1.7;">
+            Run <code>python3 get_id.py</code>, copy your Machine ID, and send it our way.
+        </p>
+        <div class="hero-buttons" style="justify-content:center; gap:16px;">
+            <a href="mailto:eldorzufarov66@gmail.com?subject=License%20Request" class="btn btn-primary btn-glow" style="padding:14px 28px;">
+                <i class="fas fa-envelope"></i> Contact Us
+            </a>
+            <a href="compare.html" class="btn btn-secondary" style="padding:14px 28px;">
+                <i class="fas fa-layer-group"></i> Compare Products
+            </a>
+        </div>
+        <p style="margin-top:24px; color:#555; font-size:0.82rem;">
+            No subscriptions · No telemetry · Individual hardware-bound licenses only
+        </p>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════ FOOTER -->
 <footer class="footer">
     <div class="container">
-        <div class="footer-grid" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; padding-bottom: 60px;">
-            <div style="flex: 1; min-width: 250px;">
-                <h4 style="margin-bottom: 20px;">DataWizual Security</h4>
-                <p style="color: var(--gray);">Developing territories of confidence through rigorous engineering.</p>
-                <p style="margin-top: 20px; color: var(--primary); font-weight: bold;">
+        <div class="footer-grid" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:40px; padding-bottom:60px;">
+            <div style="flex:1; min-width:250px;">
+                <h4 style="margin-bottom:20px;">DataWizual Security</h4>
+                <p style="color:var(--gray);">Developing territories of confidence through rigorous engineering.</p>
+                <p style="margin-top:20px; color:#4ade80; font-weight:bold;">
                     <i class="fas fa-envelope"></i> eldorzufarov66@gmail.com
                 </p>
             </div>
-            
             <div>
-                <h4 style="margin-bottom: 20px;">Our Ecosystem</h4>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <a href="auditor-core.html" style="color: var(--gray); text-decoration: none;">
-                        <i class="fas fa-search"></i> Auditor Core
-                    </a>
-                    <a href="sentinel.html" style="color: var(--gray); text-decoration: none;">
-                        <i class="fas fa-shield-alt"></i> Sentinel
-                    </a>
-                    <a href="compare.html" style="color: var(--gray); text-decoration: none;">
-                        <i class="fas fa-layer-group"></i> Compare
-                    </a>
+                <h4 style="margin-bottom:20px;">Our Ecosystem</h4>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.1</a>
+                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.1</a>
+                    <a href="compare.html"      style="color:var(--gray); text-decoration:none;"><i class="fas fa-layer-group"></i> Compare</a>
                 </div>
             </div>
-            
             <div>
-                <h4 style="margin-bottom: 20px;">Resources</h4>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <a href="methodology.html" style="color: var(--gray); text-decoration: none;">
-                        Methodology
-                    </a>
-                    <a href="sample-report.html" style="color: var(--gray); text-decoration: none;">
-                        Demo Report
-                    </a>
-                    <a href="security-policy.html" style="color: var(--gray); text-decoration: none;">
-                        Security Policy
-                    </a>
+                <h4 style="margin-bottom:20px;">Resources</h4>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <a href="methodology.html"     style="color:var(--gray); text-decoration:none;">Methodology</a>
+                    <a href="sample-report.html"   style="color:var(--gray); text-decoration:none;">Demo Report</a>
+                    <a href="security-policy.html" style="color:var(--gray); text-decoration:none;">Security Policy</a>
                 </div>
             </div>
         </div>
-        <div style="text-align: center; color: #444; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px;">
-            &copy; 2026 DataWizual Security. Professional Licensing Model.
+        <div style="text-align:center; color:#444; border-top:1px solid rgba(255,255,255,0.05); padding-top:30px;">
+            &copy; 2026 DataWizual Security Labs. Built with surgical precision.
         </div>
     </div>
 </footer>

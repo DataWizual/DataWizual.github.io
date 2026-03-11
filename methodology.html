@@ -3,54 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Methodology | DataWizual Security</title>
+    <title>Methodology | Auditor Core v2.1 | DataWizual Security</title>
+    <meta name="description" content="Security audit methodology behind Auditor Core v2.1 — 11 detectors, WSPM v2.2 scoring, AI false-positive filter, coordinated disclosure principles.">
+
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="security" href="https://datawizual.github.io/.well-known/security.txt">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
     <style>
-        :root { --primary: #3498db; --secondary: #0f172a; --light: #f8f9fa; }
-        body { background: #0f172a; color: white; line-height: 1.6; font-family: 'Segoe UI', sans-serif; margin: 0; }
-        .method-card { 
-            background: #1a1c20; padding: 40px; border-radius: 15px; 
-            border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
+        @keyframes horizontal-scan {
+            0%   { width:0; left:0; opacity:0; }
+            50%  { width:100%; opacity:0.6; }
+            100% { width:0; left:100%; opacity:0; }
         }
-        .method-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        .phase-badge { 
-            display: inline-block; padding: 4px 12px; border-radius: 20px; 
-            font-size: 0.8rem; font-weight: bold; margin-bottom: 20px; 
-        }
-        .section-title { font-size: 2.5rem; text-align: center; margin-bottom: 15px; }
-        .section-subtitle { text-align: center; color: #94a3b8; margin-bottom: 60px; font-size: 1.1rem; }
-        .audit-hero {
-            background: var(--secondary);
-            color: white;
-            padding: 100px 0;
-            text-align: center;
+        .scan-line {
+            position:absolute; top:0; left:0; right:0; height:2px;
+            background:linear-gradient(90deg,transparent,#3498db,transparent);
+            animation:horizontal-scan 2.5s infinite linear;
         }
 
-        .audit-hero h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
+        .method-card {
+            background:rgba(26,28,32,0.85); border:1px solid rgba(255,255,255,0.06);
+            border-radius:14px; padding:34px; transition:all 0.3s ease;
+            position:relative; overflow:hidden;
+        }
+        .method-card:hover { transform:translateY(-4px); }
+        .method-card::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:3px;
+            opacity:0; transition:opacity 0.3s ease;
+        }
+        .method-card:hover::before { opacity:1; }
+        .method-card.blue::before   { background:linear-gradient(90deg,var(--primary),#60a5fa); }
+        .method-card.green::before  { background:linear-gradient(90deg,#4ade80,#22c55e); }
+        .method-card.yellow::before { background:linear-gradient(90deg,#f59e0b,#fcd34d); }
+        .method-card.purple::before { background:linear-gradient(90deg,#c084fc,#a855f7); }
+        .method-card.red::before    { background:linear-gradient(90deg,#f87171,#ef4444); }
+        .method-card.teal::before   { background:linear-gradient(90deg,#2dd4bf,#14b8a6); }
+        .method-card:hover.blue     { border-color:rgba(52,152,219,0.3); }
+        .method-card:hover.green    { border-color:rgba(74,222,128,0.3); }
+        .method-card:hover.yellow   { border-color:rgba(245,158,11,0.3); }
+        .method-card:hover.purple   { border-color:rgba(192,132,252,0.3); }
+        .method-card:hover.red      { border-color:rgba(248,113,113,0.3); }
+        .method-card:hover.teal     { border-color:rgba(45,212,191,0.3); }
+
+        .phase-badge {
+            display:inline-flex; align-items:center; gap:6px;
+            padding:5px 14px; border-radius:20px; font-size:0.78rem;
+            font-weight:700; margin-bottom:18px; letter-spacing:0.05em;
+        }
+        .check-list { list-style:none; padding:0; margin:0; }
+        .check-list li {
+            display:flex; align-items:flex-start; gap:10px;
+            color:var(--gray); font-size:0.9rem; line-height:1.6;
+            margin-bottom:10px;
+        }
+        .check-list li i { flex-shrink:0; margin-top:3px; }
+
+        .wspm-row {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:14px 20px; border-radius:8px; margin-bottom:8px;
+            background:rgba(26,28,32,0.7); border:1px solid rgba(255,255,255,0.05);
+            transition:border-color 0.2s;
+        }
+        .wspm-row:hover { border-color:rgba(52,152,219,0.2); }
+        .wspm-weight {
+            font-size:0.85rem; font-weight:700; font-family:monospace;
+            color:var(--primary);
         }
 
-        .audit-hero p {
-            font-size: 1.1rem;
-            color: #94a3b8;
-            max-width: 900px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }        
+        .spi-row {
+            display:flex; align-items:center; gap:16px; padding:14px 20px;
+            border-radius:10px; margin-bottom:8px; border:1px solid transparent;
+        }
+        .spi-score { font-size:1.1rem; font-weight:800; font-family:monospace; min-width:90px; }
+        .spi-bar-bg { flex:1; height:6px; background:rgba(255,255,255,0.07); border-radius:3px; }
+        .spi-bar    { height:6px; border-radius:3px; }
+
+        .ai-flow {
+            display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:12px;
+        }
+        .ai-chip {
+            background:rgba(26,28,32,0.9); border:1px solid rgba(255,255,255,0.08);
+            border-radius:8px; padding:6px 12px; font-size:0.8rem; color:var(--gray);
+        }
+        .ai-chip.primary  { border-color:rgba(52,152,219,0.4);  color:var(--primary); }
+        .ai-chip.purple   { border-color:rgba(192,132,252,0.4); color:#c084fc; }
+        .ai-chip.green    { border-color:rgba(74,222,128,0.4);  color:#4ade80; }
+        .ai-arrow { color:rgba(74,222,128,0.4); font-size:0.75rem; }
     </style>
 </head>
 <body>
 
 <nav class="navbar">
     <div class="container">
-        <div class="logo">
-            <i class="fas fa-shield-alt"></i> DataWizual Security
-        </div>
+        <div class="logo"><i class="fas fa-shield-alt"></i> DataWizual Security</div>
         <div class="nav-links">
             <a href="index.html">Home</a>
-            
             <div class="dropdown">
                 <a href="#" class="dropdown-trigger">Products <i class="fas fa-chevron-down"></i></a>
                 <div class="dropdown-content">
@@ -59,9 +107,7 @@
                     <a href="compare.html"><i class="fas fa-layer-group"></i> Compare Engines</a>
                 </div>
             </div>
-
             <a href="audit.html">Audit Service</a>
-
             <div class="dropdown">
                 <a href="#" class="dropdown-trigger">Resources <i class="fas fa-chevron-down"></i></a>
                 <div class="dropdown-content">
@@ -70,103 +116,367 @@
                     <a href="security-policy.html">Security Policy</a>
                 </div>
             </div>
-
             <a href="get.html" class="nav-btn">Get Access</a>
         </div>
     </div>
 </nav>
 
-<header class="audit-hero">
-    <div class="container">
-        <h1>Security Audit Methodology</h1>
-        <p>
-            This methodology is applied strictly to <strong>authorized scopes</strong>,
-            <strong>public repositories</strong>, and <strong>environments explicitly permitted by the client</strong>, following Coordinated Disclosure principles.
-            <br><br>
-            All research follows <strong>Coordinated Disclosure principles</strong> and focuses on
-            CI/CD, supply-chain, and infrastructure-level risks — without exploitation,
-            disruption, or access to production systems.
+<!-- ══════════════════════════════════════ HERO -->
+<header class="hero" style="padding:110px 0 80px; background:linear-gradient(135deg,#0f172a 0%,#1a1c20 100%); text-align:center; position:relative; overflow:hidden;">
+    <div class="scan-line"></div>
+    <div class="container" style="position:relative; z-index:2;">
+        <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(52,152,219,0.1); border:1px solid rgba(52,152,219,0.3); border-radius:20px; padding:6px 16px; margin-bottom:24px; color:var(--primary); font-size:0.85rem; font-weight:700;">
+            <i class="fas fa-flask"></i> Auditor Core v2.1 — Engine Methodology
+        </div>
+        <h1 style="font-size:3.2rem; margin-bottom:20px;">
+            Security Audit <span class="text-gradient">Methodology</span>
+        </h1>
+        <p style="color:var(--gray); font-size:1.1rem; max-width:780px; margin:0 auto 20px; line-height:1.8;">
+            Applied strictly to <strong style="color:white;">authorized scopes</strong>,
+            <strong style="color:white;">public repositories</strong>, and
+            <strong style="color:white;">environments explicitly permitted by the client</strong>.
+            All research follows <strong style="color:white;">Coordinated Disclosure principles</strong>
+            — no exploitation, no disruption, no access to production systems.
         </p>
+        <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:30px;">
+            <span style="background:rgba(74,222,128,0.1); border:1px solid rgba(74,222,128,0.25); border-radius:8px; padding:6px 14px; font-size:0.82rem; color:#4ade80;"><i class="fas fa-check-circle"></i> 11 Detectors</span>
+            <span style="background:rgba(52,152,219,0.1); border:1px solid rgba(52,152,219,0.25); border-radius:8px; padding:6px 14px; font-size:0.82rem; color:var(--primary);"><i class="fas fa-chart-bar"></i> WSPM v2.2 Scoring</span>
+            <span style="background:rgba(192,132,252,0.1); border:1px solid rgba(192,132,252,0.25); border-radius:8px; padding:6px 14px; font-size:0.82rem; color:#c084fc;"><i class="fas fa-brain"></i> AI False-Positive Filter</span>
+            <span style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); border-radius:8px; padding:6px 14px; font-size:0.82rem; color:#f87171;"><i class="fas fa-ban"></i> 0 Telemetry</span>
+        </div>
     </div>
 </header>
 
-
-<section class="section" style="padding-bottom: 100px;">
+<!-- ══════════════════════════════════════ 5-PHASE METHODOLOGY -->
+<section style="padding:100px 0; background:rgba(15,23,42,0.75);">
     <div class="container">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
-            
-            <div class="method-card">
-                <span class="phase-badge" style="background: rgba(52, 152, 219, 0.2); color: #3498db;">PHASE 01</span>
-                <h3><i class="fas fa-search" style="margin-right: 10px;"></i> Reconnaissance</h3>
-                <p style="color: #cbd5e1; margin-bottom: 25px;">Before we run a single script, we map the digital territory. We focus on trust boundaries and hidden entry points.</p>
-                <ul style="list-style: none; padding: 0; color: #94a3b8;">
-                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #3498db; margin-right: 8px;"></i> Mapping public-facing assets and DNS records</li>
-                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #3498db; margin-right: 8px;"></i> Deep analysis of GitHub Actions & GitLab CI workflows</li>
-                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #3498db; margin-right: 8px;"></i> Identifying third-party integrations and webhooks</li>
-                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #3498db; margin-right: 8px;"></i> Reviewing baseline IAM policies and access tokens</li>
+        <h2 style="text-align:center; margin-bottom:16px; font-size:2.6rem;">
+            Five-Phase <span class="text-gradient">Audit Process</span>
+        </h2>
+        <p style="text-align:center; color:var(--gray); margin-bottom:60px; max-width:700px; margin-left:auto; margin-right:auto;">
+            Every scan follows the same reproducible pipeline — deterministic by design.
+        </p>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:24px;">
+
+            <div class="method-card blue">
+                <span class="phase-badge" style="background:rgba(52,152,219,0.15); color:var(--primary); border:1px solid rgba(52,152,219,0.3);">
+                    <i class="fas fa-map"></i> PHASE 01
+                </span>
+                <h3 style="color:white; margin-bottom:12px;"><i class="fas fa-search" style="color:var(--primary); margin-right:8px;"></i> Reconnaissance</h3>
+                <p style="color:var(--gray); font-size:0.92rem; line-height:1.6; margin-bottom:18px;">Before running any scanner, we map the digital territory — trust boundaries, hidden entry points, third-party integrations.</p>
+                <ul class="check-list">
+                    <li><i class="fas fa-check-circle" style="color:var(--primary);"></i> Repository structure analysis — files, folders, CI/CD configs</li>
+                    <li><i class="fas fa-check-circle" style="color:var(--primary);"></i> GitHub Actions, GitLab CI, Jenkinsfile workflow mapping</li>
+                    <li><i class="fas fa-check-circle" style="color:var(--primary);"></i> Third-party integrations and webhook exposure</li>
+                    <li><i class="fas fa-check-circle" style="color:var(--primary);"></i> Exclusion of media, build artifacts, and vendor directories</li>
                 </ul>
             </div>
 
-            <div class="method-card">
-                <span class="phase-badge" style="background: rgba(74, 222, 128, 0.2); color: #4ade80;">PHASE 02</span>
-                <h3><i class="fas fa-robot" style="margin-right: 10px;"></i> Automated Intelligence</h3>
-                <p style="color: #cbd5e1; margin-bottom: 25px;">Execution of the <strong>Auditor Core Baseline v1.0</strong>. We deploy our proprietary engine to scan for deep-seated flaws.</p>
-                <ul style="list-style: none; padding: 0; color: #94a3b8;">
-                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #4ade80; margin-right: 8px;"></i> Automated secret leak detection in history & logs</li>
-                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #4ade80; margin-right: 8px;"></i> Supply-chain dependency vulnerability analysis</li>
-                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #4ade80; margin-right: 8px;"></i> Container image and Dockerfile security hardening</li>
-                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #4ade80; margin-right: 8px;"></i> Identifying misconfigured S3 buckets and databases</li>
+            <div class="method-card green">
+                <span class="phase-badge" style="background:rgba(74,222,128,0.15); color:#4ade80; border:1px solid rgba(74,222,128,0.3);">
+                    <i class="fas fa-robot"></i> PHASE 02
+                </span>
+                <h3 style="color:white; margin-bottom:12px;"><i class="fas fa-radar" style="color:#4ade80; margin-right:8px;"></i> Multi-Engine Scanning</h3>
+                <p style="color:var(--gray); font-size:0.92rem; line-height:1.6; margin-bottom:18px;">Auditor Core v2.1 deploys all 11 detectors in parallel. Each engine covers a distinct threat class.</p>
+                <ul class="check-list">
+                    <li><i class="fas fa-check-circle" style="color:#4ade80;"></i> Bandit — Python SAST: injection, crypto, subprocess risks</li>
+                    <li><i class="fas fa-check-circle" style="color:#4ade80;"></i> Semgrep — multi-language SAST: XSS, SQLi, command injection</li>
+                    <li><i class="fas fa-check-circle" style="color:#4ade80;"></i> Gitleaks — secrets in full git history</li>
+                    <li><i class="fas fa-check-circle" style="color:#4ade80;"></i> Secret Detector — 30+ patterns across all file types</li>
+                    <li><i class="fas fa-check-circle" style="color:#4ade80;"></i> CICD Analyzer — unpinned actions, privileged runners</li>
+                    <li><i class="fas fa-check-circle" style="color:#4ade80;"></i> IaC Scanner — Terraform, Docker, K8s, Helm</li>
+                    <li><i class="fas fa-check-circle" style="color:#4ade80;"></i> Dependency + License Scanner — CVEs, copyleft exposure</li>
+                    <li><i class="fas fa-check-circle" style="color:#4ade80;"></i> Bridge + SAST Scanner — cross-repo exposure, logic flaws</li>
                 </ul>
             </div>
 
-            <div class="method-card">
-                <span class="phase-badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">PHASE 03</span>
-                <h3><i class="fas fa-user-check" style="margin-right: 10px;"></i> Expert Validation</h3>
-                <p style="color: #cbd5e1; margin-bottom: 25px;">The human element. We manually verify every automated finding to ensure zero false positives and real impact.</p>
-                <ul style="list-style: none; padding: 0; color: #94a3b8;">
-                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #f59e0b; margin-right: 8px;"></i>  Manual validation of identified logic vulnerabilities under controlled and authorized conditions
-</li>
-                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #f59e0b; margin-right: 8px;"></i> Risk prioritization based on real-world impact and threat models</li>
-                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #f59e0b; margin-right: 8px;"></i> Development of tailored remediation code snippets and configuration fixes</li>
-                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #f59e0b; margin-right: 8px;"></i> Final comprehensive report and technical debriefing session</li>
+            <div class="method-card purple">
+                <span class="phase-badge" style="background:rgba(192,132,252,0.15); color:#c084fc; border:1px solid rgba(192,132,252,0.3);">
+                    <i class="fas fa-brain"></i> PHASE 03
+                </span>
+                <h3 style="color:white; margin-bottom:12px;"><i class="fas fa-brain" style="color:#c084fc; margin-right:8px;"></i> AI False-Positive Filter</h3>
+                <p style="color:var(--gray); font-size:0.92rem; line-height:1.6; margin-bottom:18px;">Top findings are sent to AI for contextual verification — eliminating noise before scoring.</p>
+                <ul class="check-list">
+                    <li><i class="fas fa-check-circle" style="color:#c084fc;"></i> Gemini 2.5 Flash — primary AI engine</li>
+                    <li><i class="fas fa-check-circle" style="color:#c084fc;"></i> Groq (Llama 3.3 70B) — automatic fallback on quota</li>
+                    <li><i class="fas fa-check-circle" style="color:#c084fc;"></i> Each finding verdict: AI VERIFIED or AI FALSE POSITIVE</li>
+                    <li><i class="fas fa-check-circle" style="color:#c084fc;"></i> Architectural analysis block in final report</li>
+                    <li><i class="fas fa-check-circle" style="color:#c084fc;"></i> AI unavailable → core scan continues without enrichment</li>
+                </ul>
+                <div class="ai-flow">
+                    <div class="ai-chip">Findings</div>
+                    <div class="ai-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="ai-chip primary"><i class="fas fa-robot"></i> Gemini</div>
+                    <div class="ai-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="ai-chip purple"><i class="fas fa-random"></i> Groq</div>
+                    <div class="ai-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="ai-chip green">Verdicts</div>
+                </div>
+            </div>
+
+            <div class="method-card yellow">
+                <span class="phase-badge" style="background:rgba(245,158,11,0.15); color:#f59e0b; border:1px solid rgba(245,158,11,0.3);">
+                    <i class="fas fa-chart-bar"></i> PHASE 04
+                </span>
+                <h3 style="color:white; margin-bottom:12px;"><i class="fas fa-calculator" style="color:#f59e0b; margin-right:8px;"></i> WSPM v2.2 Scoring</h3>
+                <p style="color:var(--gray); font-size:0.92rem; line-height:1.6; margin-bottom:18px;">Weighted Security Posture Metric v2.2 transforms raw findings into a single authoritative SPI score (0–100).</p>
+                <ul class="check-list">
+                    <li><i class="fas fa-check-circle" style="color:#f59e0b;"></i> Critical: weight 10 · High: 7 · Medium: 4 · Low: 1</li>
+                    <li><i class="fas fa-check-circle" style="color:#f59e0b;"></i> Codebase size normalisation applied</li>
+                    <li><i class="fas fa-check-circle" style="color:#f59e0b;"></i> AI-confirmed false positives excluded from score</li>
+                    <li><i class="fas fa-check-circle" style="color:#f59e0b;"></i> SPI = 100 − (Weighted Score / Normaliser) × 100</li>
+                    <li><i class="fas fa-check-circle" style="color:#f59e0b;"></i> Five posture labels from Critical Risk to Hardened</li>
                 </ul>
             </div>
-            <div style="margin-top:60px; text-align:center; color:#94a3b8;"></div>
+
+            <div class="method-card teal">
+                <span class="phase-badge" style="background:rgba(45,212,191,0.15); color:#2dd4bf; border:1px solid rgba(45,212,191,0.3);">
+                    <i class="fas fa-file-alt"></i> PHASE 05
+                </span>
+                <h3 style="color:white; margin-bottom:12px;"><i class="fas fa-file-code" style="color:#2dd4bf; margin-right:8px;"></i> Report Generation</h3>
+                <p style="color:var(--gray); font-size:0.92rem; line-height:1.6; margin-bottom:18px;">Findings, scores, and AI verdicts are assembled into a full interactive HTML report — zero external dependencies.</p>
+                <ul class="check-list">
+                    <li><i class="fas fa-check-circle" style="color:#2dd4bf;"></i> Interactive HTML with AI VERIFIED / AI FALSE POSITIVE badges</li>
+                    <li><i class="fas fa-check-circle" style="color:#2dd4bf;"></i> Per-finding CWE mapping to MITRE framework</li>
+                    <li><i class="fas fa-check-circle" style="color:#2dd4bf;"></i> Executive summary + full technical details</li>
+                    <li><i class="fas fa-check-circle" style="color:#2dd4bf;"></i> JSON output for machine-readable integration</li>
+                    <li><i class="fas fa-check-circle" style="color:#2dd4bf;"></i> Architectural analysis block from AI layer</li>
+                </ul>
+            </div>
+
+            <div class="method-card red">
+                <span class="phase-badge" style="background:rgba(239,68,68,0.15); color:#f87171; border:1px solid rgba(239,68,68,0.3);">
+                    <i class="fas fa-user-check"></i> PHASE 06
+                </span>
+                <h3 style="color:white; margin-bottom:12px;"><i class="fas fa-user-check" style="color:#f87171; margin-right:8px;"></i> Human Validation</h3>
+                <p style="color:var(--gray); font-size:0.92rem; line-height:1.6; margin-bottom:18px;">For the professional Audit Service — every finding is manually reviewed for real-world exploitability and impact.</p>
+                <ul class="check-list">
+                    <li><i class="fas fa-check-circle" style="color:#f87171;"></i> Manual verification under authorized, controlled conditions</li>
+                    <li><i class="fas fa-check-circle" style="color:#f87171;"></i> Risk prioritization based on actual threat models</li>
+                    <li><i class="fas fa-check-circle" style="color:#f87171;"></i> Tailored remediation code snippets and config fixes</li>
+                    <li><i class="fas fa-check-circle" style="color:#f87171;"></i> Technical debriefing session with remediation roadmap</li>
+                </ul>
+                <div style="margin-top:14px; background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.15); border-radius:8px; padding:10px 14px; font-size:0.82rem; color:#fca5a5;">
+                    <i class="fas fa-info-circle"></i> This phase applies to the professional <a href="audit.html" style="color:#f87171; text-decoration:underline;">Audit Service</a> — not to standalone Auditor Core scans.
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
 
-<section style="padding: 100px 0; background: #1a1c20; border-top: 1px solid rgba(255,255,255,0.05);">
-    <div class="container" style="text-align: center;">
-        <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Ready for a Deep Review?</h2>
-        <p style="color: #94a3b8; margin-bottom: 40px; font-size: 1.2rem;">Get a professional security assessment with actionable remediation steps.</p>
-        
-        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-            <a href="get.html" class="btn btn-primary btn-glow">
-                <i class="fas fa-file-signature"></i> Request an Audit
-            </a>
-            <a href="get.html" class="btn btn-secondary">
-                <i class="fas fa-key"></i> Request Professional Licensing
-            </a>
+<!-- ══════════════════════════════════════ WSPM FORMULA -->
+<section style="padding:100px 0; background:var(--dark);">
+    <div class="container">
+        <h2 style="text-align:center; margin-bottom:16px; font-size:2.6rem;">
+            WSPM <span class="text-gradient">v2.2 Scoring Formula</span>
+        </h2>
+        <p style="text-align:center; color:var(--gray); margin-bottom:60px; max-width:700px; margin-left:auto; margin-right:auto;">
+            Weighted Security Posture Metric — deterministic, reproducible, codebase-normalised.
+        </p>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:40px; max-width:1000px; margin:0 auto; flex-wrap:wrap;">
+
+            <!-- Weights -->
+            <div>
+                <h4 style="color:white; margin-bottom:20px; font-size:1.1rem;"><i class="fas fa-weight-hanging" style="color:var(--primary);"></i> Severity Weights</h4>
+                <div class="wspm-row">
+                    <span style="color:white; font-weight:600;">Critical</span>
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <div style="width:80px; height:6px; background:rgba(239,68,68,0.2); border-radius:3px;">
+                            <div style="width:100%; height:6px; background:#f87171; border-radius:3px;"></div>
+                        </div>
+                        <span class="wspm-weight">× 10</span>
+                    </div>
+                </div>
+                <div class="wspm-row">
+                    <span style="color:white; font-weight:600;">High</span>
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <div style="width:80px; height:6px; background:rgba(245,158,11,0.2); border-radius:3px;">
+                            <div style="width:70%; height:6px; background:#f59e0b; border-radius:3px;"></div>
+                        </div>
+                        <span class="wspm-weight">× 7</span>
+                    </div>
+                </div>
+                <div class="wspm-row">
+                    <span style="color:white; font-weight:600;">Medium</span>
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <div style="width:80px; height:6px; background:rgba(52,152,219,0.2); border-radius:3px;">
+                            <div style="width:40%; height:6px; background:var(--primary); border-radius:3px;"></div>
+                        </div>
+                        <span class="wspm-weight">× 4</span>
+                    </div>
+                </div>
+                <div class="wspm-row">
+                    <span style="color:white; font-weight:600;">Low</span>
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <div style="width:80px; height:6px; background:rgba(148,163,184,0.2); border-radius:3px;">
+                            <div style="width:10%; height:6px; background:#94a3b8; border-radius:3px;"></div>
+                        </div>
+                        <span class="wspm-weight">× 1</span>
+                    </div>
+                </div>
+
+                <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(52,152,219,0.2); border-radius:12px; padding:20px; margin-top:24px;">
+                    <div style="color:#94a3b8; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:10px;">Formula</div>
+                    <code style="font-family:'Courier New',monospace; font-size:0.88rem; color:#4ade80; line-height:1.8;">
+                        WS = Σ(severity_weight × count)<br>
+                        N  = log(files + 1) + 1<br>
+                        SPI = max(0, 100 − (WS / N) × 10)
+                    </code>
+                </div>
+            </div>
+
+            <!-- SPI labels -->
+            <div>
+                <h4 style="color:white; margin-bottom:20px; font-size:1.1rem;"><i class="fas fa-tachometer-alt" style="color:#4ade80;"></i> SPI Posture Labels</h4>
+
+                <div class="spi-row" style="background:rgba(239,68,68,0.07); border-color:rgba(239,68,68,0.2);">
+                    <span class="spi-score" style="color:#f87171;">0 – 29</span>
+                    <div class="spi-bar-bg"><div class="spi-bar" style="width:29%; background:#f87171;"></div></div>
+                    <span style="color:#f87171; font-weight:700; min-width:110px; text-align:right;">Critical Risk</span>
+                </div>
+                <div class="spi-row" style="background:rgba(239,68,68,0.04); border-color:rgba(239,68,68,0.12);">
+                    <span class="spi-score" style="color:#fb923c;">30 – 49</span>
+                    <div class="spi-bar-bg"><div class="spi-bar" style="width:49%; background:#fb923c;"></div></div>
+                    <span style="color:#fb923c; font-weight:700; min-width:110px; text-align:right;">High Risk</span>
+                </div>
+                <div class="spi-row" style="background:rgba(245,158,11,0.04); border-color:rgba(245,158,11,0.12);">
+                    <span class="spi-score" style="color:#f59e0b;">50 – 69</span>
+                    <div class="spi-bar-bg"><div class="spi-bar" style="width:69%; background:#f59e0b;"></div></div>
+                    <span style="color:#f59e0b; font-weight:700; min-width:110px; text-align:right;">Vulnerable</span>
+                </div>
+                <div class="spi-row" style="background:rgba(52,152,219,0.04); border-color:rgba(52,152,219,0.12);">
+                    <span class="spi-score" style="color:var(--primary);">70 – 89</span>
+                    <div class="spi-bar-bg"><div class="spi-bar" style="width:89%; background:var(--primary);"></div></div>
+                    <span style="color:var(--primary); font-weight:700; min-width:110px; text-align:right;">Resilient</span>
+                </div>
+                <div class="spi-row" style="background:rgba(74,222,128,0.04); border-color:rgba(74,222,128,0.2);">
+                    <span class="spi-score" style="color:#4ade80;">90 – 100</span>
+                    <div class="spi-bar-bg"><div class="spi-bar" style="width:100%; background:#4ade80;"></div></div>
+                    <span style="color:#4ade80; font-weight:700; min-width:110px; text-align:right;">Hardened</span>
+                </div>
+
+                <div style="margin-top:20px; background:rgba(74,222,128,0.06); border:1px solid rgba(74,222,128,0.15); border-radius:10px; padding:14px 18px; font-size:0.85rem; color:var(--gray); line-height:1.6;">
+                    <i class="fas fa-info-circle" style="color:#4ade80;"></i>
+                    AI-confirmed false positives are excluded from WS before SPI is calculated. This ensures the score reflects real risk — not scanner noise.
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
 
+<!-- ══════════════════════════════════════ ETHICS -->
+<section style="padding:100px 0; background:rgba(15,23,42,0.75);">
+    <div class="container">
+        <h2 style="text-align:center; margin-bottom:16px; font-size:2.6rem;">
+            Ethics & <span class="text-gradient">Scope Boundaries</span>
+        </h2>
+        <p style="text-align:center; color:var(--gray); margin-bottom:60px; max-width:700px; margin-left:auto; margin-right:auto;">
+            Auditor Core v2.1 is a passive analysis engine — it never modifies, exploits, or disrupts any system.
+        </p>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:24px; max-width:1000px; margin:0 auto;">
+
+            <div style="background:rgba(26,28,32,0.85); border:1px solid rgba(74,222,128,0.2); border-radius:14px; padding:28px;">
+                <div style="width:46px; height:46px; background:rgba(74,222,128,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+                    <i class="fas fa-check-circle" style="color:#4ade80; font-size:1.2rem;"></i>
+                </div>
+                <h4 style="color:white; margin-bottom:10px;">What We Do</h4>
+                <ul class="check-list">
+                    <li><i class="fas fa-check" style="color:#4ade80;"></i> Scan authorized repositories and environments</li>
+                    <li><i class="fas fa-check" style="color:#4ade80;"></i> Analyse public repositories for research purposes</li>
+                    <li><i class="fas fa-check" style="color:#4ade80;"></i> Report findings to authorized parties only</li>
+                    <li><i class="fas fa-check" style="color:#4ade80;"></i> Follow Coordinated Disclosure at all times</li>
+                </ul>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.85); border:1px solid rgba(239,68,68,0.2); border-radius:14px; padding:28px;">
+                <div style="width:46px; height:46px; background:rgba(239,68,68,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+                    <i class="fas fa-times-circle" style="color:#f87171; font-size:1.2rem;"></i>
+                </div>
+                <h4 style="color:white; margin-bottom:10px;">What We Never Do</h4>
+                <ul class="check-list">
+                    <li><i class="fas fa-times" style="color:#f87171;"></i> Exploit vulnerabilities in any environment</li>
+                    <li><i class="fas fa-times" style="color:#f87171;"></i> Access production data or credentials</li>
+                    <li><i class="fas fa-times" style="color:#f87171;"></i> Disrupt CI/CD pipelines or deployments</li>
+                    <li><i class="fas fa-times" style="color:#f87171;"></i> Scan systems without explicit authorization</li>
+                </ul>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.85); border:1px solid rgba(52,152,219,0.2); border-radius:14px; padding:28px;">
+                <div style="width:46px; height:46px; background:rgba(52,152,219,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+                    <i class="fas fa-ban" style="color:var(--primary); font-size:1.2rem;"></i>
+                </div>
+                <h4 style="color:white; margin-bottom:10px;">Zero Telemetry Guarantee</h4>
+                <ul class="check-list">
+                    <li><i class="fas fa-check" style="color:var(--primary);"></i> No usage data collected or transmitted</li>
+                    <li><i class="fas fa-check" style="color:var(--primary);"></i> No scanned code ever leaves your machine</li>
+                    <li><i class="fas fa-check" style="color:var(--primary);"></i> AI API calls contain findings only — never source</li>
+                    <li><i class="fas fa-check" style="color:var(--primary);"></i> Engine never self-updates or calls home</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════ CTA -->
+<section style="padding:100px 0; background:linear-gradient(135deg,#0f172a 0%,#1a1c20 100%); text-align:center; position:relative; overflow:hidden;">
+    <div class="scan-line"></div>
+    <div class="container" style="position:relative; z-index:2;">
+        <h2 style="font-size:2.6rem; margin-bottom:20px; color:white;">
+            Ready for a <span class="text-gradient">Deep Review?</span>
+        </h2>
+        <p style="color:var(--gray); margin-bottom:40px; font-size:1.05rem; max-width:600px; margin-left:auto; margin-right:auto; line-height:1.7;">
+            Run Auditor Core v2.1 yourself — or commission a full professional audit with human validation and remediation roadmap.
+        </p>
+        <div class="hero-buttons" style="justify-content:center; gap:16px;">
+            <a href="get.html" class="btn btn-primary btn-glow" style="padding:15px 30px;">
+                <i class="fas fa-key"></i> Get Auditor Core
+            </a>
+            <a href="audit.html" class="btn btn-secondary" style="padding:15px 30px;">
+                <i class="fas fa-file-signature"></i> Request Professional Audit
+            </a>
+        </div>
+        <p style="margin-top:24px; color:#555; font-size:0.82rem;">
+            View a real scan result → <a href="sample-report.html" style="color:var(--primary);">Demo Report</a>
+        </p>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════ FOOTER -->
 <footer class="footer">
     <div class="container">
-        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 50px; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-            <div style="flex: 1; min-width: 250px;">
-                <h4 style="color: white; margin-bottom: 20px;">DataWizual Security</h4>
-                <p style="color: #aaa;">Independent CI/CD security audits. Ensuring your infrastructure is an asset, not a liability.</p>
+        <div class="footer-grid" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:40px; padding-bottom:60px;">
+            <div style="flex:1; min-width:250px;">
+                <h4 style="margin-bottom:20px;">DataWizual Security</h4>
+                <p style="color:var(--gray);">Developing territories of confidence through rigorous engineering.</p>
+                <p style="margin-top:20px; color:#4ade80; font-weight:bold;">
+                    <i class="fas fa-envelope"></i> eldorzufarov66@gmail.com
+                </p>
             </div>
             <div>
-                <h4>Legal & Safety</h4>
-                <p style="margin-top: 10px; display: flex; gap: 20px;">
-                    <a href="security-policy.html" style="color: #aaa; text-decoration: none;"><i class="fas fa-shield-alt"></i> Security Policy</a>
-                    <a href="sample-report.html" style="color: #aaa; text-decoration: none;"><i class="fas fa-file-alt"></i> Demo Report</a>
-                </p>
-                <p style="margin-top: 15px; color: #666;">© 2026 DataWizual Security. All rights reserved.</p>
+                <h4 style="margin-bottom:20px;">Our Ecosystem</h4>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.1</a>
+                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.1</a>
+                    <a href="compare.html"      style="color:var(--gray); text-decoration:none;"><i class="fas fa-layer-group"></i> Compare</a>
+                </div>
             </div>
+            <div>
+                <h4 style="margin-bottom:20px;">Resources</h4>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <a href="methodology.html"     style="color:var(--gray); text-decoration:none; color:white;">Methodology</a>
+                    <a href="sample-report.html"   style="color:var(--gray); text-decoration:none;">Demo Report</a>
+                    <a href="security-policy.html" style="color:var(--gray); text-decoration:none;">Security Policy</a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center; color:#444; border-top:1px solid rgba(255,255,255,0.05); padding-top:30px;">
+            &copy; 2026 DataWizual Security Labs. Built with surgical precision.
         </div>
     </div>
 </footer>
