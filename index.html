@@ -365,27 +365,118 @@
 <!-- ═══════════════════════════════════════════════ DEMO GIF -->
 <section class="section" style="padding: 80px 0; background: var(--dark); text-align: center;">
     <div class="container">
-        <div style="display: inline-block; background: #10b981; color: #000; font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; letter-spacing: 1px; margin-bottom: 20px;">LIVE DEMO</div>
+        <div style="display: inline-block; background: #10b981; color: #000; font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; letter-spacing: 1px; margin-bottom: 20px;">LIVE DEMOS</div>
         <h2 style="font-size: 2.4rem; margin-bottom: 16px;">
-            See Auditor Core <span class="text-gradient">In Action</span>
+            See The Ecosystem <span class="text-gradient">In Action</span>
         </h2>
         <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 48px; font-size: 1.05rem;">
-            Real scan on a real project. 11 detectors, AI false-positive filter, SPI score — all in one run.
+            Real tools. Real scans. Click any demo to watch full screen.
         </p>
-        <div style="max-width: 900px; margin: 0 auto; border-radius: 12px; overflow: hidden; border: 1px solid rgba(52, 152, 219, 0.3); box-shadow: 0 0 60px rgba(52, 152, 219, 0.15);">
-            <div style="background: #1e1e1e; padding: 12px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-                <span style="width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; display: inline-block;"></span>
-                <span style="width: 12px; height: 12px; border-radius: 50%; background: #febc2e; display: inline-block;"></span>
-                <span style="width: 12px; height: 12px; border-radius: 50%; background: #28c840; display: inline-block;"></span>
-                <span style="color: #666; font-size: 0.8rem; margin-left: 8px; font-family: monospace;">auditor-core v2.1 — live scan</span>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 1000px; margin: 0 auto;">
+            <!-- Card 1: Auditor Core -->
+            <div onclick="openModal('demo.gif','Auditor Core v2.1 — Live Security Scan','Scanning DVWA · AI switching Gemini → Groq on quota · SPI 64.51 calculated')"
+                 style="cursor:pointer;border-radius:12px;overflow:hidden;border:1px solid rgba(52,152,219,0.3);box-shadow:0 0 30px rgba(52,152,219,0.1);transition:transform 0.2s,box-shadow 0.2s;"
+                 onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 0 50px rgba(52,152,219,0.3)'"
+                 onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 0 30px rgba(52,152,219,0.1)'">
+                <div style="background:#1e1e1e;padding:10px 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(255,255,255,0.08);">
+                    <span style="width:10px;height:10px;border-radius:50%;background:#ff5f57;display:inline-block;"></span>
+                    <span style="width:10px;height:10px;border-radius:50%;background:#febc2e;display:inline-block;"></span>
+                    <span style="width:10px;height:10px;border-radius:50%;background:#28c840;display:inline-block;"></span>
+                    <span style="color:#666;font-size:0.75rem;margin-left:6px;font-family:monospace;">auditor-core v2.1</span>
+                </div>
+                <div style="position:relative;overflow:hidden;height:180px;background:#0a0a0a;">
+                    <img src="demo.gif" alt="Auditor Core Demo" style="width:100%;height:100%;object-fit:cover;object-position:top;">
+                    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);">
+                        <span style="font-size:2.5rem;">▶</span>
+                    </div>
+                </div>
+                <div style="padding:16px;background:#0f172a;text-align:left;">
+                    <div style="font-weight:700;font-size:0.95rem;margin-bottom:4px;">Auditor Core v2.1</div>
+                    <div style="color:var(--text-muted);font-size:0.8rem;">Full security scan · SPI score · AI verified</div>
+                </div>
             </div>
-            <img src="demo.gif" alt="Auditor Core v2.1 Live Demo" style="width: 100%; display: block;">
+            <!-- Card 2: Sentinel Install -->
+            <div onclick="openModal('demo_1.gif','Sentinel Core v2.1 — Client Installation','One command setup · License binding · Pre-commit hook installed')"
+                 style="cursor:pointer;border-radius:12px;overflow:hidden;border:1px solid rgba(74,222,128,0.3);box-shadow:0 0 30px rgba(74,222,128,0.1);transition:transform 0.2s,box-shadow 0.2s;"
+                 onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 0 50px rgba(74,222,128,0.3)'"
+                 onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 0 30px rgba(74,222,128,0.1)'">
+                <div style="background:#1e1e1e;padding:10px 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(255,255,255,0.08);">
+                    <span style="width:10px;height:10px;border-radius:50%;background:#ff5f57;display:inline-block;"></span>
+                    <span style="width:10px;height:10px;border-radius:50%;background:#febc2e;display:inline-block;"></span>
+                    <span style="width:10px;height:10px;border-radius:50%;background:#28c840;display:inline-block;"></span>
+                    <span style="color:#666;font-size:0.75rem;margin-left:6px;font-family:monospace;">sentinel v2.1 — install</span>
+                </div>
+                <div style="position:relative;overflow:hidden;height:180px;background:#0a0a0a;">
+                    <img src="demo_1.gif" alt="Sentinel Install Demo" style="width:100%;height:100%;object-fit:cover;object-position:top;">
+                    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);">
+                        <span style="font-size:2.5rem;">▶</span>
+                    </div>
+                </div>
+                <div style="padding:16px;background:#0f172a;text-align:left;">
+                    <div style="font-weight:700;font-size:0.95rem;margin-bottom:4px;">Sentinel Core v2.1 — Installation</div>
+                    <div style="color:var(--text-muted);font-size:0.8rem;">Client setup · Hardware license · Hook install</div>
+                </div>
+            </div>
+            <!-- Card 3: Sentinel Block -->
+            <div onclick="openModal('demo_2.gif','Sentinel Core v2.1 — Security Gate BLOCK','Hardcoded secrets detected · Commit rejected · Alert sent to admin')"
+                 style="cursor:pointer;border-radius:12px;overflow:hidden;border:1px solid rgba(248,113,113,0.3);box-shadow:0 0 30px rgba(248,113,113,0.1);transition:transform 0.2s,box-shadow 0.2s;"
+                 onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 0 50px rgba(248,113,113,0.3)'"
+                 onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 0 30px rgba(248,113,113,0.1)'">
+                <div style="background:#1e1e1e;padding:10px 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(255,255,255,0.08);">
+                    <span style="width:10px;height:10px;border-radius:50%;background:#ff5f57;display:inline-block;"></span>
+                    <span style="width:10px;height:10px;border-radius:50%;background:#febc2e;display:inline-block;"></span>
+                    <span style="width:10px;height:10px;border-radius:50%;background:#28c840;display:inline-block;"></span>
+                    <span style="color:#666;font-size:0.75rem;margin-left:6px;font-family:monospace;">sentinel v2.1 — gate</span>
+                </div>
+                <div style="position:relative;overflow:hidden;height:180px;background:#0a0a0a;">
+                    <img src="demo_2.gif" alt="Sentinel Block Demo" style="width:100%;height:100%;object-fit:cover;object-position:top;">
+                    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);">
+                        <span style="font-size:2.5rem;">▶</span>
+                    </div>
+                </div>
+                <div style="padding:16px;background:#0f172a;text-align:left;">
+                    <div style="font-weight:700;font-size:0.95rem;margin-bottom:4px;">Sentinel Core v2.1 — Security Gate</div>
+                    <div style="color:var(--text-muted);font-size:0.8rem;">❌ BLOCK · Secrets detected · Alert fired</div>
+                </div>
+            </div>
         </div>
-        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 20px;">
-            Scanning DVWA · AI switching Gemini → Groq on quota · SPI 64.51 calculated
-        </p>
     </div>
 </section>
+
+<!-- ═══════════════════════════════════════════════ MODAL -->
+<div id="demoModal" onclick="closeModal()"
+     style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+    <div onclick="event.stopPropagation()" style="max-width:900px;width:100%;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);">
+        <div style="background:#1e1e1e;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:8px;">
+                <span style="width:12px;height:12px;border-radius:50%;background:#ff5f57;display:inline-block;"></span>
+                <span style="width:12px;height:12px;border-radius:50%;background:#febc2e;display:inline-block;"></span>
+                <span style="width:12px;height:12px;border-radius:50%;background:#28c840;display:inline-block;"></span>
+                <span id="modalTitle" style="color:#999;font-size:0.8rem;margin-left:8px;font-family:monospace;"></span>
+            </div>
+            <span onclick="closeModal()" style="cursor:pointer;color:#666;font-size:1.2rem;padding:0 8px;">✕</span>
+        </div>
+        <img id="modalGif" src="" alt="" style="width:100%;display:block;">
+        <div style="background:#0f172a;padding:12px 16px;">
+            <p id="modalDesc" style="color:var(--text-muted);font-size:0.85rem;margin:0;"></p>
+        </div>
+    </div>
+</div>
+<script>
+function openModal(gif,title,desc){
+    document.getElementById('modalGif').src=gif;
+    document.getElementById('modalTitle').textContent=title;
+    document.getElementById('modalDesc').textContent=desc;
+    document.getElementById('demoModal').style.display='flex';
+    document.body.style.overflow='hidden';
+}
+function closeModal(){
+    document.getElementById('demoModal').style.display='none';
+    document.getElementById('modalGif').src='';
+    document.body.style.overflow='';
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+</script>
 
 <!-- ═══════════════════════════════════════════════ ECOSYSTEM -->
 <section id="ecosystem" class="section" style="padding: 100px 0; background: var(--dark);">
@@ -464,7 +555,7 @@
                     <div style="width: 100px; height: 100px; background: rgba(74,222,128,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
                         <i class="fas fa-shield-alt" style="font-size: 3rem; color: #4ade80;"></i>
                     </div>
-                    <h3 style="color: white; font-size: 1.8rem; margin-bottom: 5px;">Sentinel Core</h3>
+                    <h3 style="color: white; font-size: 1.8rem; margin-bottom: 5px;">Sentinel Core v2.1</h3>
                     <span class="version-badge green">v2.1</span>
                 </div>
 
