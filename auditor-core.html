@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auditor Core v2.1 | Enterprise Security Analysis Engine | DataWizual</title>
-    <meta name="description" content="Auditor Core v2.1 — 11-engine SAST platform with WSPM v2.2 scoring, AI-powered false positive elimination, hardware-bound licensing.">
+    <title>Auditor Core v2.2 | Enterprise Security Analysis Engine | DataWizual</title>
+    <meta name="description" content="Auditor Core v2.2 — 11-engine SAST platform with WSPM v2.2 scoring, PDF executive reports, SOC 2 / CIS / ISO 27001 compliance mapping, AI-powered false positive elimination, hardware-bound licensing.">
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -187,6 +187,8 @@
                 </div>
             </div>
             <a href="get.html" class="nav-btn">Get Access</a>
+
+            <a href="terms.html" class="nav-btn">Terms</a>
         </div>
     </div>
 </nav>
@@ -198,7 +200,7 @@
         <div class="hero-flex">
             <div class="hero-content">
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 22px;">
-                    <span class="version-badge"><i class="fas fa-search"></i> Auditor Core v2.1</span>
+                    <span class="version-badge"><i class="fas fa-search"></i> Auditor Core v2.2</span>
                     <span class="ai-badge"><i class="fas fa-brain"></i> Gemini + Groq</span>
                 </div>
 
@@ -238,6 +240,8 @@
                         <p><span style="color:#27ae60;">[✓]</span> 11 detectors loaded</p>
                         <p><span style="color:#27ae60;">[✓]</span> AI: Gemini → chunk 1 ✓ | Groq → chunks 2-3 ✓</p>
                         <p style="margin-top:10px;"><span style="color:#fbbf24;">[→]</span> SPI: <strong style="color:#4ade80;">96.6</strong> — Grade <strong style="color:#4ade80;">A</strong> (Resilient)</p>
+                        <p><span style="color:#fbbf24;">[→]</span> Gate Override: inactive (no CRITICAL in production)</p>
+                        <p><span style="color:#27ae60;">[✓]</span> PDF: reports/report_project.pdf</p>
                         <p class="finding-badge" style="color:#4ade80; padding: 8px 12px; background: rgba(74,222,128,0.08); border-radius: 6px; border-left: 3px solid #4ade80; margin-top: 10px;">
                             <i class="fas fa-check-circle"></i> Policy: PASS — 15 AI verdicts applied
                         </p>
@@ -340,9 +344,15 @@
             <div class="flow-step">
                 <div class="flow-num" style="background:rgba(52,152,219,0.12); color:var(--primary);">5</div>
                 <div>
-                    <h4 style="color:white; margin-bottom:6px;">Reports — HTML + JSON</h4>
+                    <h4 style="color:white; margin-bottom:6px;">Reports — PDF + HTML + JSON</h4>
+                    <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0 0 10px;">
+                        <strong style="color:white;">PDF Executive Summary</strong> — 7-page audit-ready document for SOC 2 readiness and cyber insurance underwriting (Marsh, Aon, At-Bay, Coalition). Includes evidence appendix with source-level code context for every CRITICAL/HIGH finding, remediation roadmap, and attestation block with signature lines.
+                    </p>
+                    <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0 0 10px;">
+                        <strong style="color:white;">Interactive HTML Report</strong> — Enterprise posture dashboard with SOC 2 / CIS / ISO 27001 control tags, AI analysis badges (<code>AI VERIFIED</code> / <code>AI FALSE POSITIVE</code>), and reachability breakdown.
+                    </p>
                     <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0;">
-                        Enterprise HTML Posture Report with AI badges (AI VERIFIED / AI FALSE POSITIVE), ARCHITECTURAL ANALYSIS blocks, severity breakdown, and machine-readable JSON for SIEM integration.
+                        <strong style="color:white;">Machine-readable JSON</strong> — CI/CD gating with <code>instance_count</code>, <code>instance_lines</code>, <code>compliance_mapping</code> per finding and <code>framework_summary</code> block for direct SIEM integration.
                     </p>
                 </div>
             </div>
@@ -543,17 +553,104 @@
                 <div style="font-family:'Courier New',monospace; font-size:1rem; color:#4ade80; background:rgba(0,0,0,0.3); padding:16px; border-radius:8px; margin-bottom:16px;">
                     SPI = 100 × e<sup>-(Σ WeightedExposure / K)</sup>
                 </div>
-                <p style="color:var(--gray); font-size:0.9rem; line-height:1.7; margin:0;">
+                <p style="color:var(--gray); font-size:0.9rem; line-height:1.7; margin:0 0 16px;">
                     Where <strong style="color:white;">context</strong> (CORE / TEST / DOCS / INFRA),
                     <strong style="color:white;">detector trust</strong>,
                     <strong style="color:white;">reachability</strong>, and
                     <strong style="color:white;">cross-detector consensus</strong> are all factored in.
                     K scales dynamically with project size to prevent noise amplification in large codebases.
                 </p>
+                <p style="color:var(--gray); font-size:0.9rem; line-height:1.7; margin:0;">
+                    <strong style="color:white;">Context Intelligence:</strong> Findings in <code>test/</code>, <code>docs/</code>, and <code>examples/</code> directories are classified as <code>NON_RUNTIME</code> and excluded from SPI calculation by default. Detector fixture files are recognised as <code>SETUP</code> context — eliminating false severity inflation from non-production code.
+                </p>
+            </div>
+
+            <!-- Gate Override callout -->
+            <div style="background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.3); border-radius:14px; padding:24px; display:flex; gap:16px; align-items:flex-start; margin-top:20px;">
+                <div style="width:42px; height:42px; background:rgba(245,158,11,0.15); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <i class="fas fa-sliders-h" style="color:#f59e0b; font-size:1.1rem;"></i>
+                </div>
+                <div>
+                    <h4 style="color:#f59e0b; margin:0 0 8px;">Gate Override (v2.2)</h4>
+                    <p style="color:var(--gray); font-size:0.9rem; line-height:1.7; margin:0;">
+                        If CRITICAL findings exist in production code, the effective grade is capped at <strong style="color:#fbbf24;">C</strong> — regardless of the mathematical SPI score. This resolves the cognitive dissonance of a high SPI alongside a FAIL decision for CISO and underwriter audiences.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- ══════════════════════════════════════ COMPLIANCE -->
+<section class="section" style="padding: 100px 0; background: var(--dark);">
+    <div class="container">
+        <h2 style="text-align:center; margin-bottom:20px; font-size:2.6rem;">
+            Compliance <span class="text-gradient">Framework Coverage</span>
+        </h2>
+        <p style="text-align:center; color:var(--gray); margin-bottom:60px; max-width:700px; margin-left:auto; margin-right:auto;">
+            Every finding is automatically mapped to industry-standard controls. Reports include a <code>framework_summary</code> block ready for direct submission to SOC 2 auditors or cyber insurance underwriters.
+        </p>
+
+        <div style="max-width:860px; margin:0 auto;">
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:20px; margin-bottom:40px;">
+
+                <div style="background:rgba(26,28,32,0.85); border:1px solid rgba(52,152,219,0.25); border-radius:14px; padding:28px;">
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                        <div style="width:42px; height:42px; background:rgba(52,152,219,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                            <i class="fas fa-certificate" style="color:var(--primary); font-size:1.1rem;"></i>
+                        </div>
+                        <h4 style="color:white; margin:0;">SOC 2 TSC</h4>
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                        <span style="background:rgba(52,152,219,0.1); color:var(--primary); border:1px solid rgba(52,152,219,0.2); border-radius:6px; padding:3px 9px; font-size:0.78rem; font-weight:600;">CC6.1</span>
+                        <span style="background:rgba(52,152,219,0.1); color:var(--primary); border:1px solid rgba(52,152,219,0.2); border-radius:6px; padding:3px 9px; font-size:0.78rem; font-weight:600;">CC6.6</span>
+                        <span style="background:rgba(52,152,219,0.1); color:var(--primary); border:1px solid rgba(52,152,219,0.2); border-radius:6px; padding:3px 9px; font-size:0.78rem; font-weight:600;">CC7.1</span>
+                        <span style="background:rgba(52,152,219,0.1); color:var(--primary); border:1px solid rgba(52,152,219,0.2); border-radius:6px; padding:3px 9px; font-size:0.78rem; font-weight:600;">CC8.1</span>
+                        <span style="background:rgba(52,152,219,0.08); color:#64748b; border:1px solid rgba(52,152,219,0.1); border-radius:6px; padding:3px 9px; font-size:0.78rem;">+ more</span>
+                    </div>
+                </div>
+
+                <div style="background:rgba(26,28,32,0.85); border:1px solid rgba(245,158,11,0.25); border-radius:14px; padding:28px;">
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                        <div style="width:42px; height:42px; background:rgba(245,158,11,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                            <i class="fas fa-shield-alt" style="color:#f59e0b; font-size:1.1rem;"></i>
+                        </div>
+                        <h4 style="color:white; margin:0;">CIS Controls v8</h4>
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                        <span style="background:rgba(245,158,11,0.1); color:#f59e0b; border:1px solid rgba(245,158,11,0.2); border-radius:6px; padding:3px 9px; font-size:0.78rem; font-weight:600;">CIS-16.1</span>
+                        <span style="background:rgba(245,158,11,0.1); color:#f59e0b; border:1px solid rgba(245,158,11,0.2); border-radius:6px; padding:3px 9px; font-size:0.78rem; font-weight:600;">CIS-16.12</span>
+                        <span style="background:rgba(245,158,11,0.1); color:#f59e0b; border:1px solid rgba(245,158,11,0.2); border-radius:6px; padding:3px 9px; font-size:0.78rem; font-weight:600;">CIS-3.11</span>
+                        <span style="background:rgba(245,158,11,0.08); color:#64748b; border:1px solid rgba(245,158,11,0.1); border-radius:6px; padding:3px 9px; font-size:0.78rem;">+ more</span>
+                    </div>
+                </div>
+
+                <div style="background:rgba(26,28,32,0.85); border:1px solid rgba(74,222,128,0.25); border-radius:14px; padding:28px;">
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                        <div style="width:42px; height:42px; background:rgba(74,222,128,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                            <i class="fas fa-globe" style="color:#4ade80; font-size:1.1rem;"></i>
+                        </div>
+                        <h4 style="color:white; margin:0;">ISO/IEC 27001:2022</h4>
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                        <span style="background:rgba(74,222,128,0.1); color:#4ade80; border:1px solid rgba(74,222,128,0.2); border-radius:6px; padding:3px 9px; font-size:0.78rem; font-weight:600;">A.8.28</span>
+                        <span style="background:rgba(74,222,128,0.1); color:#4ade80; border:1px solid rgba(74,222,128,0.2); border-radius:6px; padding:3px 9px; font-size:0.78rem; font-weight:600;">A.8.26</span>
+                        <span style="background:rgba(74,222,128,0.1); color:#4ade80; border:1px solid rgba(74,222,128,0.2); border-radius:6px; padding:3px 9px; font-size:0.78rem; font-weight:600;">A.5.17</span>
+                        <span style="background:rgba(74,222,128,0.08); color:#64748b; border:1px solid rgba(74,222,128,0.1); border-radius:6px; padding:3px 9px; font-size:0.78rem;">+ more</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div style="background:rgba(26,28,32,0.6); border:1px solid rgba(255,255,255,0.05); border-radius:12px; padding:20px; text-align:center;">
+                <p style="color:#64748b; font-size:0.85rem; margin:0; line-height:1.6;">
+                    <i class="fas fa-info-circle" style="color:#475569;"></i>
+                    This report does not constitute a formal SOC 2 audit opinion. For SOC 2 Type I/II certification, engage a licensed CPA firm.
+                    The PDF report format is designed to align with underwriting pre-assessment requirements from Marsh, Aon, At-Bay, and Coalition.
+                </p>
+            </div>
+        </div>
+    </div>
 
 <!-- ══════════════════════════════════════ LICENSING -->
 <section class="section" style="padding: 100px 0; background: var(--dark);">
@@ -583,7 +680,7 @@
                 <div>
                     <h4 style="color:white; margin-bottom:6px;">Send Machine ID to DataWizual</h4>
                     <p style="color:var(--gray); font-size:0.9rem; line-height:1.6; margin:0;">
-                        Email your Machine ID to <strong style="color:#4ade80;">eldorzufarov66@gmail.com</strong>.
+                        Email your Machine ID to <strong style="color:#4ade80;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c9aca5ada6bbb3bcafa8bba6bfffff89aea4a8a0a5e7aaa6a4">[email&#160;protected]</a></strong>.
                         You will receive a License Key unique to that machine.
                     </p>
                 </div>
@@ -653,6 +750,16 @@
                 <p style="color:var(--gray); line-height:1.7; margin:0;">Yes. The JSON report is machine-readable and designed for downstream integration with SIEM platforms, dashboards, and CI/CD quality gates.</p>
             </div>
 
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(52,152,219,0.15); border-radius:14px; padding:28px;">
+                <h4 style="color:white; margin-bottom:10px;"><i class="fas fa-question-circle" style="color:var(--primary);"></i> Can the PDF report be used for SOC 2 readiness?</h4>
+                <p style="color:var(--gray); line-height:1.7; margin:0;">Yes — as supporting evidence for pre-assessment and gap analysis. The report includes SOC 2 TSC control mappings, an evidence appendix with source-level code context for every CRITICAL/HIGH finding, and a remediation roadmap. It does not constitute a formal audit opinion. For SOC 2 Type I/II certification, engage a licensed CPA firm.</p>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(52,152,219,0.15); border-radius:14px; padding:28px;">
+                <h4 style="color:white; margin-bottom:10px;"><i class="fas fa-question-circle" style="color:var(--primary);"></i> Can the PDF report be submitted to cyber insurance underwriters?</h4>
+                <p style="color:var(--gray); line-height:1.7; margin:0;">Yes. The report format is designed to align with underwriting pre-assessment requirements from Marsh, Aon, At-Bay, and Coalition. The <code>framework_summary</code> block in JSON aggregates which controls are triggered across all findings — ready for direct submission.</p>
+            </div>
+
         </div>
     </div>
 </section>
@@ -689,14 +796,14 @@
                 <h4 style="margin-bottom:20px;">DataWizual Security</h4>
                 <p style="color:var(--gray);">Developing territories of confidence through rigorous engineering.</p>
                 <p style="margin-top:20px; color:var(--primary); font-weight:bold;">
-                    <i class="fas fa-envelope"></i> eldorzufarov66@gmail.com
+                    <i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dcb9b0b8b3aea6a9babdaeb3aaeaea9cbbb1bdb5b0f2bfb3b1">[email&#160;protected]</a>
                 </p>
             </div>
             <div>
                 <h4 style="margin-bottom:20px;">Our Ecosystem</h4>
                 <div style="display:flex; flex-direction:column; gap:10px;">
-                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.1</a>
-                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.1</a>
+                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.2</a>
+                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.2</a>
                     <a href="compare.html"      style="color:var(--gray); text-decoration:none;"><i class="fas fa-layer-group"></i> Compare</a>
                 </div>
             </div>
@@ -715,7 +822,7 @@
     </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 document.addEventListener('DOMContentLoaded', function() {
     const fills = document.querySelectorAll('.coverage-fill');
     const observer = new IntersectionObserver((entries) => {

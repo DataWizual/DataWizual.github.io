@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sentinel Core v2.1 | Deterministic Security Gate for CI/CD | DataWizual</title>
-    <meta name="description" content="Sentinel Core v2.1 — real-time CI/CD enforcement, hardware-bound licensing, Auditor Core embedded, ALLOW or BLOCK with zero ambiguity.">
+    <title>Sentinel Core v2.2 | Deterministic Security Gate for CI/CD | DataWizual</title>
+    <meta name="description" content="Sentinel Core v2.2 — real-time CI/CD enforcement, hardware-bound licensing, Auditor Core v2.2 embedded, SOC 2 / CIS / ISO 27001 compliance alerts, ALLOW or BLOCK with zero ambiguity.">
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -171,6 +171,8 @@
                 </div>
             </div>
             <a href="get.html" class="nav-btn">Get Access</a>
+
+            <a href="terms.html" class="nav-btn">Terms</a>
         </div>
     </div>
 </nav>
@@ -182,8 +184,8 @@
         <div class="hero-flex">
             <div class="hero-content">
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 22px;">
-                    <span class="version-badge-green"><i class="fas fa-shield-alt"></i> Sentinel Core v2.1</span>
-                    <span class="ai-badge"><i class="fas fa-brain"></i> Auditor Core Embedded</span>
+                    <span class="version-badge-green"><i class="fas fa-shield-alt"></i> Sentinel Core v2.2</span>
+                    <span class="ai-badge"><i class="fas fa-brain"></i> Auditor Core v2.2 Embedded</span>
                 </div>
 
                 <h1 class="hero-title">
@@ -192,7 +194,7 @@
 
                 <p class="hero-subtitle" style="font-size: 1.15rem;">
                     Deterministic security gate for CI/CD pipelines.
-                    Intercepts every commit, runs <strong>Auditor Core v2.1</strong> internally,
+                    Intercepts every commit, runs <strong>Auditor Core v2.2</strong> internally,
                     enforces policy in real-time. <strong>ALLOW or BLOCK — no ambiguity, no silent bypass.</strong>
                     Hardware-bound licensing. 100% local execution.
                 </p>
@@ -420,9 +422,9 @@
             <div class="flow-step">
                 <div class="flow-num" style="background:rgba(52,152,219,0.12); color:var(--primary);">2</div>
                 <div>
-                    <h4 style="color:white; margin-bottom:6px;">Auditor Core Scans Changed Files</h4>
+                    <h4 style="color:white; margin-bottom:6px;">Auditor Core v2.2 Scans Changed Files</h4>
                     <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0;">
-                        Full 11-engine scan runs internally — Bandit, Semgrep, Gitleaks, Secret Detector, CICD Analyzer, IaC Scanner, Dependency Scanner and more. Same engine, same WSPM v2.2 scoring.
+                        Full 11-engine scan runs internally — Bandit, Semgrep, Gitleaks, Secret Detector, CICD Analyzer, IaC Scanner, Dependency Scanner and more. Same engine, same WSPM v2.2 scoring. Every blocked commit report includes a PDF Evidence Appendix with source-level code context for CRITICAL/HIGH findings, and compliance tags (SOC 2 TSC · CIS Controls v8 · ISO/IEC 27001:2022).
                     </p>
                 </div>
             </div>
@@ -453,9 +455,13 @@
                     <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0;">
                         Every blocked commit automatically creates a GitHub Issue in the admin repository — machine identity, developer username, timestamp, violation details. Immutable audit trail.
                     </p>
-                    <div style="font-family:monospace; font-size:0.8rem; background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.2); padding:12px 16px; border-radius:8px; margin-top:12px; color:#fca5a5;">
-                        ❌ BLOCK — 1 CRITICAL: Hardcoded AWS key in config/prod.yml<br>
-                        🚀 Alert sent → DataWizual/sentinel-core #47
+                    <div style="font-family:monospace; font-size:0.8rem; background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.2); padding:12px 16px; border-radius:8px; margin-top:12px; color:#fca5a5; line-height:1.9;">
+                        ❌ BLOCK — SEC-001: Hardcoded Password<br>
+                        Environment: 💻 Local Development<br>
+                        Machine: worker-pc-01 | Triggered by: developer_username<br>
+                        Timestamp: 2026-03-13 14:22:01<br>
+                        <span style="color:#f59e0b;">Controls: SOC2-CC6.1 · CIS-16.1 · ISO-A.5.17</span><br>
+                        🚀 Alert sent → admin-repo #47
                     </div>
                 </div>
             </div>
@@ -636,7 +642,7 @@
                 <div>
                     <h4 style="color:white; margin-bottom:6px;">Send Machine ID → Receive License Key</h4>
                     <p style="color:var(--gray); font-size:0.9rem; line-height:1.6; margin:0;">
-                        Email your Machine ID to <strong style="color:#4ade80;">eldorzufarov66@gmail.com</strong>.
+                        Email your Machine ID to <strong style="color:#4ade80;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6b0e070f0419111e0d0a19041d5d5d2b0c060a020745080406">[email&#160;protected]</a></strong>.
                         You will receive a License Key unique to that machine.
                     </p>
                 </div>
@@ -671,6 +677,83 @@
                 <i class="fas fa-lock"></i>
                 <span>A License Key issued for one Machine ID will not work on any other machine. Each deployment requires its own key. Cannot be copied, transferred, or shared.</span>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════ WHAT'S NEW v2.2 -->
+<section class="section" style="padding: 80px 0; background: rgba(10,15,28,0.9);">
+    <div class="container">
+        <div style="text-align:center; margin-bottom:60px;">
+            <div style="display:inline-block; background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.4); color:#f59e0b; font-size:0.75rem; font-weight:700; padding:4px 14px; border-radius:20px; letter-spacing:1px; margin-bottom:20px;">NEW IN v2.2</div>
+            <h2 style="font-size:2.6rem; margin-bottom:16px;">What's New in <span class="text-gradient">Sentinel v2.2</span></h2>
+            <p style="color:var(--gray); max-width:600px; margin:0 auto; font-size:1.05rem;">
+                Every improvement to Auditor Core v2.2 propagates automatically to the enforcement gate.
+            </p>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(270px, 1fr)); gap:20px; max-width:1000px; margin:0 auto;">
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(239,68,68,0.2); border-radius:14px; padding:26px; display:flex; gap:16px; align-items:flex-start;">
+                <div style="width:40px; height:40px; background:rgba(239,68,68,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <i class="fas fa-file-pdf" style="color:#f87171;"></i>
+                </div>
+                <div>
+                    <h4 style="color:white; margin:0 0 8px; font-size:0.95rem;">PDF Evidence Appendix</h4>
+                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;">Every blocked commit report now includes source-level code context for CRITICAL/HIGH findings — audit-defensible out of the box.</p>
+                </div>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(245,158,11,0.2); border-radius:14px; padding:26px; display:flex; gap:16px; align-items:flex-start;">
+                <div style="width:40px; height:40px; background:rgba(245,158,11,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <i class="fas fa-certificate" style="color:#f59e0b;"></i>
+                </div>
+                <div>
+                    <h4 style="color:white; margin:0 0 8px; font-size:0.95rem;">SOC 2 / CIS / ISO 27001 Mapping</h4>
+                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;">Every finding tagged to specific controls in JSON and PDF output. Compliance tags included in every GitHub Issue alert.</p>
+                </div>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(168,85,247,0.2); border-radius:14px; padding:26px; display:flex; gap:16px; align-items:flex-start;">
+                <div style="width:40px; height:40px; background:rgba(168,85,247,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <i class="fas fa-sliders-h" style="color:#c084fc;"></i>
+                </div>
+                <div>
+                    <h4 style="color:white; margin:0 0 8px; font-size:0.95rem;">Gate Override</h4>
+                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;">Effective grade capped at <strong style="color:#fbbf24;">C</strong> when CRITICAL findings exist in production code — regardless of SPI score.</p>
+                </div>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(52,152,219,0.2); border-radius:14px; padding:26px; display:flex; gap:16px; align-items:flex-start;">
+                <div style="width:40px; height:40px; background:rgba(52,152,219,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <i class="fas fa-brain" style="color:var(--primary);"></i>
+                </div>
+                <div>
+                    <h4 style="color:white; margin:0 0 8px; font-size:0.95rem;">Context Intelligence</h4>
+                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;"><code style="font-size:0.8rem;color:#94a3b8;">NON_RUNTIME</code> context for <code style="font-size:0.8rem;color:#94a3b8;">test/</code>, <code style="font-size:0.8rem;color:#94a3b8;">docs/</code>, <code style="font-size:0.8rem;color:#94a3b8;">examples/</code> excluded from SPI. Taint analysis and reachability scoring applied before enforcement.</p>
+                </div>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(74,222,128,0.2); border-radius:14px; padding:26px; display:flex; gap:16px; align-items:flex-start;">
+                <div style="width:40px; height:40px; background:rgba(74,222,128,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <i class="fas fa-layer-group" style="color:#4ade80;"></i>
+                </div>
+                <div>
+                    <h4 style="color:white; margin:0 0 8px; font-size:0.95rem;">Duplicate Aggregation</h4>
+                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;">Multiple findings in the same file grouped as one block with line list in PDF output. NUL-byte sanitization prevents binary files from causing scan failures.</p>
+                </div>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.07); border-radius:14px; padding:26px; display:flex; gap:16px; align-items:flex-start;">
+                <div style="width:40px; height:40px; background:rgba(255,255,255,0.05); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <i class="fas fa-box" style="color:var(--gray);"></i>
+                </div>
+                <div>
+                    <h4 style="color:white; margin:0 0 8px; font-size:0.95rem;">Cython-Compiled Distribution</h4>
+                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;">Delivered as <code style="font-size:0.8rem;color:#94a3b8;">.so</code> compiled modules for IP protection. Consistent verdict labels across PDF and HTML report formats.</p>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
@@ -744,14 +827,14 @@
                 <h4 style="margin-bottom:20px;">DataWizual Security</h4>
                 <p style="color:var(--gray);">Developing territories of confidence through rigorous engineering.</p>
                 <p style="margin-top:20px; color:#4ade80; font-weight:bold;">
-                    <i class="fas fa-envelope"></i> eldorzufarov66@gmail.com
+                    <i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ef8a838b809d959a898e9d8099d9d9af88828e8683c18c8082">[email&#160;protected]</a>
                 </p>
             </div>
             <div>
                 <h4 style="margin-bottom:20px;">Our Ecosystem</h4>
                 <div style="display:flex; flex-direction:column; gap:10px;">
-                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.1</a>
-                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.1</a>
+                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.2</a>
+                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.2</a>
                     <a href="compare.html"      style="color:var(--gray); text-decoration:none;"><i class="fas fa-layer-group"></i> Compare</a>
                 </div>
             </div>
@@ -770,7 +853,7 @@
     </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 function toggleGate() {
     const gate    = document.getElementById('gateDemo');
     const status  = document.getElementById('gateStatus');
