@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | DataWizual Security</title>
+    <meta name="description" content="Security engineering insights, DevSecOps deep dives, and compliance strategy from the DataWizual team.">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="security" href="https://datawizual.github.io/.well-known/security.txt">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+
+    <style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes horizontal-scan {
+            0% { width: 0; left: 0; opacity: 0; }
+            50% { width: 100%; opacity: 0.7; }
+            100% { width: 0; left: 100%; opacity: 0; }
+        }
+
+        .scan-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3498db, transparent);
+            animation: horizontal-scan 2s infinite linear;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .blog-hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--dark) 0%, #1a1c20 100%);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 32px;
+            margin-top: 60px;
+        }
+
+        .blog-card {
+            background: rgba(26, 28, 32, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(52, 152, 219, 0.15);
+        }
+
+        .blog-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), #4ade80);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .blog-card:hover::before {
+            opacity: 1;
+        }
+
+        .blog-card-body {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .blog-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .blog-date {
+            color: #64748b;
+            font-size: 0.82rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .blog-read-time {
+            color: #64748b;
+            font-size: 0.82rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .blog-card-title {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 14px;
+            text-decoration: none;
+            display: block;
+            transition: color 0.2s;
+        }
+
+        .blog-card-title:hover {
+            color: var(--primary);
+        }
+
+        .blog-card-excerpt {
+            color: var(--gray);
+            font-size: 0.92rem;
+            line-height: 1.65;
+            flex: 1;
+            margin-bottom: 24px;
+        }
+
+        .blog-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .blog-tag {
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid rgba(52, 152, 219, 0.25);
+            color: var(--primary);
+            font-size: 0.73rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .blog-tag.green {
+            background: rgba(74, 222, 128, 0.1);
+            border-color: rgba(74, 222, 128, 0.25);
+            color: #4ade80;
+        }
+
+        .blog-tag.purple {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: rgba(168, 85, 247, 0.25);
+            color: #c084fc;
+        }
+
+        .blog-tag.orange {
+            background: rgba(251, 146, 60, 0.1);
+            border-color: rgba(251, 146, 60, 0.25);
+            color: #fb923c;
+        }
+
+        .btn-read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 8px 0;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: gap 0.2s;
+        }
+
+        .btn-read-more:hover {
+            gap: 14px;
+        }
+
+        .blog-featured-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, rgba(52,152,219,0.15), rgba(74,222,128,0.15));
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            color: var(--primary);
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .blog-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            margin-top: auto;
+        }
+
+        .author-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #4ade80);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .author-name {
+            color: #94a3b8;
+            font-size: 0.83rem;
+        }
+
+        .blog-filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .filter-btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--gray);
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: rgba(52,152,219,0.12);
+            border-color: rgba(52,152,219,0.35);
+            color: var(--primary);
+        }
+
+        .section-label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-label::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 1px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--gray);
+        }
+
+        @media (max-width: 640px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ═══════════════════════════════════════════════ NAV -->
+<nav class="navbar">
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i> DataWizual Security
+        </div>
+        <button class="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+
+            <div class="dropdown">
+                <a href="#" class="dropdown-trigger">Products <i class="fas fa-chevron-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="auditor-core.html"><i class="fas fa-search"></i> Auditor Core</a>
+                    <a href="sentinel.html"><i class="fas fa-shield-alt"></i> Sentinel</a>
+                    <a href="compare.html"><i class="fas fa-layer-group"></i> Compare Engines</a>
+                </div>
+            </div>
+
+            <a href="audit.html">Audit Service</a>
+
+            <div class="dropdown">
+                <a href="#" class="dropdown-trigger">Resources <i class="fas fa-chevron-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="methodology.html">Methodology</a>
+                    <a href="sample-report.html">Demo Report</a>
+                    <a href="security-policy.html">Security Policy</a>
+                    <a href="blog.html" class="nav-btn">Blog</a>
+                </div>
+            </div>
+
+            <a href="get.html" class="nav-btn">Get Access</a>
+            <a href="terms.html" class="nav-btn">Terms</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════ HERO -->
+<section class="blog-hero">
+    <div class="scan-line"></div>
+    <div class="container" style="position: relative; z-index: 2;">
+        <div class="section-label" style="justify-content: center;">
+            <i class="fas fa-pen-nib"></i> DataWizual Blog
+        </div>
+        <h1 style="font-size: 3rem; margin-bottom: 20px; color: white; line-height: 1.2;">
+            Security Engineering,<br>
+            <span class="text-gradient">Without the Noise</span>
+        </h1>
+        <p style="color: var(--gray); font-size: 1.1rem; max-width: 640px; margin: 0 auto; line-height: 1.7;">
+            Deep dives into DevSecOps, compliance strategy, and the hard lessons from real-world security audits.
+            No vendor fluff. No checkbox security.
+        </p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ BLOG CONTENT -->
+<section style="padding: 80px 0 120px; background: rgba(15, 23, 42, 0.85);">
+    <div class="container">
+
+        <!-- Filter bar -->
+        <div class="blog-filter-bar" style="margin-bottom: 48px;">
+            <a href="#" class="filter-btn active">All Posts</a>
+            <a href="#" class="filter-btn">Compliance</a>
+            <a href="#" class="filter-btn">DevSecOps</a>
+            <a href="#" class="filter-btn">Secrets Management</a>
+            <a href="#" class="filter-btn">Audit</a>
+        </div>
+
+        <!-- Posts grid -->
+        <div class="blog-grid">
+
+            <article class="blog-card">
+                <div class="blog-card-body">
+                    <span class="blog-featured-label"><i class="fas fa-star"></i> New</span>
+                    <div class="blog-card-meta">
+                        <span class="blog-date"><i class="fas fa-calendar-alt"></i> April 14, 2026</span>
+                        <span class="blog-read-time"><i class="fas fa-clock"></i> 8 min read</span>
+                    </div>
+                    <a href="blog/ai-vulnerability-storm-measurable.html" class="blog-card-title">The AI Vulnerability Storm Is Real. But It Is Measurable.</a>
+                    <p class="blog-card-excerpt">When AI automates exploit chaining, raw alert volume becomes operational friction. Here’s how deterministic exposure measurement restores control.</p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">AI</span>
+                        <span class="blog-tag green">Threat Intel</span>
+                        <span class="blog-tag purple">Measurement</span>
+                        <span class="blog-tag orange">DevSecOps</span>
+                    </div>
+                    <a href="blog/ai-vulnerability-storm-measurable.html" class="btn-read-more">Read article <i class="fas fa-arrow-right"></i></a>
+                    <div class="blog-author"><div class="author-avatar">EZ</div><span class="author-name">Eldor Zufarov</span></div>
+                </div>
+            </article>
+
+            <!-- Post 1: Compliance Trap -->
+            <article class="blog-card">
+                <div class="blog-card-body">
+                    <span class="blog-featured-label">
+                        <i class="fas fa-star"></i> Featured
+                    </span>
+
+                    <div class="blog-card-meta">
+                        <span class="blog-date">
+                            <i class="fas fa-calendar-alt"></i> April 14, 2026
+                        </span>
+                        <span class="blog-read-time">
+                            <i class="fas fa-clock"></i> 12 min read
+                        </span>
+                    </div>
+
+                    <a href="blog/compliance-trap.html" class="blog-card-title">
+                        The Compliance Trap: Why 90% of Security Scans are Technically Correct but Strategically Worthless
+                    </a>
+
+                    <p class="blog-card-excerpt">
+                        Your scanner shows zero critical findings. Your compliance dashboard is green. Your CISO is satisfied.
+                        And yet, three months later, you're breached. This is the compliance trap — and most security teams
+                        walk straight into it, every single release cycle.
+                    </p>
+
+                    <div class="blog-tags">
+                        <span class="blog-tag">Compliance</span>
+                        <span class="blog-tag green">Strategy</span>
+                        <span class="blog-tag purple">DevSecOps</span>
+                        <span class="blog-tag orange">Audit</span>
+                    </div>
+
+                    <a href="blog/compliance-trap.html" class="btn-read-more">
+                        Read article <i class="fas fa-arrow-right"></i>
+                    </a>
+
+                    <div class="blog-author">
+                        <div class="author-avatar">EZ</div>
+                        <span class="author-name">Eldor Zufarov</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Placeholder card: coming soon -->
+            <article class="blog-card">
+                <div class="blog-card-body">
+                    <span class="blog-featured-label">
+                        <i class="fas fa-star"></i> New
+                    </span>
+                    <div class="blog-card-meta">
+                        <span class="blog-date"><i class="fas fa-calendar-alt"></i> April 1, 2026</span>
+                        <span class="blog-read-time"><i class="fas fa-clock"></i> 9 min read</span>
+                    </div>
+                    <a href="blog/cyber-insurance.html" class="blog-card-title">
+                        Why Cyber-Insurance and SOC 2 Audits Struggle with Small Tech Teams — And What a Structured Evidence Layer Changes
+                    </a>
+                    <p class="blog-card-excerpt">
+                        Startups fail compliance not because of bad code, but because they lack structured, verifiable evidence. 
+                        How Auditor Core bridges the gap for insurers, auditors, and enterprise deals.
+                    </p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">Insurance</span>
+                        <span class="blog-tag green">SOC2</span>
+                        <span class="blog-tag purple">Compliance</span>
+                        <span class="blog-tag orange">Startups</span>
+                    </div>
+                    <a href="blog/cyber-insurance.html" class="btn-read-more">
+                        Read article <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <div class="blog-author">
+                        <div class="author-avatar">EZ</div>
+                        <span class="author-name">Eldor Zufarov</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Placeholder card: coming soon -->
+            <article class="blog-card" style="opacity: 0.5; pointer-events: none;">
+                <div class="blog-card-body">
+                    <div class="blog-card-meta">
+                        <span class="blog-date">
+                            <i class="fas fa-calendar-alt"></i> Coming soon
+                        </span>
+                    </div>
+
+                    <span class="blog-card-title" style="color: #64748b;">
+                        SAST vs. SCA vs. DAST: What Your Tool Stack is Missing
+                    </span>
+
+                    <p class="blog-card-excerpt">
+                        Every category of security testing tool has a blind spot. Understanding the gaps between
+                        static analysis, dependency scanning, and runtime testing is the difference between coverage and confidence.
+                    </p>
+
+                    <div class="blog-tags">
+                        <span class="blog-tag purple">SAST</span>
+                        <span class="blog-tag orange">SCA</span>
+                    </div>
+
+                    <span class="btn-read-more" style="color: #475569;">
+                        Coming soon <i class="fas fa-hourglass-half"></i>
+                    </span>
+
+                    <div class="blog-author">
+                        <div class="author-avatar">EZ</div>
+                        <span class="author-name">Eldor Zufarov</span>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ CTA -->
+<section style="padding: 80px 0; background: linear-gradient(135deg, var(--dark) 0%, #1a1c20 100%); text-align: center; position: relative; overflow: hidden;">
+    <div class="scan-line"></div>
+    <div class="container" style="position: relative; z-index: 2;">
+        <h2 style="font-size: 2.2rem; margin-bottom: 16px; color: white;">
+            Ready to Go Beyond <span class="text-gradient">Checkbox Compliance?</span>
+        </h2>
+        <p style="color: var(--gray); margin-bottom: 36px; font-size: 1rem; max-width: 560px; margin-left: auto; margin-right: auto;">
+            See how Auditor Core and Sentinel turn raw scan data into strategic security posture.
+        </p>
+        <div class="hero-buttons" style="justify-content: center; gap: 16px;">
+            <a href="get.html" class="btn btn-primary btn-glow" style="padding: 14px 28px;">
+                <i class="fas fa-key"></i> Get License
+            </a>
+            <a href="audit.html" class="btn btn-secondary" style="padding: 14px 28px;">
+                <i class="fas fa-clipboard-check"></i> Request Audit
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; padding-bottom: 60px;">
+            <div style="flex: 1; min-width: 250px;">
+                <h4 style="margin-bottom: 20px;">DataWizual Security</h4>
+                <p style="color: var(--gray);">Developing territories of confidence through rigorous engineering.</p>
+                <p style="margin-top: 20px; color: var(--primary); font-weight: bold;">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:eldorzufarov66@gmail.com" style="color: var(--primary); text-decoration: none;">eldorzufarov66@gmail.com</a>
+                </p>
+            </div>
+
+            <div>
+                <h4 style="margin-bottom: 20px;">Our Ecosystem</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <a href="auditor-core.html" style="color: var(--gray); text-decoration: none;">
+                        <i class="fas fa-search"></i> Auditor Core v2.2
+                    </a>
+                    <a href="sentinel.html" style="color: var(--gray); text-decoration: none;">
+                        <i class="fas fa-shield-alt"></i> Sentinel Core v2.2
+                    </a>
+                    <a href="compare.html" style="color: var(--gray); text-decoration: none;">
+                        <i class="fas fa-layer-group"></i> Compare
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h4 style="margin-bottom: 20px;">Resources</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <a href="methodology.html" style="color: var(--gray); text-decoration: none;">Methodology</a>
+                    <a href="sample-report.html" style="color: var(--gray); text-decoration: none;">Demo Report</a>
+                    <a href="security-policy.html" style="color: var(--gray); text-decoration: none;">Security Policy</a>
+                    <a href="blog.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">
+                        <i class="fas fa-pen-nib"></i> Blog
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; color: #444; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px;">
+            &copy; 2026 DataWizual Security. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>
