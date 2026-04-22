@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Security & Disclosure Policy | DataWizual Security</title>
-    <meta name="description" content="Vulnerability Disclosure Policy, Safe Harbor principles, product privacy commitments, and coordinated disclosure guidelines for DataWizual Security.">
+    <meta name="description" content="Vulnerability Disclosure Policy, Safe Harbor principles, product privacy commitments, and coordinated disclosure guidelines for DataWizual Security — Auditor Core v2.2.1, Sentinel Core v2.2.1.">
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -33,6 +33,7 @@
         .policy-h3.red    { border-color:#f87171; }
         .policy-h3.yellow { border-color:#f59e0b; }
         .policy-h3.purple { border-color:#c084fc; }
+        .policy-h3.teal   { border-color:#2dd4bf; }
 
         .policy-p {
             color:var(--gray); line-height:1.8; font-size:0.95rem; margin-bottom:16px;
@@ -89,7 +90,6 @@
                 </div>
             </div>
             <a href="get.html" class="nav-btn">Get Access</a>
-
             <a href="terms.html" class="nav-btn">Terms</a>
         </div>
     </div>
@@ -100,7 +100,7 @@
     <div class="scan-line"></div>
     <div class="container" style="position:relative; z-index:2; max-width:860px;">
         <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(52,152,219,0.1); border:1px solid rgba(52,152,219,0.3); border-radius:20px; padding:6px 16px; margin-bottom:22px; color:var(--primary); font-size:0.85rem; font-weight:700;">
-            <i class="fas fa-file-shield"></i> Version 1.3 · Effective January 1, 2026
+            <i class="fas fa-file-shield"></i> Version 1.4 · Effective March 1, 2026
         </div>
         <h1 class="hero-title" style="font-size:2.8rem; margin-bottom:16px;">
             Security &amp; <span class="text-gradient">Disclosure Policy</span>
@@ -108,7 +108,7 @@
         <p style="color:var(--gray); font-size:1.05rem; line-height:1.8; max-width:720px;">
             This document covers our vulnerability disclosure policy, Safe Harbor principles,
             product privacy commitments, and research ethics guidelines.
-            It applies to DataWizual Security and all products — Auditor Core v2.1 and Sentinel Core v2.1.
+            It applies to DataWizual Security and all products — <strong>Auditor Core v2.2.1</strong> and <strong>Sentinel Core v2.2.1</strong>.
         </p>
     </div>
 </header>
@@ -132,6 +132,7 @@
                     <li><i class="fas fa-check" style="color:#4ade80;"></i> CI/CD workflow definitions (GitHub Actions, GitLab CI, Jenkinsfiles)</li>
                     <li><i class="fas fa-check" style="color:#4ade80;"></i> Infrastructure-as-Code files — Terraform, Kubernetes, Helm, Dockerfiles</li>
                     <li><i class="fas fa-check" style="color:#4ade80;"></i> Dependency manifests — requirements.txt, package.json, Cargo.toml</li>
+                    <li><i class="fas fa-check" style="color:#4ade80;"></i> <strong>Chain analysis</strong> – correlation of findings across multiple files/directories</li>
                     <li><i class="fas fa-check" style="color:#4ade80;"></i> Environments explicitly authorized by the client in writing</li>
                 </ul>
             </div>
@@ -144,6 +145,7 @@
                     <li><i class="fas fa-times" style="color:#f87171;"></i> Social engineering or phishing of any party</li>
                     <li><i class="fas fa-times" style="color:#f87171;"></i> Denial-of-Service testing</li>
                     <li><i class="fas fa-times" style="color:#f87171;"></i> Access to production data or credentials</li>
+                    <li><i class="fas fa-times" style="color:#f87171;"></i> Attempting to bypass hardware‑bound licensing mechanisms</li>
                 </ul>
             </div>
 
@@ -162,6 +164,7 @@
         <p class="policy-p">
             All analysis is limited to static artifacts — source code, configuration files, dependency manifests, and CI/CD definitions.
             We never connect to, probe, or interact with live systems, APIs, or services in the course of an audit.
+            <strong>Chain Analysis</strong> operates on static findings only, correlating them without runtime execution.
         </p>
 
         <h3 class="policy-h3">No Exploitation</h3>
@@ -175,6 +178,7 @@
             We do not collect, store, or transmit private user data encountered during analysis.
             If sensitive data (credentials, PII, private keys) is found during an authorized audit,
             it is documented in the confidential report and immediately purged from our local environment.
+            The AI advisory layer (Gemini, Groq, or local LLM) receives only anonymised finding summaries — never raw source code.
         </p>
 
         <h3 class="policy-h3 yellow">Coordinated Disclosure</h3>
@@ -182,6 +186,7 @@
             All significant findings are reported privately to the authorized contact before any public disclosure.
             We follow a <strong style="color:white;">90-day coordinated disclosure window</strong> — findings remain confidential
             until a fix is released or 90 days elapse, whichever comes first, unless mutually agreed otherwise.
+            Findings involving <strong>chain analysis</strong> (multi‑step attack paths) are treated with the same confidentiality window.
         </p>
     </div>
 
@@ -207,7 +212,7 @@
                 <div style="width:36px; height:36px; background:rgba(74,222,128,0.12); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:800; color:#4ade80;">2</div>
                 <div>
                     <div style="font-weight:600; color:white; margin-bottom:4px;">Detailed Report Delivery</div>
-                    <div style="color:var(--gray); font-size:0.9rem; line-height:1.6;">A structured findings report is provided with severity ratings, CWE references, reproduction steps, and concrete remediation guidance.</div>
+                    <div style="color:var(--gray); font-size:0.9rem; line-height:1.6;">A structured findings report is provided with severity ratings, CWE references, reproduction steps, chain analysis (if applicable), and concrete remediation guidance.</div>
                 </div>
             </div>
 
@@ -232,13 +237,13 @@
 
     <hr class="divider">
 
-    <!-- PRODUCT PRIVACY -->
+    <!-- PRODUCT PRIVACY (updated for v2.2.1) -->
     <div class="policy-section">
         <h2 style="color:white; font-size:1.8rem; margin-bottom:24px;">
             <i class="fas fa-lock" style="color:#c084fc;"></i> Product Privacy Commitments
         </h2>
         <p class="policy-p">
-            These commitments apply to all DataWizual products — Auditor Core v2.1 and Sentinel Core v2.1.
+            These commitments apply to all DataWizual products — <strong>Auditor Core v2.2.1</strong> and <strong>Sentinel Core v2.2.1</strong>.
         </p>
 
         <h3 class="policy-h3 purple">Zero Telemetry</h3>
@@ -250,8 +255,9 @@
 
         <h3 class="policy-h3 purple">Source Code Never Leaves Your Machine</h3>
         <p class="policy-p">
-            The AI advisory layer (Gemini / Groq) receives only structured finding summaries — never raw source code,
-            file contents, or repository paths. All full-text analysis runs locally.
+            The AI advisory layer (Gemini, Groq, or local LLM) receives only structured finding summaries — never raw source code,
+            file contents, or repository paths. <strong>Chain analysis</strong> is performed locally. All full-text analysis runs locally.
+            For air‑gapped environments, <strong>local LLM mode</strong> eliminates all outbound network calls.
         </p>
 
         <h3 class="policy-h3 purple">No Self-Update or Remote Rule Fetching</h3>
@@ -265,6 +271,13 @@
         <p class="policy-p">
             License validation is a local cryptographic operation against your Machine ID.
             There is no license server, no activation call, and no revocation mechanism that requires internet access.
+        </p>
+
+        <h3 class="policy-h3 teal">Context Intelligence & Gate Override</h3>
+        <p class="policy-p">
+            <strong>Context Intelligence</strong> automatically excludes findings in <code>test/</code>, <code>docs/</code>, and <code>examples/</code> from SPI calculation.
+            <strong>Gate Override</strong> caps the effective grade at C when CRITICAL findings exist in production code — eliminating false confidence.
+            These are purely local, deterministic calculations with no data leakage.
         </p>
     </div>
 
@@ -296,7 +309,7 @@
 
     <hr class="divider">
 
-    <!-- LICENSE TERMS SUMMARY -->
+    <!-- LICENSE TERMS SUMMARY (updated version) -->
     <div class="policy-section">
         <h2 style="color:white; font-size:1.8rem; margin-bottom:24px;">
             <i class="fas fa-file-contract" style="color:#2dd4bf;"></i> License Terms Summary
@@ -308,6 +321,7 @@
             <li><i class="fas fa-check" style="color:#2dd4bf;"></i> Redistribution of any product component without written permission is prohibited</li>
             <li><i class="fas fa-check" style="color:#2dd4bf;"></i> License is granted for use within the authorized organization only</li>
             <li><i class="fas fa-check" style="color:#2dd4bf;"></i> Source code remains the intellectual property of DataWizual Security</li>
+            <li><i class="fas fa-check" style="color:#2dd4bf;"></i> Chain Analysis and Gate Override are integral parts of the licensed software</li>
         </ul>
     </div>
 
@@ -348,8 +362,8 @@
             <div>
                 <h4 style="margin-bottom:20px;">Our Ecosystem</h4>
                 <div style="display:flex; flex-direction:column; gap:10px;">
-                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.1</a>
-                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.1</a>
+                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.2.1</a>
+                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.2.1</a>
                     <a href="compare.html"      style="color:var(--gray); text-decoration:none;"><i class="fas fa-layer-group"></i> Compare</a>
                 </div>
             </div>

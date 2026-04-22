@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sentinel Core v2.2 | Deterministic Security Gate for CI/CD | DataWizual</title>
-    <meta name="description" content="Sentinel Core v2.2 — real-time CI/CD enforcement, hardware-bound licensing, Auditor Core v2.2 embedded, SOC 2 / CIS / ISO 27001 compliance alerts, ALLOW or BLOCK with zero ambiguity.">
+    <title>Sentinel Core v2.2.1 | Deterministic Security Gate for CI/CD | DataWizual</title>
+    <meta name="description" content="Sentinel Core v2.2.1 — real-time CI/CD enforcement, hardware-bound licensing, Auditor Core v2.2.1 embedded, SOC 2 / CIS / ISO 27001 compliance alerts, Chain Analysis (attack paths), ALLOW or BLOCK with zero ambiguity.">
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -139,6 +139,16 @@
         .ai-flow-step.fallback { border-color: rgba(168,85,247,0.4);  color: #c084fc; }
         .ai-flow-step.success  { border-color: rgba(74,222,128,0.4);  color: #4ade80; }
         .ai-flow-arrow { color: rgba(74,222,128,0.4); font-size: 0.8rem; }
+
+        .chain-demo {
+            background: rgba(168,85,247,0.05);
+            border: 1px solid rgba(168,85,247,0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -184,8 +194,9 @@
         <div class="hero-flex">
             <div class="hero-content">
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 22px;">
-                    <span class="version-badge-green"><i class="fas fa-shield-alt"></i> Sentinel Core v2.2</span>
-                    <span class="ai-badge"><i class="fas fa-brain"></i> Auditor Core v2.2 Embedded</span>
+                    <span class="version-badge-green"><i class="fas fa-shield-alt"></i> Sentinel Core v2.2.1</span>
+                    <span class="ai-badge"><i class="fas fa-brain"></i> Auditor Core v2.2.1 Embedded</span>
+                    <span class="ai-badge"><i class="fas fa-link"></i> Chain Analysis</span>
                 </div>
 
                 <h1 class="hero-title">
@@ -194,8 +205,9 @@
 
                 <p class="hero-subtitle" style="font-size: 1.15rem;">
                     Deterministic security gate for CI/CD pipelines.
-                    Intercepts every commit, runs <strong>Auditor Core v2.2</strong> internally,
+                    Intercepts every commit, runs <strong>Auditor Core v2.2.1</strong> internally,
                     enforces policy in real-time. <strong>ALLOW or BLOCK — no ambiguity, no silent bypass.</strong>
+                    <strong>Chain Analysis</strong> correlates findings into attack paths – severity escalation triggers BLOCK even on originally LOW findings.
                     Hardware-bound licensing. 100% local execution.
                 </p>
 
@@ -229,12 +241,19 @@
                             </div>
                         </div>
                         <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                            <button onclick="simulateChain()" class="btn" style="background:rgba(168,85,247,0.1); border:1px solid #c084fc; color:#c084fc; font-size:0.85rem;">
+                                <i class="fas fa-link"></i> Simulate Chain Attack
+                            </button>
                             <button onclick="toggleGate()" class="btn" style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); color:#f87171; font-size:0.85rem;">
                                 <i class="fas fa-ban"></i> Simulate Violation
                             </button>
                             <button onclick="resetGate()" class="btn" style="background:rgba(74,222,128,0.1); border:1px solid #4ade80; color:#4ade80; font-size:0.85rem;">
                                 <i class="fas fa-check"></i> Reset
                             </button>
+                        </div>
+                        <div class="chain-demo" id="chainDemoMessage" style="display:none;">
+                            🔗 <strong>Chain detected:</strong> SECRET_HIGH_ENTROPY (LOW) + SAST_COMMAND_INJECTION (MEDIUM) → <span style="color:#f87171;">CRITICAL CHAIN</span><br>
+                            Gate BLOCK – chain escalation active.
                         </div>
                     </div>
                 </div>
@@ -264,8 +283,8 @@
                 <div style="color:var(--gray); font-size:0.85rem; margin-top:6px;">Hardware-Bound License</div>
             </div>
             <div class="stat-box">
-                <div class="stat-num" style="background:linear-gradient(135deg,#c084fc,#3498db); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">AI</div>
-                <div style="color:var(--gray); font-size:0.85rem; margin-top:6px;">Gemini + Groq Advisory</div>
+                <div class="stat-num" style="background:linear-gradient(135deg,#c084fc,#3498db); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">Chain</div>
+                <div style="color:var(--gray); font-size:0.85rem; margin-top:6px;">Attack Path Detection</div>
             </div>
         </div>
     </div>
@@ -279,7 +298,7 @@
         </h2>
         <p style="text-align:center; color:var(--gray); margin-bottom:60px; max-width:800px; margin-left:auto; margin-right:auto;">
             Unlike scanners that provide risk opinions, Sentinel delivers authoritative decisions.
-            Every execution results in exactly one of two states.
+            Every execution results in exactly one of two states. <strong>Chain escalation</strong> ensures correlated findings are never underreported.
         </p>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 60px;">
@@ -298,7 +317,7 @@
                     <i class="fas fa-ban" style="font-size:2rem; color:#f87171;"></i>
                 </div>
                 <h3 style="margin-bottom:12px; color:white;">BLOCK (exit 1)</h3>
-                <p style="color:var(--gray); line-height:1.6;">Critical violations detected. Pipeline terminates immediately. Alert created in GitHub Issues with full details.</p>
+                <p style="color:var(--gray); line-height:1.6;">Critical violations or <strong>chain-escalated</strong> findings detected. Pipeline terminates immediately. Alert created in GitHub Issues with full chain details.</p>
                 <div style="margin-top:18px;"><span class="decision-badge decision-block">Pipeline Terminated</span></div>
             </div>
 
@@ -320,29 +339,29 @@
             </h3>
             <p style="color:var(--gray); text-align:center; max-width:700px; margin:0 auto 28px;">
                 Violations cannot be silently ignored. Every exception must be formally justified in <code>sentinel.yaml</code> — creating an immutable audit trail visible to administrators.
+                Chain findings cannot be overridden individually; the entire chain must be justified.
             </p>
             <div style="background:#1a1c20; border-radius:8px; padding:22px; font-family:'Courier New',monospace; font-size:13px; color:#eee; max-width:580px; margin:0 auto;">
                 <div style="color:#94a3b8; margin-bottom:12px;"># sentinel.yaml — Policy Overrides</div>
                 <div style="color:#f59e0b;">overrides:</div>
                 <div style="margin-left:18px;">
-                    <div style="color:#94a3b8;">- <span style="color:#4ade80;">rule_id</span>: "SUPPLY-001"</div>
-                    <div style="color:#94a3b8; margin-left:18px;"><span style="color:#4ade80;">justification</span>: "Legacy base image required for test-suite compatibility"</div>
-                    <div style="margin-top:8px; color:#94a3b8;">- <span style="color:#4ade80;">rule_id</span>: "SEC-001"</div>
-                    <div style="color:#94a3b8; margin-left:18px;"><span style="color:#4ade80;">justification</span>: "Verified public mock token for internal tests only"</div>
+                    <div style="color:#94a3b8;">- <span style="color:#4ade80;">chain_id</span>: "CHAIN_0001"</div>
+                    <div style="color:#94a3b8; margin-left:18px;"><span style="color:#4ade80;">justification</span>: "Test harness with deliberate vulnerability chain – excluded by security review"</div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ══════════════════════════════════════ HOW IT WORKS -->
+<!-- ══════════════════════════════════════ HOW IT WORKS (updated with Chain) -->
 <section id="how-it-works" class="section" style="padding: 100px 0; background: var(--dark);">
     <div class="container">
         <h2 style="text-align:center; margin-bottom:20px; font-size:2.6rem;">
             How <span class="text-gradient">Sentinel Works</span>
         </h2>
         <p style="text-align:center; color:var(--gray); margin-bottom:60px; max-width:700px; margin-left:auto; margin-right:auto;">
-            Two enforcement layers — pre-commit hook for local development, CI/CD pipeline for every push.
+            Two enforcement layers — pre-commit hook for local development, CI/CD pipeline for every push.<br>
+            <strong>Chain Analysis</strong> runs after detectors, before AI, to correlate findings into attack paths.
         </p>
 
         <!-- Pipeline visualization -->
@@ -379,12 +398,12 @@
 
             <div class="pipeline-stage sentinel-active" id="decisionStage">
                 <div style="display:flex; align-items:center; gap:14px;">
-                    <div style="width:40px; height:40px; background:rgba(74,222,128,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center;">
-                        <i class="fas fa-balance-scale" style="color:#4ade80;"></i>
+                    <div style="width:40px; height:40px; background:rgba(168,85,247,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                        <i class="fas fa-link" style="color:#c084fc;"></i>
                     </div>
                     <div>
-                        <div style="font-weight:600; color:white;">Policy Decision</div>
-                        <div style="font-size:0.85rem; color:var(--gray);">ALLOW, BLOCK, or WARN</div>
+                        <div style="font-weight:600; color:white;">Chain Analysis + Policy Decision</div>
+                        <div style="font-size:0.85rem; color:var(--gray);">Correlate findings → escalate severity → ALLOW/BLOCK/WARN</div>
                     </div>
                 </div>
                 <span class="decision-badge decision-allow" id="pipelineDecision">ALLOW</span>
@@ -406,7 +425,7 @@
             </div>
         </div>
 
-        <!-- 5-step how it works -->
+        <!-- 5-step how it works (updated) -->
         <div style="display:flex; flex-direction:column; gap:16px; max-width:860px; margin:0 auto;">
 
             <div class="flow-step">
@@ -422,9 +441,9 @@
             <div class="flow-step">
                 <div class="flow-num" style="background:rgba(52,152,219,0.12); color:var(--primary);">2</div>
                 <div>
-                    <h4 style="color:white; margin-bottom:6px;">Auditor Core v2.2 Scans Changed Files</h4>
+                    <h4 style="color:white; margin-bottom:6px;">Auditor Core v2.2.1 Scans Changed Files</h4>
                     <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0;">
-                        Full 11-engine scan runs internally — Bandit, Semgrep, Gitleaks, Secret Detector, CICD Analyzer, IaC Scanner, Dependency Scanner and more. Same engine, same WSPM v2.2 scoring. Every blocked commit report includes a PDF Evidence Appendix with source-level code context for CRITICAL/HIGH findings, and compliance tags (SOC 2 TSC · CIS Controls v8 · ISO/IEC 27001:2022).
+                        Full 11-engine scan runs internally — Bandit, Semgrep, Gitleaks, Secret Detector, CICD Analyzer, IaC Scanner, Dependency Scanner and more. Same engine, same WSPM v2.2 scoring.
                     </p>
                 </div>
             </div>
@@ -432,42 +451,54 @@
             <div class="flow-step">
                 <div class="flow-num" style="background:rgba(168,85,247,0.12); color:#c084fc;">3</div>
                 <div>
-                    <h4 style="color:white; margin-bottom:6px;">AI Verifies Top Findings</h4>
+                    <h4 style="color:white; margin-bottom:6px;">Chain Analysis – Attack Path Detection</h4>
                     <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0;">
-                        Gemini 2.5 analyzes critical findings — eliminates false positives before policy enforcement. Groq (Llama 3.3 70B) takes over automatically if Gemini quota is exhausted.
+                        Correlates findings across detectors. A hardcoded API key (LOW) feeding a command injection (MEDIUM) becomes a <strong>CRITICAL</strong> chain. Severity escalation ensures no underreporting.
                     </p>
-                    <div class="ai-flow">
-                        <div class="ai-flow-step">Findings</div>
-                        <div class="ai-flow-arrow"><i class="fas fa-arrow-right"></i></div>
-                        <div class="ai-flow-step primary"><i class="fas fa-robot"></i> Gemini</div>
-                        <div class="ai-flow-arrow"><i class="fas fa-arrow-right"></i></div>
-                        <div class="ai-flow-step fallback"><i class="fas fa-random"></i> Groq</div>
-                        <div class="ai-flow-arrow"><i class="fas fa-arrow-right"></i></div>
-                        <div class="ai-flow-step success">Verified</div>
+                    <div style="background:rgba(168,85,247,0.1); border-radius:8px; padding:12px; margin-top:10px; font-size:0.85rem;">
+                        <i class="fas fa-link"></i> <strong>Example chain:</strong> SECRET_HIGH_ENTROPY (LOW) + SAST_COMMAND_INJECTION (MEDIUM) → <span style="color:#f87171;">CRITICAL</span>
                     </div>
                 </div>
             </div>
 
             <div class="flow-step">
-                <div class="flow-num" style="background:rgba(239,68,68,0.12); color:#f87171;">4</div>
+                <div class="flow-num" style="background:rgba(52,152,219,0.12); color:var(--primary);">4</div>
                 <div>
-                    <h4 style="color:white; margin-bottom:6px;">BLOCK → GitHub Issue Alert</h4>
+                    <h4 style="color:white; margin-bottom:6px;">AI Verifies Findings (Chain-Aware)</h4>
                     <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0;">
-                        Every blocked commit automatically creates a GitHub Issue in the admin repository — machine identity, developer username, timestamp, violation details. Immutable audit trail.
+                        Gemini 2.5 analyzes critical findings — including full chain context. Groq (Llama 3.3 70B) fallback. Optional <strong>local LLM mode</strong> for air‑gapped environments.
+                    </p>
+                    <div class="ai-flow">
+                        <div class="ai-flow-step">Chain+Findings</div>
+                        <div class="ai-flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="ai-flow-step primary"><i class="fas fa-robot"></i> Gemini</div>
+                        <div class="ai-flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="ai-flow-step fallback"><i class="fas fa-random"></i> Groq</div>
+                        <div class="ai-flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="ai-flow-step success">Chain‑Aware Verdict</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <div class="flow-num" style="background:rgba(239,68,68,0.12); color:#f87171;">5</div>
+                <div>
+                    <h4 style="color:white; margin-bottom:6px;">BLOCK → GitHub Issue Alert (with Chain)</h4>
+                    <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0;">
+                        Every blocked commit automatically creates a GitHub Issue in the admin repository — machine identity, developer username, timestamp, violation details, and <strong>full attack path description</strong>.
                     </p>
                     <div style="font-family:monospace; font-size:0.8rem; background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.2); padding:12px 16px; border-radius:8px; margin-top:12px; color:#fca5a5; line-height:1.9;">
-                        ❌ BLOCK — SEC-001: Hardcoded Password<br>
-                        Environment: 💻 Local Development<br>
-                        Machine: worker-pc-01 | Triggered by: developer_username<br>
-                        Timestamp: 2026-03-13 14:22:01<br>
-                        <span style="color:#f59e0b;">Controls: SOC2-CC6.1 · CIS-16.1 · ISO-A.5.17</span><br>
+                        ❌ BLOCK — CHAIN_0001: secret_to_command_injection (CRITICAL)<br>
+                        Step 1: SECRET_HIGH_ENTROPY at config.py:42 (LOW → CRITICAL)<br>
+                        Step 2: SAST_COMMAND_INJECTION at config.py:87 (MEDIUM → CRITICAL)<br>
+                        Environment: 💻 Local Development · Machine: worker-pc-01<br>
                         🚀 Alert sent → admin-repo #47
                     </div>
                 </div>
             </div>
 
             <div class="flow-step">
-                <div class="flow-num" style="background:rgba(52,152,219,0.12); color:var(--primary);">5</div>
+                <div class="flow-num" style="background:rgba(52,152,219,0.12); color:var(--primary);">6</div>
                 <div>
                     <h4 style="color:white; margin-bottom:6px;">CI/CD Pipeline — Second Line of Defence</h4>
                     <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0;">
@@ -480,14 +511,15 @@
     </div>
 </section>
 
-<!-- ══════════════════════════════════════ RULES -->
+<!-- ══════════════════════════════════════ RULES (unchanged but can add chain note) -->
 <section class="section" style="padding: 100px 0; background: rgba(15,23,42,0.7);">
     <div class="container">
         <h2 style="text-align:center; margin-bottom:20px; font-size:2.6rem;">
             Built-in <span class="text-gradient">Security Rules</span>
         </h2>
         <p style="text-align:center; color:var(--gray); margin-bottom:60px; max-width:700px; margin-left:auto; margin-right:auto;">
-            Policy-driven enforcement — each rule maps to a specific threat class with configurable BLOCK / WARN response.
+            Policy-driven enforcement — each rule maps to a specific threat class with configurable BLOCK / WARN response.<br>
+            <strong>Chain rules</strong> can correlate multiple rule violations into a higher‑severity attack path.
         </p>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;">
@@ -574,7 +606,7 @@
     </div>
 </section>
 
-<!-- ══════════════════════════════════════ ZERO LEAKAGE -->
+<!-- ══════════════════════════════════════ ZERO LEAKAGE (unchanged) -->
 <section class="section" style="padding: 100px 0; background: var(--dark);">
     <div class="container">
         <h2 style="text-align:center; margin-bottom:20px; font-size:2.6rem;">
@@ -599,7 +631,7 @@
                     <i class="fas fa-plug" style="font-size:2rem; color:#4ade80;"></i>
                 </div>
                 <h3 style="color:white; margin-bottom:10px;">Air-Gap Ready</h3>
-                <p style="color:var(--gray); line-height:1.6; font-size:0.92rem;">Operates without internet access. Safe for classified, banking, and high-security internal environments.</p>
+                <p style="color:var(--gray); line-height:1.6; font-size:0.92rem;">Operates without internet access. Safe for classified, banking, and high-security internal environments. Local LLM mode available.</p>
             </div>
 
             <div class="rule-card" style="text-align:center;">
@@ -614,7 +646,7 @@
     </div>
 </section>
 
-<!-- ══════════════════════════════════════ LICENSING -->
+<!-- ══════════════════════════════════════ LICENSING (unchanged) -->
 <section class="section" style="padding: 100px 0; background: rgba(15,23,42,0.7);">
     <div class="container">
         <h2 style="text-align:center; margin-bottom:20px; font-size:2.6rem;">
@@ -642,7 +674,7 @@
                 <div>
                     <h4 style="color:white; margin-bottom:6px;">Send Machine ID → Receive License Key</h4>
                     <p style="color:var(--gray); font-size:0.9rem; line-height:1.6; margin:0;">
-                        Email your Machine ID to <strong style="color:#4ade80;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6b0e070f0419111e0d0a19041d5d5d2b0c060a020745080406">[email&#160;protected]</a></strong>.
+                        Email your Machine ID to <strong style="color:#4ade80;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c2a7aea6adb0b8b7a4a3b0adb4f4f482a5afa3abaeeca1adaf">[email&#160;protected]</a></strong>.
                         You will receive a License Key unique to that machine.
                     </p>
                 </div>
@@ -681,18 +713,28 @@
     </div>
 </section>
 
-<!-- ══════════════════════════════════════ WHAT'S NEW v2.2 -->
+<!-- ══════════════════════════════════════ WHAT'S NEW v2.2.1 -->
 <section class="section" style="padding: 80px 0; background: rgba(10,15,28,0.9);">
     <div class="container">
         <div style="text-align:center; margin-bottom:60px;">
-            <div style="display:inline-block; background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.4); color:#f59e0b; font-size:0.75rem; font-weight:700; padding:4px 14px; border-radius:20px; letter-spacing:1px; margin-bottom:20px;">NEW IN v2.2</div>
-            <h2 style="font-size:2.6rem; margin-bottom:16px;">What's New in <span class="text-gradient">Sentinel v2.2</span></h2>
+            <div style="display:inline-block; background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.4); color:#f59e0b; font-size:0.75rem; font-weight:700; padding:4px 14px; border-radius:20px; letter-spacing:1px; margin-bottom:20px;">NEW IN v2.2.1</div>
+            <h2 style="font-size:2.6rem; margin-bottom:16px;">What's New in <span class="text-gradient">Sentinel v2.2.1</span></h2>
             <p style="color:var(--gray); max-width:600px; margin:0 auto; font-size:1.05rem;">
-                Every improvement to Auditor Core v2.2 propagates automatically to the enforcement gate.
+                Every improvement to Auditor Core v2.2.1 propagates automatically to the enforcement gate.
             </p>
         </div>
 
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(270px, 1fr)); gap:20px; max-width:1000px; margin:0 auto;">
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(168,85,247,0.2); border-radius:14px; padding:26px; display:flex; gap:16px; align-items:flex-start;">
+                <div style="width:40px; height:40px; background:rgba(168,85,247,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <i class="fas fa-link" style="color:#c084fc;"></i>
+                </div>
+                <div>
+                    <h4 style="color:white; margin:0 0 8px; font-size:0.95rem;">Chain Analysis (Attack Paths)</h4>
+                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;">Correlates findings across detectors. Severity escalation (LOW → CRITICAL) triggers BLOCK. Chains appear in GitHub alerts and JSON.</p>
+                </div>
+            </div>
 
             <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(239,68,68,0.2); border-radius:14px; padding:26px; display:flex; gap:16px; align-items:flex-start;">
                 <div style="width:40px; height:40px; background:rgba(239,68,68,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
@@ -700,7 +742,7 @@
                 </div>
                 <div>
                     <h4 style="color:white; margin:0 0 8px; font-size:0.95rem;">PDF Evidence Appendix</h4>
-                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;">Every blocked commit report now includes source-level code context for CRITICAL/HIGH findings — audit-defensible out of the box.</p>
+                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;">Every blocked commit report includes source-level code context for CRITICAL/HIGH findings — audit-defensible out of the box.</p>
                 </div>
             </div>
 
@@ -710,7 +752,7 @@
                 </div>
                 <div>
                     <h4 style="color:white; margin:0 0 8px; font-size:0.95rem;">SOC 2 / CIS / ISO 27001 Mapping</h4>
-                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;">Every finding tagged to specific controls in JSON and PDF output. Compliance tags included in every GitHub Issue alert.</p>
+                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;">Every finding tagged to specific controls. Compliance tags included in every GitHub Issue alert.</p>
                 </div>
             </div>
 
@@ -729,8 +771,8 @@
                     <i class="fas fa-brain" style="color:var(--primary);"></i>
                 </div>
                 <div>
-                    <h4 style="color:white; margin:0 0 8px; font-size:0.95rem;">Context Intelligence</h4>
-                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;"><code style="font-size:0.8rem;color:#94a3b8;">NON_RUNTIME</code> context for <code style="font-size:0.8rem;color:#94a3b8;">test/</code>, <code style="font-size:0.8rem;color:#94a3b8;">docs/</code>, <code style="font-size:0.8rem;color:#94a3b8;">examples/</code> excluded from SPI. Taint analysis and reachability scoring applied before enforcement.</p>
+                    <h4 style="color:white; margin:0 0 8px; font-size:0.95rem;">Chain‑Aware AI + Local LLM</h4>
+                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;">AI receives full chain context. Optional local LLM mode for air‑gapped environments.</p>
                 </div>
             </div>
 
@@ -740,17 +782,7 @@
                 </div>
                 <div>
                     <h4 style="color:white; margin:0 0 8px; font-size:0.95rem;">Duplicate Aggregation</h4>
-                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;">Multiple findings in the same file grouped as one block with line list in PDF output. NUL-byte sanitization prevents binary files from causing scan failures.</p>
-                </div>
-            </div>
-
-            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.07); border-radius:14px; padding:26px; display:flex; gap:16px; align-items:flex-start;">
-                <div style="width:40px; height:40px; background:rgba(255,255,255,0.05); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                    <i class="fas fa-box" style="color:var(--gray);"></i>
-                </div>
-                <div>
-                    <h4 style="color:white; margin:0 0 8px; font-size:0.95rem;">Cython-Compiled Distribution</h4>
-                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;">Delivered as <code style="font-size:0.8rem;color:#94a3b8;">.so</code> compiled modules for IP protection. Consistent verdict labels across PDF and HTML report formats.</p>
+                    <p style="color:var(--gray); font-size:0.85rem; line-height:1.6; margin:0;">Multiple findings in the same file grouped as one block with line list in PDF output.</p>
                 </div>
             </div>
 
@@ -758,7 +790,7 @@
     </div>
 </section>
 
-<!-- ══════════════════════════════════════ FAQ -->
+<!-- ══════════════════════════════════════ FAQ (updated with chain) -->
 <section class="section" style="padding: 100px 0; background: var(--dark);">
     <div class="container">
         <h2 style="text-align:center; margin-bottom:60px; font-size:2.6rem;">
@@ -772,18 +804,23 @@
             </div>
 
             <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:28px;">
+                <h4 style="color:white; margin-bottom:10px;"><i class="fas fa-question-circle" style="color:#4ade80;"></i> What is Chain Analysis and how does it affect the gate?</h4>
+                <p style="color:var(--gray); line-height:1.7; margin:0;">Chain Analysis correlates findings that together form a complete attack path (e.g., hardcoded secret + command injection). When a chain is detected, all participating findings are escalated to the chain's resulting risk level (typically CRITICAL), and the gate blocks the commit regardless of individual severities. Chain escalation cannot be suppressed via <code>sentinel.yaml::overrides</code> (only the whole chain can be justified).</p>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:28px;">
                 <h4 style="color:white; margin-bottom:10px;"><i class="fas fa-question-circle" style="color:#4ade80;"></i> Does Sentinel slow down commits?</h4>
                 <p style="color:var(--gray); line-height:1.7; margin:0;">Basic scanning takes 2–5 seconds on typical projects. With Gemini AI analysis enabled — 15–30 seconds depending on project size and number of findings sent for verification.</p>
             </div>
 
             <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:28px;">
-                <h4 style="color:white; margin-bottom:10px;"><i class="fas fa-question-circle" style="color:#4ade80;"></i> What happens if Gemini API is unavailable?</h4>
+                <h4 style="color:white; margin-bottom:10px;"><i class="fas fa-question-circle" style="color:#4ade80;"></i> What if Gemini API is unavailable?</h4>
                 <p style="color:var(--gray); line-height:1.7; margin:0;">Groq (Llama 3.3 70B) takes over automatically. If both are unavailable, Sentinel continues operating without AI enrichment — all core enforcement rules run fully offline at all times.</p>
             </div>
 
             <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:28px;">
                 <h4 style="color:white; margin-bottom:10px;"><i class="fas fa-question-circle" style="color:#4ade80;"></i> Is developer activity logged?</h4>
-                <p style="color:var(--gray); line-height:1.7; margin:0;">Yes. Every blocked commit is recorded as a GitHub Issue with machine identity, username, timestamp, and violation details — creating an immutable audit trail. Developers have no access to the enforcement dashboard.</p>
+                <p style="color:var(--gray); line-height:1.7; margin:0;">Yes. Every blocked commit is recorded as a GitHub Issue with machine identity, username, timestamp, and violation details — creating an immutable audit trail. Chain alerts include the full attack path description.</p>
             </div>
 
             <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:28px;">
@@ -827,14 +864,14 @@
                 <h4 style="margin-bottom:20px;">DataWizual Security</h4>
                 <p style="color:var(--gray);">Developing territories of confidence through rigorous engineering.</p>
                 <p style="margin-top:20px; color:#4ade80; font-weight:bold;">
-                    <i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ef8a838b809d959a898e9d8099d9d9af88828e8683c18c8082">[email&#160;protected]</a>
+                    <i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ee8b828a819c949b888f9c8198d8d8ae89838f8782c08d8183">[email&#160;protected]</a>
                 </p>
             </div>
             <div>
                 <h4 style="margin-bottom:20px;">Our Ecosystem</h4>
                 <div style="display:flex; flex-direction:column; gap:10px;">
-                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.2</a>
-                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.2</a>
+                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.2.1</a>
+                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.2.1</a>
                     <a href="compare.html"      style="color:var(--gray); text-decoration:none;"><i class="fas fa-layer-group"></i> Compare</a>
                 </div>
             </div>
@@ -853,13 +890,15 @@
     </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script>
 function toggleGate() {
     const gate    = document.getElementById('gateDemo');
     const status  = document.getElementById('gateStatus');
     const message = document.getElementById('gateMessage');
     const stage   = document.getElementById('decisionStage');
     const badge   = document.getElementById('pipelineDecision');
+    const chainMsg = document.getElementById('chainDemoMessage');
 
     if (gate.classList.contains('gate-open')) {
         gate.classList.remove('gate-open');
@@ -867,13 +906,31 @@ function toggleGate() {
         message.innerHTML  = '✓ Security policy satisfied'; message.style.color = '#4ade80';
         stage.classList.remove('blocked'); stage.classList.add('sentinel-active');
         badge.className = 'decision-badge decision-allow'; badge.textContent = 'ALLOW';
+        chainMsg.style.display = 'none';
     } else {
         gate.classList.add('gate-open');
         status.textContent = 'BLOCKED'; status.style.color = '#f87171';
         message.innerHTML  = '✗ BLOCK — SEC-001: Hardcoded secret detected'; message.style.color = '#f87171';
         stage.classList.remove('sentinel-active'); stage.classList.add('blocked');
         badge.className = 'decision-badge decision-block'; badge.textContent = 'BLOCK';
+        chainMsg.style.display = 'none';
     }
+}
+
+function simulateChain() {
+    const gate    = document.getElementById('gateDemo');
+    const status  = document.getElementById('gateStatus');
+    const message = document.getElementById('gateMessage');
+    const stage   = document.getElementById('decisionStage');
+    const badge   = document.getElementById('pipelineDecision');
+    const chainMsg = document.getElementById('chainDemoMessage');
+
+    gate.classList.add('gate-open');
+    status.textContent = 'BLOCKED'; status.style.color = '#f87171';
+    message.innerHTML  = '✗ BLOCK — Chain escalation: SECRET + COMMAND_INJECTION → CRITICAL'; message.style.color = '#f87171';
+    stage.classList.remove('sentinel-active'); stage.classList.add('blocked');
+    badge.className = 'decision-badge decision-block'; badge.textContent = 'BLOCK';
+    chainMsg.style.display = 'block';
 }
 
 function resetGate() {
@@ -882,12 +939,14 @@ function resetGate() {
     const message = document.getElementById('gateMessage');
     const stage   = document.getElementById('decisionStage');
     const badge   = document.getElementById('pipelineDecision');
+    const chainMsg = document.getElementById('chainDemoMessage');
 
     gate.classList.remove('gate-open');
     status.textContent = 'ACTIVE'; status.style.color = '#4ade80';
     message.innerHTML  = '✓ Security policy satisfied'; message.style.color = '#4ade80';
     stage.classList.remove('blocked'); stage.classList.add('sentinel-active');
     badge.className = 'decision-badge decision-allow'; badge.textContent = 'ALLOW';
+    chainMsg.style.display = 'none';
 }
 
 document.addEventListener('DOMContentLoaded', function() {

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auditor Core v2.2 | Enterprise Security Analysis Engine | DataWizual</title>
-    <meta name="description" content="Auditor Core v2.2 — 11-engine SAST platform with WSPM v2.2 scoring, PDF executive reports, SOC 2 / CIS / ISO 27001 compliance mapping, AI-powered false positive elimination, hardware-bound licensing.">
+    <title>Auditor Core v2.2.1 | Enterprise Security Analysis Engine | DataWizual</title>
+    <meta name="description" content="Auditor Core v2.2.1 — 11-engine SAST platform with WSPM v2.2 scoring, Chain Analysis (attack paths), PDF executive reports, SOC 2 / CIS / ISO 27001 compliance mapping, AI-powered false positive elimination (Gemini + Groq + local LLM), hardware-bound licensing.">
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -155,6 +155,23 @@
         .ai-flow-step.fallback { border-color: rgba(168,85,247,0.4);  color: #c084fc; }
         .ai-flow-step.success  { border-color: rgba(74,222,128,0.4);  color: #4ade80; }
         .ai-flow-arrow { color: rgba(52,152,219,0.5); font-size: 0.8rem; }
+
+        .chain-section {
+            background: rgba(168,85,247,0.08);
+            border: 1px solid rgba(168,85,247,0.25);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .chain-step {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
@@ -200,8 +217,9 @@
         <div class="hero-flex">
             <div class="hero-content">
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 22px;">
-                    <span class="version-badge"><i class="fas fa-search"></i> Auditor Core v2.2</span>
-                    <span class="ai-badge"><i class="fas fa-brain"></i> Gemini + Groq</span>
+                    <span class="version-badge"><i class="fas fa-search"></i> Auditor Core v2.2.1</span>
+                    <span class="ai-badge"><i class="fas fa-brain"></i> Gemini + Groq + Local LLM</span>
+                    <span class="ai-badge"><i class="fas fa-link"></i> Chain Analysis</span>
                 </div>
 
                 <h1 class="hero-title">
@@ -211,7 +229,8 @@
                 <p class="hero-subtitle" style="font-size: 1.15rem;">
                     11-engine SAST platform with a mathematically reproducible
                     <strong>Security Posture Index</strong> via WSPM v2.2.
-                    AI-powered false positive elimination — Gemini first, Groq as automatic fallback.
+                    <strong>Chain Analysis</strong> detects multi‑step attack paths – severity escalation prevents underreporting.
+                    AI-powered false positive elimination — Gemini first, Groq as automatic fallback, plus optional <strong>local LLM mode</strong> for air‑gapped environments.
                     Hardware-bound licensing. No telemetry. 100% local execution.
                 </p>
 
@@ -225,7 +244,7 @@
                 </div>
             </div>
 
-            <!-- Terminal mockup -->
+            <!-- Terminal mockup (updated) -->
             <div class="hero-visual">
                 <div class="scan-card">
                     <div class="scan-header" style="background: #25282c; padding: 12px 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #333;">
@@ -238,12 +257,13 @@
                         <p><span style="color:#3498db;">[*]</span> Inference Engine: Loaded 13 semantic rules</p>
                         <p><span style="color:#27ae60;">[✓]</span> FileIntake: 3406 files collected</p>
                         <p><span style="color:#27ae60;">[✓]</span> 11 detectors loaded</p>
-                        <p><span style="color:#27ae60;">[✓]</span> AI: Gemini → chunk 1 ✓ | Groq → chunks 2-3 ✓</p>
+                        <p><span style="color:#c084fc;">[→]</span> Chain Analysis: 1 attack path detected (secret + command injection → CRITICAL)</p>
+                        <p><span style="color:#27ae60;">[✓]</span> AI: Gemini → chain context ✓ | Groq → fallback ready</p>
                         <p style="margin-top:10px;"><span style="color:#fbbf24;">[→]</span> SPI: <strong style="color:#4ade80;">96.6</strong> — Grade <strong style="color:#4ade80;">A</strong> (Resilient)</p>
                         <p><span style="color:#fbbf24;">[→]</span> Gate Override: inactive (no CRITICAL in production)</p>
-                        <p><span style="color:#27ae60;">[✓]</span> PDF: reports/report_project.pdf</p>
+                        <p><span style="color:#27ae60;">[✓]</span> PDF: reports/report_project.pdf (includes attack path appendix)</p>
                         <p class="finding-badge" style="color:#4ade80; padding: 8px 12px; background: rgba(74,222,128,0.08); border-radius: 6px; border-left: 3px solid #4ade80; margin-top: 10px;">
-                            <i class="fas fa-check-circle"></i> Policy: PASS — 15 AI verdicts applied
+                            <i class="fas fa-check-circle"></i> Policy: PASS — 15 AI verdicts applied, 1 chain escalated
                         </p>
                     </div>
                 </div>
@@ -265,8 +285,8 @@
                 <div style="color: var(--gray); font-size: 0.85rem; margin-top: 6px;">v2.2 Scoring Model</div>
             </div>
             <div class="stat-box">
-                <div class="stat-number" style="background: linear-gradient(135deg,#c084fc,#3498db); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">AI</div>
-                <div style="color: var(--gray); font-size: 0.85rem; margin-top: 6px;">Gemini + Groq Fallback</div>
+                <div class="stat-number" style="background: linear-gradient(135deg,#c084fc,#3498db); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">Chain</div>
+                <div style="color: var(--gray); font-size: 0.85rem; margin-top: 6px;">Attack Path Detection</div>
             </div>
             <div class="stat-box">
                 <div class="stat-number">0</div>
@@ -280,14 +300,14 @@
     </div>
 </section>
 
-<!-- ══════════════════════════════════════ HOW IT WORKS -->
+<!-- ══════════════════════════════════════ HOW IT WORKS (updated with Chain) -->
 <section class="section" style="padding: 100px 0; background: rgba(15,23,42,0.7);">
     <div class="container">
         <h2 style="text-align:center; margin-bottom:20px; font-size:2.6rem;">
             How <span class="text-gradient">Auditor Core Works</span>
         </h2>
         <p style="text-align:center; color:var(--gray); margin-bottom:60px; max-width:700px; margin-left:auto; margin-right:auto;">
-            A deterministic pipeline — from file intake to AI-verified, SPI-scored report.
+            A deterministic pipeline — from file intake to AI-verified, SPI-scored report, with Chain Analysis in between.
         </p>
 
         <div style="display: flex; flex-direction: column; gap: 16px; max-width: 860px; margin: 0 auto;">
@@ -315,44 +335,63 @@
             <div class="flow-step">
                 <div class="flow-num" style="background:rgba(168,85,247,0.12); color:#c084fc;">3</div>
                 <div>
-                    <h4 style="color:white; margin-bottom:6px;">WSPM v2.2 — Weighted Scoring</h4>
+                    <h4 style="color:white; margin-bottom:6px;">Chain Analysis — Attack Path Detection</h4>
                     <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0;">
-                        Context weighting (CORE / TEST / DOCS / INFRA), detector trust balancing, reachability scoring, and cross-detector consensus — producing a mathematically reproducible SPI from 0 to 100.
+                        Correlates findings across detectors. When a hardcoded secret (LOW) and a command injection (MEDIUM) exist in the same scope, they form a <strong>CRITICAL</strong> chain. Severity escalation ensures correlated risks are never underreported.
                     </p>
+                    <div class="chain-step" style="margin-top: 12px;">
+                        <i class="fas fa-link" style="color:#c084fc;"></i>
+                        <span><strong>Chain ID: CHAIN_0001</strong> — secret_to_command_injection</span>
+                        <span style="margin-left:auto; color:#f87171;">CRITICAL</span>
+                    </div>
+                    <div style="margin-left: 40px; font-size:0.85rem; color:#aaa;">
+                        Step 1: SECRET_HIGH_ENTROPY (LOW) → config.py:42<br>
+                        Step 2: SAST_COMMAND_INJECTION (MEDIUM) → config.py:87
+                    </div>
                 </div>
             </div>
 
             <div class="flow-step">
                 <div class="flow-num" style="background:rgba(251,191,36,0.12); color:#fbbf24;">4</div>
                 <div>
-                    <h4 style="color:white; margin-bottom:6px;">AI Advisory — False Positive Elimination</h4>
+                    <h4 style="color:white; margin-bottom:6px;">WSPM v2.2 — Weighted Scoring</h4>
                     <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0;">
-                        Top findings are sent to Gemini 2.5 Flash for verification. If daily quota is exhausted, Groq (Llama 3.3 70B) takes over automatically — zero manual intervention required.
+                        Context weighting (CORE / TEST / DOCS / INFRA), detector trust balancing, reachability scoring, and cross-detector consensus — producing a mathematically reproducible SPI from 0 to 100. Chain-escalated findings contribute with their escalated severity.
                     </p>
-                    <div class="ai-flow" style="justify-content:flex-start; margin-top:12px;">
-                        <div class="ai-flow-step">Top Findings</div>
-                        <div class="ai-flow-arrow"><i class="fas fa-arrow-right"></i></div>
-                        <div class="ai-flow-step primary"><i class="fas fa-robot"></i> Gemini 2.5</div>
-                        <div class="ai-flow-arrow"><i class="fas fa-arrow-right"></i></div>
-                        <div class="ai-flow-step fallback"><i class="fas fa-random"></i> Groq Fallback</div>
-                        <div class="ai-flow-arrow"><i class="fas fa-arrow-right"></i></div>
-                        <div class="ai-flow-step success">Verified</div>
-                    </div>
                 </div>
             </div>
 
             <div class="flow-step">
                 <div class="flow-num" style="background:rgba(52,152,219,0.12); color:var(--primary);">5</div>
                 <div>
+                    <h4 style="color:white; margin-bottom:6px;">AI Advisory — Chain-Aware False Positive Elimination</h4>
+                    <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0;">
+                        Top findings (including chain context) are sent to Gemini 2.5 Flash for verification. If daily quota is exhausted, Groq (Llama 3.3 70B) takes over automatically. <strong>Optional local LLM mode</strong> for air‑gapped environments.
+                    </p>
+                    <div class="ai-flow" style="justify-content:flex-start; margin-top:12px;">
+                        <div class="ai-flow-step">Chain+Findings</div>
+                        <div class="ai-flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="ai-flow-step primary"><i class="fas fa-robot"></i> Gemini 2.5</div>
+                        <div class="ai-flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="ai-flow-step fallback"><i class="fas fa-random"></i> Groq Fallback</div>
+                        <div class="ai-flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="ai-flow-step success">Chain‑Aware Verdict</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <div class="flow-num" style="background:rgba(52,152,219,0.12); color:var(--primary);">6</div>
+                <div>
                     <h4 style="color:white; margin-bottom:6px;">Reports — PDF + HTML + JSON</h4>
                     <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0 0 10px;">
-                        <strong style="color:white;">PDF Executive Summary</strong> — 7-page audit-ready document for SOC 2 readiness and cyber insurance underwriting (Marsh, Aon, At-Bay, Coalition). Includes evidence appendix with source-level code context for every CRITICAL/HIGH finding, remediation roadmap, and attestation block with signature lines.
+                        <strong style="color:white;">PDF Executive Summary</strong> — 7-page audit-ready document for SOC 2 readiness and cyber insurance underwriting. Includes <strong>Attack Path Analysis</strong> section (chain visualization), evidence appendix with source-level code context for every CRITICAL/HIGH finding, remediation roadmap, and attestation block.
                     </p>
                     <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0 0 10px;">
-                        <strong style="color:white;">Interactive HTML Report</strong> — Enterprise posture dashboard with SOC 2 / CIS / ISO 27001 control tags, AI analysis badges (<code>AI VERIFIED</code> / <code>AI FALSE POSITIVE</code>), and reachability breakdown.
+                        <strong style="color:white;">Interactive HTML Report</strong> — Enterprise posture dashboard with SOC 2 / CIS / ISO 27001 control tags, AI analysis badges, collapsible chain cards, and reachability breakdown.
                     </p>
                     <p style="color:var(--gray); font-size:0.95rem; line-height:1.6; margin:0;">
-                        <strong style="color:white;">Machine-readable JSON</strong> — CI/CD gating with <code>instance_count</code>, <code>instance_lines</code>, <code>compliance_mapping</code> per finding and <code>framework_summary</code> block for direct SIEM integration.
+                        <strong style="color:white;">Machine-readable JSON</strong> — CI/CD gating with <code>instance_count</code>, <code>chain</code> block per finding (<code>chain_id</code>, <code>chain_risk</code>, <code>original_severity</code>, <code>partner_finding_id</code>), and <code>attack_paths</code> root object aggregating all chains.
                     </p>
                 </div>
             </div>
@@ -361,14 +400,14 @@
     </div>
 </section>
 
-<!-- ══════════════════════════════════════ DETECTORS -->
+<!-- ══════════════════════════════════════ DETECTORS (unchanged, but can add chain note) -->
 <section class="section" style="padding: 100px 0; background: var(--dark);">
     <div class="container">
         <h2 style="text-align:center; margin-bottom:20px; font-size:2.6rem;">
             11 <span class="text-gradient">Detection Engines</span>
         </h2>
         <p style="text-align:center; color:var(--gray); margin-bottom:60px; max-width:700px; margin-left:auto; margin-right:auto;">
-            Each detector contributes trust-weighted findings to the unified WSPM v2.2 score.
+            Each detector contributes trust-weighted findings to the unified WSPM v2.2 score. Chain Analysis correlates findings across detectors.
         </p>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
@@ -498,14 +537,15 @@
     </div>
 </section>
 
-<!-- ══════════════════════════════════════ SPI TABLE -->
+<!-- ══════════════════════════════════════ SPI TABLE (updated with chain note) -->
 <section class="section" style="padding: 100px 0; background: rgba(15,23,42,0.7);">
     <div class="container">
         <h2 style="text-align:center; margin-bottom:20px; font-size:2.6rem;">
             Security Posture Index <span class="text-gradient">(SPI)</span>
         </h2>
         <p style="text-align:center; color:var(--gray); margin-bottom:60px; max-width:700px; margin-left:auto; margin-right:auto;">
-            A calibrated score 0–100 computed by WSPM v2.2 — context-weighted, detector-trusted, noise-normalized.
+            A calibrated score 0–100 computed by WSPM v2.2 — context-weighted, detector-trusted, noise-normalized.<br>
+            Chain‑escalated findings contribute with their escalated severity, providing a more accurate risk picture.
         </p>
 
         <div style="max-width:800px; margin:0 auto;">
@@ -558,6 +598,7 @@
                     <strong style="color:white;">detector trust</strong>,
                     <strong style="color:white;">reachability</strong>, and
                     <strong style="color:white;">cross-detector consensus</strong> are all factored in.
+                    <strong>Chain escalation</strong> updates the severity of participating findings before SPI calculation.
                     K scales dynamically with project size to prevent noise amplification in large codebases.
                 </p>
                 <p style="color:var(--gray); font-size:0.9rem; line-height:1.7; margin:0;">
@@ -571,9 +612,9 @@
                     <i class="fas fa-sliders-h" style="color:#f59e0b; font-size:1.1rem;"></i>
                 </div>
                 <div>
-                    <h4 style="color:#f59e0b; margin:0 0 8px;">Gate Override (v2.2)</h4>
+                    <h4 style="color:#f59e0b; margin:0 0 8px;">Gate Override (v2.2.1)</h4>
                     <p style="color:var(--gray); font-size:0.9rem; line-height:1.7; margin:0;">
-                        If CRITICAL findings exist in production code, the effective grade is capped at <strong style="color:#fbbf24;">C</strong> — regardless of the mathematical SPI score. This resolves the cognitive dissonance of a high SPI alongside a FAIL decision for CISO and underwriter audiences.
+                        If CRITICAL findings exist in production code (including chain‑escalated CRITICAL), the effective grade is capped at <strong style="color:#fbbf24;">C</strong> — regardless of the mathematical SPI score. This resolves the cognitive dissonance of a high SPI alongside a FAIL decision for CISO and underwriter audiences.
                     </p>
                 </div>
             </div>
@@ -581,7 +622,7 @@
     </div>
 </section>
 
-<!-- ══════════════════════════════════════ COMPLIANCE -->
+<!-- ══════════════════════════════════════ COMPLIANCE (unchanged) -->
 <section class="section" style="padding: 100px 0; background: var(--dark);">
     <div class="container">
         <h2 style="text-align:center; margin-bottom:20px; font-size:2.6rem;">
@@ -651,8 +692,9 @@
             </div>
         </div>
     </div>
+</section>
 
-<!-- ══════════════════════════════════════ LICENSING -->
+<!-- ══════════════════════════════════════ LICENSING (unchanged) -->
 <section class="section" style="padding: 100px 0; background: var(--dark);">
     <div class="container">
         <h2 style="text-align:center; margin-bottom:20px; font-size:2.6rem;">
@@ -717,7 +759,7 @@
     </div>
 </section>
 
-<!-- ══════════════════════════════════════ FAQ -->
+<!-- ══════════════════════════════════════ FAQ (updated with chain) -->
 <section class="section" style="padding: 100px 0; background: rgba(15,23,42,0.7);">
     <div class="container">
         <h2 style="text-align:center; margin-bottom:60px; font-size:2.6rem;">
@@ -727,12 +769,17 @@
 
             <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:28px;">
                 <h4 style="color:white; margin-bottom:10px;"><i class="fas fa-question-circle" style="color:var(--primary);"></i> Does Auditor Core send data anywhere?</h4>
-                <p style="color:var(--gray); line-height:1.7; margin:0;">No. The engine operates fully offline. Data is stored only in the local PostgreSQL instance. The only outbound connection is to the Gemini or Groq API if AI advisory is enabled and explicitly configured by you.</p>
+                <p style="color:var(--gray); line-height:1.7; margin:0;">No. The engine operates fully offline. Data is stored only in the local PostgreSQL instance. The only outbound connection is to the Gemini or Groq API if AI advisory is enabled and explicitly configured by you. Local LLM mode requires no outbound calls.</p>
             </div>
 
             <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:28px;">
-                <h4 style="color:white; margin-bottom:10px;"><i class="fas fa-question-circle" style="color:var(--primary);"></i> What happens if Gemini API quota is exhausted?</h4>
-                <p style="color:var(--gray); line-height:1.7; margin:0;">Groq (Llama 3.3 70B Versatile) automatically takes over for remaining chunks — no manual intervention needed. If both are unavailable, all deterministic findings, SPI scoring, and reports are produced without interruption.</p>
+                <h4 style="color:white; margin-bottom:10px;"><i class="fas fa-question-circle" style="color:var(--primary);"></i> What is Chain Analysis?</h4>
+                <p style="color:var(--gray); line-height:1.7; margin:0;">Chain Analysis correlates findings that together form a complete attack path (e.g., hardcoded secret + command injection). When a chain is detected, all participating findings are escalated to the chain's resulting risk level (typically CRITICAL). This prevents underreporting of correlated risks. Chains are visualized in all report formats and included in the JSON output.</p>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:28px;">
+                <h4 style="color:white; margin-bottom:10px;"><i class="fas fa-question-circle" style="color:var(--primary);"></i> What if Gemini API quota is exhausted?</h4>
+                <p style="color:var(--gray); line-height:1.7; margin:0;">Groq (Llama 3.3 70B Versatile) automatically takes over for remaining chunks — no manual intervention needed. If both are unavailable, all deterministic findings, chain analysis, SPI scoring, and reports are produced without interruption.</p>
             </div>
 
             <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:28px;">
@@ -747,17 +794,22 @@
 
             <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:28px;">
                 <h4 style="color:white; margin-bottom:10px;"><i class="fas fa-question-circle" style="color:var(--primary);"></i> Can I integrate JSON output into my SIEM?</h4>
-                <p style="color:var(--gray); line-height:1.7; margin:0;">Yes. The JSON report is machine-readable and designed for downstream integration with SIEM platforms, dashboards, and CI/CD quality gates.</p>
+                <p style="color:var(--gray); line-height:1.7; margin:0;">Yes. The JSON report is machine-readable and designed for downstream integration with SIEM platforms, dashboards, and CI/CD quality gates. Each finding includes a <code>chain</code> block where applicable, and the root contains an <code>attack_paths</code> array aggregating all chains.</p>
             </div>
 
             <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(52,152,219,0.15); border-radius:14px; padding:28px;">
                 <h4 style="color:white; margin-bottom:10px;"><i class="fas fa-question-circle" style="color:var(--primary);"></i> Can the PDF report be used for SOC 2 readiness?</h4>
-                <p style="color:var(--gray); line-height:1.7; margin:0;">Yes — as supporting evidence for pre-assessment and gap analysis. The report includes SOC 2 TSC control mappings, an evidence appendix with source-level code context for every CRITICAL/HIGH finding, and a remediation roadmap. It does not constitute a formal audit opinion. For SOC 2 Type I/II certification, engage a licensed CPA firm.</p>
+                <p style="color:var(--gray); line-height:1.7; margin:0;">Yes — as supporting evidence for pre-assessment and gap analysis. The report includes SOC 2 TSC control mappings, an evidence appendix with source-level code context for every CRITICAL/HIGH finding, an attack path analysis section (chains), and a remediation roadmap. It does not constitute a formal audit opinion. For SOC 2 Type I/II certification, engage a licensed CPA firm.</p>
             </div>
 
             <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(52,152,219,0.15); border-radius:14px; padding:28px;">
                 <h4 style="color:white; margin-bottom:10px;"><i class="fas fa-question-circle" style="color:var(--primary);"></i> Can the PDF report be submitted to cyber insurance underwriters?</h4>
                 <p style="color:var(--gray); line-height:1.7; margin:0;">Yes. The report format is designed to align with underwriting pre-assessment requirements from Marsh, Aon, At-Bay, and Coalition. The <code>framework_summary</code> block in JSON aggregates which controls are triggered across all findings — ready for direct submission.</p>
+            </div>
+
+            <div style="background:rgba(26,28,32,0.8); border:1px solid rgba(168,85,247,0.15); border-radius:14px; padding:28px;">
+                <h4 style="color:white; margin-bottom:10px;"><i class="fas fa-question-circle" style="color:#c084fc;"></i> How does local LLM mode work?</h4>
+                <p style="color:var(--gray); line-height:1.7; margin:0;">Set <code>ai.mode: "local"</code> in <code>audit-config.yml</code> and provide a model path (e.g., <code>/models/your-model.gguf</code>). Auditor Core will run AI validation entirely on your machine — no outbound calls, no data leaving your environment. Ideal for air‑gapped or high‑sensitivity deployments.</p>
             </div>
 
         </div>
@@ -802,8 +854,8 @@
             <div>
                 <h4 style="margin-bottom:20px;">Our Ecosystem</h4>
                 <div style="display:flex; flex-direction:column; gap:10px;">
-                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.2</a>
-                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.2</a>
+                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.2.1</a>
+                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.2.1</a>
                     <a href="compare.html"      style="color:var(--gray); text-decoration:none;"><i class="fas fa-layer-group"></i> Compare</a>
                 </div>
             </div>
