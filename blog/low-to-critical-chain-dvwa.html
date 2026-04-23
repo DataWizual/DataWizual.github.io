@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>From LOW to CRITICAL: How a 5-Step Vulnerability Chain Goes Undetected by Flat Scanners | DataWizual Security Blog</title>
+    <meta name="description" content="Real DVWA scan: a LOW severity API key leads to CRITICAL command injection and data exfiltration. Flat scanners miss chains. Deterministic chain analysis finds them.">
+    <meta name="author" content="Eldor Zufarov">
+
+    <link rel="canonical" href="https://datawizual.github.io/blog/low-to-critical-chain-dvwa.html">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="From LOW to CRITICAL: How a 5-Step Vulnerability Chain Goes Undetected by Flat Scanners">
+    <meta property="og:description" content="A real walkthrough of CHAIN_0003 from DVWA: hardcoded token → eval injection → shell_exec → curl exfiltration. Why chain analysis changes the game.">
+    <meta property="og:url" content="https://datawizual.github.io/blog/low-to-critical-chain-dvwa.html">
+    <meta property="og:site_name" content="DataWizual Security">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="From LOW to CRITICAL: Vulnerability Chain">
+    <meta name="twitter:description" content="Flat scanners miss chains. Deterministic chain analysis finds them. DVWA case study inside.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "From LOW to CRITICAL: How a 5-Step Vulnerability Chain Goes Undetected by Flat Scanners",
+      "author": { "@type": "Person", "name": "Eldor Zufarov" },
+      "publisher": { "@type": "Organization", "name": "DataWizual Security", "url": "https://datawizual.github.io/" },
+      "datePublished": "2026-04-23",
+      "dateModified": "2026-04-23",
+      "url": "https://datawizual.github.io/blog/low-to-critical-chain-dvwa.html"
+    }
+    </script>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="security" href="https://datawizual.github.io/.well-known/security.txt">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        /* Полный набор стилей (идентичен предыдущим шаблонам) */
+        @keyframes horizontal-scan { 0% { width: 0; left: 0; opacity: 0; } 50% { width: 100%; opacity: 0.7; } 100% { width: 0; left: 100%; opacity: 0; } }
+        .scan-line { position: absolute; height: 2px; background: linear-gradient(90deg, transparent, #3498db, transparent); animation: horizontal-scan 2s infinite linear; top: 0; left: 0; right: 0; }
+        .post-hero { padding: 120px 0 64px; background: linear-gradient(135deg, var(--dark) 0%, #1a1c20 100%); position: relative; overflow: hidden; }
+        .post-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #64748b; margin-bottom: 28px; }
+        .post-breadcrumb a { color: #64748b; text-decoration: none; transition: color 0.2s; }
+        .post-breadcrumb a:hover { color: var(--primary); }
+        .post-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .post-tag { background: rgba(52,152,219,0.1); border: 1px solid rgba(52,152,219,0.25); color: var(--primary); font-size: 0.73rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.05em; text-transform: uppercase; }
+        .post-tag.green  { background: rgba(74,222,128,0.1); border-color: rgba(74,222,128,0.25); color: #4ade80; }
+        .post-tag.purple { background: rgba(168,85,247,0.1); border-color: rgba(168,85,247,0.25); color: #c084fc; }
+        .post-tag.orange { background: rgba(251,146,60,0.1); border-color: rgba(251,146,60,0.25); color: #fb923c; }
+        .post-title { font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.25; color: white; margin-bottom: 24px; max-width: 860px; }
+        .post-meta-bar { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.07); }
+        .post-author { display: flex; align-items: center; gap: 10px; }
+        .author-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #4ade80); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: white; flex-shrink: 0; }
+        .author-info { display: flex; flex-direction: column; }
+        .author-name { color: white; font-weight: 600; font-size: 0.9rem; }
+        .author-role { color: #64748b; font-size: 0.78rem; }
+        .post-date-read { display: flex; align-items: center; gap: 16px; color: #64748b; font-size: 0.82rem; }
+        .post-layout { display: grid; grid-template-columns: 1fr 280px; gap: 60px; align-items: start; padding: 72px 0 120px; }
+        @media (max-width: 900px) { .post-layout { grid-template-columns: 1fr; } .post-sidebar { order: -1; } }
+        .post-content { color: #cbd5e1; font-size: 1.05rem; line-height: 1.8; }
+        .post-content h2 { color: white; font-size: 1.75rem; font-weight: 700; margin: 56px 0 20px; padding-bottom: 12px; border-bottom: 1px solid rgba(52,152,219,0.2); line-height: 1.3; }
+        .post-content h3 { color: #e2e8f0; font-size: 1.25rem; font-weight: 700; margin: 40px 0 16px; line-height: 1.35; }
+        .post-content p { margin-bottom: 20px; }
+        .post-content a { color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
+        .post-content ul, .post-content ol { padding-left: 24px; margin-bottom: 20px; }
+        .post-content li { margin-bottom: 8px; }
+        .post-content pre { background: rgba(15,23,42,0.95); border: 1px solid rgba(52,152,219,0.2); border-left: 3px solid var(--primary); border-radius: 10px; padding: 24px 28px; overflow-x: auto; margin: 28px 0; font-size: 0.88rem; line-height: 1.65; }
+        .post-content code { font-family: 'Courier New', Courier, monospace; color: #7dd3fc; }
+        .post-content p code, .post-content li code { background: rgba(52,152,219,0.1); border: 1px solid rgba(52,152,219,0.2); color: #7dd3fc; padding: 2px 7px; border-radius: 5px; font-size: 0.88em; }
+        .post-content blockquote { margin: 32px 0; padding: 24px 28px; background: rgba(52,152,219,0.06); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; color: #94a3b8; font-style: italic; font-size: 1.05rem; line-height: 1.7; }
+        .post-content blockquote strong { color: var(--primary); font-style: normal; }
+        .post-content table { width: 100%; border-collapse: collapse; margin: 32px 0; font-size: 0.9rem; }
+        .post-content th { background: rgba(52,152,219,0.1); color: var(--primary); font-weight: 700; padding: 12px 16px; text-align: left; border: 1px solid rgba(52,152,219,0.2); font-size: 0.82rem; letter-spacing: 0.04em; text-transform: uppercase; }
+        .post-content td { padding: 12px 16px; border: 1px solid rgba(255,255,255,0.06); color: #cbd5e1; vertical-align: top; }
+        .post-content tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+        .callout { background: rgba(52,152,219,0.08); border: 1px solid rgba(52,152,219,0.25); border-radius: 12px; padding: 24px 28px; margin: 32px 0; }
+        .callout-label { display: flex; align-items: center; gap: 8px; color: var(--primary); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+        .callout p { color: #94a3b8; font-size: 0.95rem; margin: 0; line-height: 1.65; }
+        .callout.warning { background: rgba(251,146,60,0.07); border-color: rgba(251,146,60,0.25); }
+        .callout.warning .callout-label { color: #fb923c; }
+        .callout.success { background: rgba(74,222,128,0.07); border-color: rgba(74,222,128,0.25); }
+        .callout.success .callout-label { color: #4ade80; }
+        .post-sidebar { position: sticky; top: 90px; }
+        .sidebar-widget { background: rgba(26,28,32,0.9); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 24px; margin-bottom: 24px; }
+        .sidebar-widget h5 { color: white; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+        .toc-link { display: block; color: #64748b; font-size: 0.85rem; text-decoration: none; padding: 6px 0; border-left: 2px solid transparent; padding-left: 12px; transition: all 0.2s; line-height: 1.4; }
+        .toc-link:hover, .toc-link.active { color: var(--primary); border-left-color: var(--primary); }
+        .share-link { display: flex; align-items: center; gap: 10px; color: var(--gray); font-size: 0.85rem; text-decoration: none; padding: 8px 0; transition: color 0.2s; }
+        .share-link:hover { color: var(--primary); }
+        .share-link i { width: 16px; }
+        .post-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 80px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.07); }
+        .post-nav-item { background: rgba(26,28,32,0.8); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 20px; text-decoration: none; transition: all 0.2s; }
+        .post-nav-item:hover { border-color: var(--primary); }
+        .post-nav-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .post-nav-title { color: white; font-size: 0.9rem; line-height: 1.4; }
+        @media (max-width: 640px) { .post-nav { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="container">
+        <div class="logo"><i class="fas fa-shield-alt"></i> DataWizual Security</div>
+        <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <div class="dropdown">
+                <a href="#" class="dropdown-trigger">Products <i class="fas fa-chevron-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="../auditor-core.html"><i class="fas fa-search"></i> Auditor Core</a>
+                    <a href="../sentinel.html"><i class="fas fa-shield-alt"></i> Sentinel</a>
+                    <a href="../compare.html"><i class="fas fa-layer-group"></i> Compare Engines</a>
+                </div>
+            </div>
+            <a href="../audit.html">Audit Service</a>
+            <div class="dropdown">
+                <a href="#" class="dropdown-trigger">Resources <i class="fas fa-chevron-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="../methodology.html">Methodology</a>
+                    <a href="../sample-report.html">Demo Report</a>
+                    <a href="../security-policy.html">Security Policy</a>
+                    <a href="../blog.html" class="nav-btn">Blog</a>
+                </div>
+            </div>
+            <a href="../get.html" class="nav-btn">Get Access</a>
+            <a href="../terms.html" class="nav-btn">Terms</a>
+        </div>
+    </div>
+</nav>
+
+<section class="post-hero">
+    <div class="scan-line"></div>
+    <div class="container" style="position: relative; z-index: 2; max-width: 1100px;">
+        <nav class="post-breadcrumb">
+            <a href="../index.html"><i class="fas fa-home"></i></a>
+            <i class="fas fa-chevron-right" style="font-size:0.65rem;"></i>
+            <a href="../blog.html">Blog</a>
+            <i class="fas fa-chevron-right" style="font-size:0.65rem;"></i>
+            <span>LOW to CRITICAL Chain</span>
+        </nav>
+        <div class="post-tags">
+            <span class="post-tag">Chain Analysis</span>
+            <span class="post-tag green">DVWA</span>
+            <span class="post-tag purple">AI Validation</span>
+            <span class="post-tag orange">SPI</span>
+        </div>
+        <h1 class="post-title">From LOW to CRITICAL: How a 5-Step Vulnerability Chain Goes Undetected by Flat Scanners</h1>
+        <div class="post-meta-bar">
+            <div class="post-author">
+                <div class="author-avatar">EZ</div>
+                <div class="author-info">
+                    <span class="author-name">Eldor Zufarov</span>
+                    <span class="author-role">Founder, DataWizual Security</span>
+                </div>
+            </div>
+            <div class="post-date-read">
+                <span><i class="fas fa-calendar-alt" style="margin-right:6px;"></i> April 23, 2026</span>
+                <span><i class="fas fa-clock" style="margin-right:6px;"></i> 7 min read</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section style="background: rgba(15, 23, 42, 0.9);">
+    <div class="container" style="max-width: 1100px;">
+        <div class="post-layout">
+            <article class="post-content" id="article-content"></article>
+            <aside class="post-sidebar">
+                <div class="sidebar-widget">
+                    <h5><i class="fas fa-list" style="margin-right:8px;color:var(--primary);"></i>Contents</h5>
+                    <a href="#setup" class="toc-link">The Setup</a>
+                    <a href="#flat-scanner" class="toc-link">What a Flat Scanner Sees</a>
+                    <a href="#chain-analysis" class="toc-link">What Chain Analysis Sees</a>
+                    <a href="#ai-validation" class="toc-link">How the AI Validation Worked</a>
+                    <a href="#enforcement" class="toc-link">The Enforcement Decision</a>
+                    <a href="#mythos-era" class="toc-link">Why This Matters in the Mythos Era</a>
+                    <a href="#takeaways" class="toc-link">Key Takeaways</a>
+                </div>
+                <div class="sidebar-widget">
+                    <h5><i class="fas fa-share-alt" style="margin-right:8px;color:var(--primary);"></i>Share</h5>
+                    <a href="#" class="share-link" onclick="navigator.clipboard.writeText(window.location.href); return false;"><i class="fas fa-link"></i> Copy link</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://datawizual.github.io/blog/low-to-critical-chain-dvwa.html" target="_blank" class="share-link"><i class="fab fa-linkedin"></i> Share on LinkedIn</a>
+                    <a href="https://twitter.com/intent/tweet?url=https://datawizual.github.io/blog/low-to-critical-chain-dvwa.html&text=From%20LOW%20to%20CRITICAL%20Vulnerability%20Chain" target="_blank" class="share-link"><i class="fab fa-twitter"></i> Post on X</a>
+                </div>
+                <div class="sidebar-widget" style="background: rgba(52,152,219,0.07); border-color: rgba(52,152,219,0.2);">
+                    <h5 style="color:var(--primary);">Try Auditor Core</h5>
+                    <p style="color:#64748b; font-size:0.82rem; line-height:1.55; margin-bottom:16px;">Deterministic chain analysis for modern DevSecOps.</p>
+                    <a href="../get.html" class="btn btn-primary" style="display:block; text-align:center; padding: 10px 16px; font-size:0.85rem;"><i class="fas fa-key"></i> Get License</a>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; padding-bottom: 60px;">
+            <div style="flex: 1; min-width: 250px;">
+                <h4 style="margin-bottom: 20px;">DataWizual Security</h4>
+                <p style="color: var(--gray);">Developing territories of confidence through rigorous engineering.</p>
+                <p style="margin-top: 20px; color: var(--primary); font-weight: bold;"><i class="fas fa-envelope"></i> <a href="mailto:eldorzufarov66@gmail.com" style="color: var(--primary); text-decoration: none;">eldorzufarov66@gmail.com</a></p>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 20px;">Our Ecosystem</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <a href="../auditor-core.html" style="color: var(--gray); text-decoration: none;"><i class="fas fa-search"></i> Auditor Core v2.2</a>
+                    <a href="../sentinel.html" style="color: var(--gray); text-decoration: none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.2</a>
+                    <a href="../compare.html" style="color: var(--gray); text-decoration: none;"><i class="fas fa-layer-group"></i> Compare</a>
+                </div>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 20px;">Resources</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <a href="../methodology.html" style="color: var(--gray); text-decoration: none;">Methodology</a>
+                    <a href="../sample-report.html" style="color: var(--gray); text-decoration: none;">Demo Report</a>
+                    <a href="../security-policy.html" style="color: var(--gray); text-decoration: none;">Security Policy</a>
+                    <a href="../blog.html" style="color: var(--primary); text-decoration: none; font-weight: 600;"><i class="fas fa-pen-nib"></i> Blog</a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; color: #444; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px;">&copy; 2026 DataWizual Security. All rights reserved.</div>
+    </div>
+</footer>
+
+<script src="../js/script.js"></script>
+<script>
+    const markdown = `# From LOW to CRITICAL: How a 5-Step Vulnerability Chain Goes Undetected by Flat Scanners
+
+*A real scan walkthrough using DVWA*
+
+---
+
+## The Setup
+
+Most security scanners give you a list sorted by CVSS. A \`CRITICAL\` at the top, some \`HIGH\` findings below, and a long tail of \`LOW\` and \`MEDIUM\` that nobody ever fixes. Teams triage by severity, patch the top items, and move on.
+
+This approach has a blind spot. It misses chains.
+
+Here is a real example from a scan of DVWA (Damn Vulnerable Web Application) — a deliberately vulnerable PHP application used for security training. The scan was run with deterministic static analysis plus AI validation. What it found was not just a list of findings. It found a complete 5-step attack path.
+
+---
+
+## What a Flat Scanner Sees
+
+A standard SAST tool scanning DVWA would report something like this:
+
+- \`generic-api-key\` in \`csrf/help/help.php:54\` — **LOW**
+- \`SAST_COMMAND_INJECTION\` in \`view_help.php:20\` — **HIGH**
+- \`SAST_COMMAND_INJECTION\` in \`exec/source/high.php:26\` — **HIGH**
+- \`SAST_COMMAND_INJECTION\` in \`cryptography/oracle_attack.php:57\` — **HIGH**
+
+A team looking at this list would prioritize the \`HIGH\` command injections. The \`LOW\` API key finding would go to the backlog. Nobody would notice the connection between them.
+
+---
+
+## What Chain Analysis Sees
+
+The ChainAnalyzer correlated these findings into a single attack path — **CHAIN_0003**, rule: \`secret_to_command_injection\`:
+
+\`\`\`
+csrf/help/help.php:54
+  → hardcoded user-token: 026d0caed93471b507ed460ebddbd096
+           ↓
+view_help.php:20
+  → eval('?>' . file_get_contents("vulnerabilities/{$id}/help/help.php"))
+           ↓
+view_help.php:22
+  → eval('?>' . file_get_contents("vulnerabilities/{$id}/help/help.{$locale}.php"))
+           ↓
+exec/source/high.php:26
+  → shell_exec('ping ' . $target)
+           ↓
+cryptography/oracle_attack.php:57
+  → curl_exec($ch)   ← exfiltration endpoint
+\`\`\`
+
+This is not five separate findings. This is one complete attack path: token capture → code execution → shell access → data exfiltration.
+
+The \`LOW\` finding at step 1 is not low risk. It is the trigger for a \`CRITICAL\` chain. Every finding in the chain was escalated to \`CRITICAL\` — not because the individual severity changed, but because the path connecting them is exploitable end-to-end.
+
+---
+
+## How the AI Validation Worked
+
+The AI (Gemini 2.5 Flash) did not generate these findings. It validated chains already discovered by the deterministic layer.
+
+For the \`curl_exec\` finding at step 5, the AI verdict was:
+
+> *"The provided code is part of a vulnerability chain (CHAIN_0003) with a critical risk. The \`curl_exec\` function is used to execute a curl request, and the \`$url\` variable is not sanitized. The bridge logic is that the output of the first finding becomes the controlled input for subsequent steps."*
+
+This is chain-aware reasoning — the AI evaluated the finding in the context of the full path, not in isolation. The result: **SUPPORTED** verdict for every confirmed step in the chain.
+
+The AI also correctly dismissed two false positives — obfuscated JavaScript files that triggered SAST rules but contained no actual command injection. Those findings were marked \`AI DISMISSED — MANUAL REVIEW ADVISED\` and excluded from the enforcement decision.
+
+---
+
+## The Enforcement Decision
+
+The scan produced a Security Posture Index (SPI) of 65.79 — grade C, status: **REQUIRES REMEDIATION**.
+
+But the gate decision was not driven by the SPI. It was driven by the chain. When CRITICAL findings exist in production code, the gate overrides the mathematical score. The effective grade is capped at C regardless of the SPI value.
+
+This resolves a common problem: a team sees SPI 87 and assumes the codebase is in good shape. But if that SPI sits alongside an undetected CRITICAL chain, the score is misleading. The gate override makes the enforcement decision honest.
+
+---
+
+## Why This Matters in the Mythos Era
+
+The CSA/SANS document on Mythos-ready security programs describes exactly this class of vulnerability:
+
+> *"Mythos identifies vulnerabilities composed of multiple primitives chained together, such as scenarios requiring multiple memory corruption bugs combined into a single exploit path."*
+
+AI attackers see graphs. They chain findings into exploit paths automatically. Traditional defenders see lists.
+
+The gap closes when the defensive layer builds the same graph — deterministically, before any AI touches the enforcement decision.
+
+DVWA is a training application. But the chain pattern it demonstrates — credential exposure feeding into execution, feeding into exfiltration — appears in production codebases. The difference is that in production, the individual findings are spread across more files, more modules, more developers. That makes them harder to correlate manually. It makes graph analysis more valuable, not less.
+
+---
+
+## Key Takeaways
+
+- A \`LOW\` finding at the start of a chain is not low risk. Its risk is determined by where the chain leads.
+- AI validation is most accurate when it evaluates the full chain context, not individual findings in isolation.
+- False positive filtering matters: the two \`AI DISMISSED\` findings in this scan would have created noise without chain-aware AI validation.
+- The enforcement gate should be driven by chain risk, not raw CVSS scores.
+
+---
+
+*Auditor Core v2.2.1 — [datawizual.github.io](https://datawizual.github.io)*
+
+*Documentation on GitHub — [DataWizual Auditor Core technical overview](https://github.com/DataWizual/auditor-core-technical-overview.git)*`;
+
+    document.getElementById('article-content').innerHTML = marked.parse(markdown);
+
+    // TOC highlight
+    const headings = document.querySelectorAll('#article-content h2, #article-content h3');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                tocLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+                });
+            }
+        });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    headings.forEach(h => {
+        if (!h.id) h.id = h.innerText.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        observer.observe(h);
+    });
+</script>
+</body>
+</html>
