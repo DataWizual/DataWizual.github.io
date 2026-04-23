@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo Reports | Auditor Core v2.2 | DataWizual Security</title>
-    <meta name="description" content="Real Auditor Core v2.2 output — PDF Executive Summary, Interactive HTML Posture Report, and JSON findings. Scanned project: Django.">
+    <title>Demo Reports | Auditor Core v2.2.1 | DataWizual Security</title>
+    <meta name="description" content="Real Auditor Core v2.2.1 output — PDF Executive Summary, Interactive HTML Posture Report, and JSON findings. Chain Analysis · Attack Path Detection. Scanned project: Django.">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="security" href="https://datawizual.github.io/.well-known/security.txt">
@@ -211,9 +211,9 @@
     <div class="scan-line"></div>
     <div class="container" style="position:relative; z-index:2;">
         <div style="display:inline-block; background:rgba(52,152,219,0.1); border:1px solid rgba(52,152,219,0.3); color:var(--primary); font-size:0.75rem; font-weight:700; padding:4px 14px; border-radius:20px; letter-spacing:1px; margin-bottom:20px;">LIVE OUTPUT</div>
-        <h1 style="font-size:3rem; margin-bottom:16px;">Real <span class="text-gradient">Auditor Core v2.2</span> Output</h1>
+        <h1 style="font-size:3rem; margin-bottom:16px;">Real <span class="text-gradient">Auditor Core v2.2.1</span> Output</h1>
         <p style="color:var(--gray); font-size:1.1rem; max-width:680px; margin:0 auto 30px; line-height:1.7;">
-            Three output formats from a single scan of the <strong style="color:white;">Django</strong> open-source project — 1,329 findings, 11 detectors, AI false-positive filter applied.
+            Three output formats from a single scan of the <strong style="color:white;">Django</strong> open-source project — 1,329 findings, 11 detectors, Chain Analysis &amp; AI false-positive filter applied.
         </p>
         <div class="stats-row">
             <div class="stat-pill"><div class="stat-pill-val" style="color:#f87171;">19</div><div class="stat-pill-lbl">CRITICAL</div></div>
@@ -223,6 +223,7 @@
             <div class="stat-pill"><div class="stat-pill-val" style="color:#94a3b8;">38.25</div><div class="stat-pill-lbl">SPI Score</div></div>
             <div class="stat-pill"><div class="stat-pill-val" style="color:#c084fc;">7</div><div class="stat-pill-lbl">AI Excluded</div></div>
             <div class="stat-pill"><div class="stat-pill-val" style="color:var(--primary);">92.5%</div><div class="stat-pill-lbl">Core/Prod</div></div>
+            <div class="stat-pill"><div class="stat-pill-val" style="color:#f59e0b;">🔗</div><div class="stat-pill-lbl">Chain Analysis</div></div>
         </div>
     </div>
 </header>
@@ -456,7 +457,7 @@
         <div style="text-align:center; margin-bottom:50px;">
             <div style="display:inline-block; background:rgba(52,152,219,0.1); border:1px solid rgba(52,152,219,0.3); color:var(--primary); font-size:0.75rem; font-weight:700; padding:4px 14px; border-radius:20px; letter-spacing:1px; margin-bottom:16px;">REPORT GUIDE</div>
             <h2 style="font-size:2.4rem; margin-bottom:14px;">How to <span class="text-gradient">Read This Report</span></h2>
-            <p style="color:var(--gray); max-width:640px; margin:0 auto; font-size:1rem; line-height:1.7;">Every metric in the Auditor Core report belongs to one of three independent layers: <strong style="color:white;">Technical Findings</strong>, <strong style="color:white;">Risk Modeling (WSPM v2.2 → SPI)</strong>, and <strong style="color:white;">Compliance Mapping</strong>.</p>
+            <p style="color:var(--gray); max-width:640px; margin:0 auto; font-size:1rem; line-height:1.7;">Every metric in the Auditor Core report belongs to one of three independent layers: <strong style="color:white;">Technical Findings</strong>, <strong style="color:white;">Risk Modeling (WSPM v2.2.1 → SPI)</strong>, and <strong style="color:white;">Compliance Mapping</strong>.</p>
         </div>
 
         <div style="max-width:860px; margin:0 auto; display:flex; flex-direction:column; gap:10px;">
@@ -478,7 +479,7 @@
                     <p><strong>Weighted Exposure</strong> — sum of findings after severity weighting, context modeling (prod vs test), AI verification, and reachability scaling. NOT raw CVSS sum — it is post-processed business exposure.</p>
                     <p><strong>K (Dynamic K-Factor)</strong> — controls sensitivity of the exponential curve. Higher K → score drops slower. Lower K → drops faster. Deterministic given same inputs.</p>
                     <div style="background:rgba(245,158,11,0.07); border:1px solid rgba(245,158,11,0.2); border-radius:8px; padding:12px 16px; margin-top:10px;">
-                        <strong style="color:#f59e0b;">Gate Override (v2.2):</strong> <span style="color:var(--gray);">If CRITICAL findings exist in production code, effective grade is capped at C — regardless of SPI score. Numeric score and policy decision are separate layers.</span>
+                        <strong style="color:#f59e0b;">Gate Override (v2.2.1):</strong> <span style="color:var(--gray);">If CRITICAL findings exist in production code, effective grade is capped at C — regardless of SPI score. Numeric score and policy decision are separate layers.</span>
                     </div>
                 </div>
             </div>
@@ -609,7 +610,7 @@
                         </div>
                         <div style="background:rgba(74,222,128,0.07); border:1px solid rgba(74,222,128,0.2); border-radius:10px; padding:16px;">
                             <h5 style="color:#4ade80; margin:0 0 8px; font-size:0.88rem;">2. Risk Modeling (SPI)</h5>
-                            <p style="color:var(--gray); font-size:0.82rem; margin:0; line-height:1.6;">WSPM v2.2 scoring. Answers: <em>"How exposed is this codebase?"</em></p>
+                            <p style="color:var(--gray); font-size:0.82rem; margin:0; line-height:1.6;">WSPM v2.2.1 scoring. Answers: <em>"How exposed is this codebase?"</em></p>
                         </div>
                         <div style="background:rgba(245,158,11,0.07); border:1px solid rgba(245,158,11,0.2); border-radius:10px; padding:16px;">
                             <h5 style="color:#f59e0b; margin:0 0 8px; font-size:0.88rem;">3. Compliance Mapping</h5>
@@ -656,8 +657,8 @@
             <div>
                 <h4 style="margin-bottom:20px;">Our Ecosystem</h4>
                 <div style="display:flex; flex-direction:column; gap:10px;">
-                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.2</a>
-                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.2</a>
+                    <a href="auditor-core.html" style="color:var(--gray); text-decoration:none;"><i class="fas fa-search"></i> Auditor Core v2.2.1</a>
+                    <a href="sentinel.html"     style="color:var(--gray); text-decoration:none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.2.1</a>
                     <a href="compare.html"      style="color:var(--gray); text-decoration:none;"><i class="fas fa-layer-group"></i> Compare</a>
                 </div>
             </div>
@@ -696,7 +697,7 @@ const PDF_URLS = [
 ];
 const HTML_URLS = [
     "report_django.html — SPI 38.25 · Grade D · Enterprise Security Posture",
-    "report_django.html — WSPM v2.2 Methodology · Context Distribution",
+    "report_django.html — WSPM v2.2.1 Methodology · Context Distribution",
     "report_django.html — CRITICAL Findings · AI Analysis Blocks",
     "report_django.html — Findings Table · SOC 2 / CIS / ISO Compliance Tags",
 ];
