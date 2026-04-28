@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataWizual Security — Pricing & Order</title>
+    <meta name="description" content="Request a one‑time security audit or a self‑hosted license for Auditor Core / Sentinel Core. Bank wire, crypto, or invoice.">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <style>
+        /* Additional styles for pricing page */
+        .pricing-card {
+            background: rgba(26,28,32,0.9);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s;
+            height: 100%;
+        }
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        .pricing-badge {
+            display: inline-block;
+            background: rgba(52,152,219,0.2);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+        .price-request {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 15px 0;
+        }
+        .price-request small {
+            font-size: 0.8rem;
+            color: var(--gray);
+            font-weight: normal;
+        }
+        .contact-form {
+            background: rgba(15,23,42,0.8);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 60px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--gray-light);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(0,0,0,0.6);
+        }
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+        }
+        .btn-submit:hover {
+            background: #2980b9;
+            transform: scale(1.02);
+        }
+        .payment-methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        .payment-method {
+            background: rgba(255,255,255,0.03);
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-size: 0.85rem;
+            color: var(--gray);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .payment-method i {
+            margin-right: 8px;
+            color: var(--primary);
+        }
+        .guarantee-badge {
+            background: rgba(74,222,128,0.1);
+            border-left: 3px solid #4ade80;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+        hr {
+            border-color: rgba(255,255,255,0.05);
+            margin: 40px 0;
+        }
+        .inline-icon {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i> DataWizual Security
+        </div>
+        <button class="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>        
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <div class="dropdown">
+                <a href="#" class="dropdown-trigger">Products <i class="fas fa-chevron-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="auditor-core.html"><i class="fas fa-search"></i> Auditor Core</a>
+                    <a href="sentinel.html"><i class="fas fa-shield-alt"></i> Sentinel</a>
+                    <a href="compare.html"><i class="fas fa-layer-group"></i> Compare Engines</a>
+                </div>
+            </div>
+            <a href="audit.html">Audit Service</a>
+            <div class="dropdown">
+                <a href="#" class="dropdown-trigger">Resources <i class="fas fa-chevron-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="methodology.html">Methodology</a>
+                    <a href="sample-report.html">Demo Report</a>
+                    <a href="security-policy.html">Security Policy</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+            </div>
+            <a href="pricing.html" class="nav-btn active">Pricing</a>
+            <a href="get.html" class="nav-btn">Get Access</a>
+            <a href="terms.html" class="nav-btn">Terms</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero section -->
+<header class="hero" style="min-height: 50vh; display: flex; align-items: center; position: relative; overflow: hidden;">
+    <div class="scan-line"></div>
+    <div class="container" style="position: relative; z-index: 2;">
+        <div style="text-align: center; max-width: 960px; margin: 0 auto;">
+            <div class="hero-shield" style="margin-bottom: 20px;">
+                <i class="fas fa-tag" style="font-size: 4rem; color: var(--primary);"></i>
+            </div>
+            <h1 class="hero-title" style="font-size: 2.8rem;">Clear Pricing. No Calls. <br><span class="text-gradient">Just Results.</span></h1>
+            <p class="hero-subtitle" style="font-size: 1.2rem; max-width: 720px; margin: 0 auto;">
+                Choose a one‑time audit or a self‑hosted annual license. All payments handled via invoice – bank wire, crypto, or partner platforms.
+            </p>
+        </div>
+    </div>
+</header>
+
+<!-- Pricing cards -->
+<section class="section" style="padding: 60px 0;">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px;">
+
+            <!-- One-time Audit -->
+            <div class="pricing-card">
+                <div class="pricing-badge"><i class="fas fa-microscope"></i> One‑time Audit</div>
+                <div class="price-request">Request Quote <small>– from $490</small></div>
+                <p style="color: var(--gray); margin: 20px 0;">We scan your private or public repository. You receive a full PDF+HTML+JSON report within 48 hours, including Chain Analysis and compliance mapping.</p>
+                <ul class="protect-list" style="margin: 25px 0;">
+                    <li><i class="fas fa-check"></i> Full SAST + secrets + IaC + CI/CD analysis</li>
+                    <li><i class="fas fa-link"></i> Attack chain detection (LOW+LOW → CRITICAL)</li>
+                    <li><i class="fas fa-chart-line"></i> Security Posture Index (SPI) & grade</li>
+                    <li><i class="fas fa-certificate"></i> SOC2 / CIS / ISO 27001 mapping</li>
+                    <li><i class="fas fa-file-pdf"></i> PDF evidence appendix with code context</li>
+                </ul>
+                <div class="guarantee-badge" style="margin-top: 20px;">
+                    <i class="fas fa-medal" style="color: #4ade80;"></i> <strong>Risk-free guarantee:</strong> If we don't find at least one attack chain that Semgrep/Bandit/Gitleaks missed, you pay nothing.
+                </div>
+                <div style="margin-top: 30px; text-align: center;">
+                    <a href="#order-form" class="btn btn-primary" style="width: 100%;">Request This Audit →</a>
+                </div>
+            </div>
+
+            <!-- License (Self‑hosted) -->
+            <div class="pricing-card">
+                <div class="pricing-badge"><i class="fas fa-lock"></i> Self‑hosted License</div>
+                <div class="price-request">From $490 / month <small>or $4,900 / year</small></div>
+                <p style="color: var(--gray); margin: 20px 0;">Run Auditor Core or Sentinel Core on your own infrastructure. Hardware‑bound key, no phone‑home, no counters – only a legal agreement and mutual trust.</p>
+                <ul class="protect-list" style="margin: 25px 0;">
+                    <li><i class="fas fa-infinity"></i> Unlimited scans on your machine</li>
+                    <li><i class="fas fa-brain"></i> AI advisory (Gemini + Groq fallback + local LLM)</li>
+                    <li><i class="fas fa-shield-alt"></i> CI/CD gate integration (Sentinel)</li>
+                    <li><i class="fas fa-key"></i> Hardware‑bound, non‑transferable</li>
+                    <li><i class="fas fa-envelope"></i> Email support included</li>
+                </ul>
+                <div class="hardware-lock" style="margin: 20px 0;">
+                    <i class="fas fa-lock"></i>
+                    <span>License key never expires technically – you comply with subscription terms in good faith.</span>
+                </div>
+                <div style="margin-top: 30px; text-align: center;">
+                    <a href="#order-form" class="btn btn-primary" style="width: 100%; background: rgba(74,222,128,0.15); color: #4ade80; border-color: rgba(74,222,128,0.4);">Request License →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment methods note -->
+        <div style="text-align: center; margin-top: 60px;">
+            <div class="payment-methods">
+                <span class="payment-method"><i class="fas fa-university"></i> Bank wire (SWIFT)</span>
+                <span class="payment-method"><i class="fab fa-bitcoin"></i> Cryptocurrency (USDT / USDC)</span>
+                <span class="payment-method"><i class="fas fa-handshake"></i> Pioneer (via partner – upon request)</span>
+                <span class="payment-method"><i class="fas fa-file-invoice"></i> Invoice (NET 15 for annual licenses)</span>
+            </div>
+            <p style="color: #777; font-size: 0.85rem;"><i class="fas fa-globe"></i> We accept USD/EUR via SWIFT to Uzbekistan. All fees clearly stated on invoice. No hidden charges.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Order form -->
+<section id="order-form" class="section" style="padding: 40px 0 80px;">
+    <div class="container">
+        <div class="contact-form">
+            <h2 style="text-align: center; margin-bottom: 10px;">Submit Your Request</h2>
+            <p style="text-align: center; color: var(--gray); margin-bottom: 40px;">Fill in the details – we will reply within 24 hours with an invoice or instructions. No phone calls.</p>
+            
+            <form id="pricingRequestForm" onsubmit="sendEmailRequest(event)">
+                <div class="form-group">
+                    <label for="name">Full name *</label>
+                    <input type="text" id="name" name="name" required placeholder="John Smith">
+                </div>
+                <div class="form-group">
+                    <label for="company">Company / Organization</label>
+                    <input type="text" id="company" name="company" placeholder="Acme Inc.">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email address *</label>
+                    <input type="email" id="email" name="email" required placeholder="john@acme.com">
+                </div>
+                <div class="form-group">
+                    <label for="repo">Repository URL (if audit) or any details</label>
+                    <input type="text" id="repo" name="repo" placeholder="https://github.com/your-org/your-repo">
+                </div>
+                <div class="form-group">
+                    <label for="service">What are you interested in? *</label>
+                    <select id="service" name="service" required>
+                        <option value="">-- Select --</option>
+                        <option value="one-time-audit">One‑time Audit ($490+ quote)</option>
+                        <option value="monthly-license">Monthly License ($490/month)</option>
+                        <option value="yearly-license">Yearly License ($4,900/year)</option>
+                        <option value="both">Both (audit first, then license)</option>
+                        <option value="free-preview">Free preview (public repo only)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Additional notes / questions</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Any special requirements? CI/CD integration? Air‑gapped? ..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="consent" required> 
+                        <span style="font-size: 0.85rem;">I agree that DataWizual Security will contact me via email regarding this request. No marketing, no calls.</span>
+                    </label>
+                </div>
+                <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Send Request (opens your email client)</button>
+            </form>
+            <p style="text-align: center; margin-top: 20px; font-size: 0.8rem; color: #555;">
+                <i class="fas fa-lock"></i> Your data is never stored on our server – the form simply prepares an email for you to send.
+            </p>
+        </div>
+
+        <!-- FAQ / Trust hints -->
+        <div class="guarantee-badge" style="background: rgba(52,152,219,0.05); margin-top: 40px; text-align: center;">
+            <i class="fas fa-headset" style="font-size: 1.5rem; color: var(--primary);"></i>
+            <p style="margin: 10px 0 0 0;"><strong>No calls. No tracking. No phone‑home counters.</strong><br>We believe in transparent B2B relationships. Your license works on the honor system + binding legal agreement.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer (same as index) -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; padding-bottom: 60px;">
+            <div style="flex: 1; min-width: 250px;">
+                <h4 style="margin-bottom: 20px;">DataWizual Security</h4>
+                <p style="color: var(--gray);">Developing territories of confidence through rigorous engineering.</p>
+                <p style="margin-top: 20px; color: var(--primary); font-weight: bold;">
+                    <i class="fas fa-envelope"></i> eldorzufarov66@gmail.com
+                </p>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 20px;">Our Ecosystem</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <a href="auditor-core.html" style="color: var(--gray); text-decoration: none;"><i class="fas fa-search"></i> Auditor Core v2.2.1</a>
+                    <a href="sentinel.html" style="color: var(--gray); text-decoration: none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.2.1</a>
+                    <a href="compare.html" style="color: var(--gray); text-decoration: none;"><i class="fas fa-layer-group"></i> Compare</a>
+                </div>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 20px;">Resources</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <a href="methodology.html" style="color: var(--gray); text-decoration: none;">Methodology</a>
+                    <a href="sample-report.html" style="color: var(--gray); text-decoration: none;">Demo Report</a>
+                    <a href="security-policy.html" style="color: var(--gray); text-decoration: none;">Security Policy</a>
+                    <a href="blog.html" style="color: var(--gray); text-decoration: none;">Blog</a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; color: #444; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px;">
+            &copy; 2026 DataWizual Security
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Simple form handler: open email client with populated fields
+    function sendEmailRequest(event) {
+        event.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const company = document.getElementById('company').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const repo = document.getElementById('repo').value.trim();
+        const service = document.getElementById('service').value;
+        const message = document.getElementById('message').value.trim();
+        const consent = document.getElementById('consent').checked;
+
+        if (!name || !email || !service || !consent) {
+            alert('Please fill all required fields (*) and agree to the terms.');
+            return;
+        }
+
+        const subject = `Pricing request: ${service} from ${name}`;
+        let body = `Name: ${name}\n`;
+        if (company) body += `Company: ${company}\n`;
+        body += `Email: ${email}\n`;
+        if (repo) body += `Repository: ${repo}\n`;
+        body += `Service requested: ${service}\n`;
+        if (message) body += `\nAdditional notes:\n${message}\n`;
+        body += `\n---\nThis request was sent from the pricing page. Please reply with payment instructions (SWIFT/crypto/invoice).\nNo calls needed.`;
+
+        const mailtoLink = `mailto:eldorzufarov66@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.location.href = mailtoLink;
+    }
+</script>
+
+<!-- Optional: mobile menu script (copied from index) -->
+<script>
+    document.querySelector('.hamburger')?.addEventListener('click', function() {
+        document.querySelector('.nav-links').classList.toggle('active');
+    });
+</script>
+</body>
+</html>
