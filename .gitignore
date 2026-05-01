@@ -10,3 +10,9 @@ venv/
 # OS files
 .DS_Store
 Thumbs.db
+
+start.sh
+sentinel.yaml
+.env.example
+audit-config.yml
+.github/
