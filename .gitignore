@@ -16,3 +16,4 @@ sentinel.yaml
 .env.example
 audit-config.yml
 .github/
+reports/
