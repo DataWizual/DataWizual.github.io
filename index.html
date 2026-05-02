@@ -250,7 +250,12 @@
                 </div>
             </div>
 
-            <a href="audit.html">Audit Service</a>
+            <a href="audit.html" style="color:#f59e0b;font-weight:700;border:1px solid rgba(245,158,11,0.35);
+               border-radius:8px;padding:5px 14px;transition:all 0.2s;"
+               onmouseover="this.style.background='rgba(245,158,11,0.1)'"
+               onmouseout="this.style.background='transparent'">
+                <i class="fas fa-search" style="font-size:0.75rem;"></i> Audit Service
+            </a>
 
             <div class="dropdown">
                 <a href="#" class="dropdown-trigger">Resources <i class="fas fa-chevron-down"></i></a>
@@ -268,7 +273,7 @@
 
             <a href="terms.html" class="nav-btn">Terms</a>
 
-            <a href="audit-megalinter.html" class="nav-btn">Public Audits</a>
+            <a href="public-audits.html" class="nav-btn">Public Audits</a>
 
         </div>
     </div>
@@ -395,6 +400,51 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ AUDIT CALLOUT -->
+<section style="padding: 50px 0; background: var(--dark); border-top: 1px solid rgba(255,255,255,0.04);">
+    <div class="container" style="max-width: 900px;">
+        <div style="background: linear-gradient(135deg, rgba(52,152,219,0.07) 0%, rgba(74,222,128,0.05) 100%);
+                    border: 1px solid rgba(52,152,219,0.2); border-radius: 20px; padding: 44px 48px;
+                    position: relative; overflow: hidden;">
+            <div style="position:absolute;top:0;right:0;width:220px;height:220px;
+                        background:radial-gradient(circle at top right,rgba(52,152,219,0.08),transparent 70%);
+                        pointer-events:none;"></div>
+            <div style="display:flex; align-items:flex-start; gap:36px; flex-wrap:wrap;">
+                <div style="flex-shrink:0; text-align:center; min-width:72px;">
+                    <div style="width:68px;height:68px;background:rgba(52,152,219,0.12);border:1px solid rgba(52,152,219,0.25);
+                                border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;">
+                        <i class="fas fa-briefcase" style="font-size:1.7rem;color:var(--primary);"></i>
+                    </div>
+                    <div style="font-size:0.67rem;color:#4a5568;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;">For freelancers<br>&amp; agencies</div>
+                </div>
+                <div style="flex:1; min-width:250px;">
+                    <h2 style="font-size:1.5rem;font-weight:700;color:white;margin-bottom:12px;line-height:1.3;">
+                        Need a security audit without installing anything?<br>
+                        <span style="color:var(--primary);">We scan, you deliver the report to your client.</span>
+                    </h2>
+                    <p style="color:var(--gray);font-size:0.93rem;line-height:1.75;margin-bottom:10px;max-width:560px;">
+                        We scan your repository and deliver a full <strong style="color:#cbd5e1;">PDF + HTML + JSON</strong> report within 48 hours —
+                        every finding mapped to <strong style="color:#cbd5e1;">SOC 2, CIS Controls v8, and ISO 27001</strong> automatically.
+                        No manual evidence collection. No formatting. Hand it to your client the same day.
+                    </p>
+                    <p style="color:#4ade80;font-size:0.88rem;margin-bottom:22px;">
+                        <i class="fas fa-shield-alt"></i> Risk-free: if we find nothing beyond what free tools already show, you pay nothing.
+                    </p>
+                    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
+                        <a href="audit.html" class="btn btn-primary btn-glow" style="font-size:0.95rem;padding:13px 26px;">
+                            <i class="fas fa-file-signature"></i> Request an Audit — from $490
+                        </a>
+                        <a href="public-audits.html" style="color:var(--gray);font-size:0.85rem;text-decoration:none;
+                                   border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:1px;">
+                            See real findings we disclosed →
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -884,65 +934,78 @@ document.addEventListener('keydown',function(e){
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════ SOCIAL PROOF (unchanged) -->
+<!-- ═══════════════════════════════════════════════ REAL PROOF -->
 <section class="section" style="padding: 100px 0; background: rgba(15, 23, 42, 0.7);">
-    <div class="container">
-        <h2 style="text-align: center; margin-bottom: 20px; font-size: 2.8rem;"> Engineering Teams That <span class="text-gradient">Ship Securely</span>
+    <div class="container" style="max-width: 900px;">
+        <h2 style="text-align:center; margin-bottom:16px; font-size:2.6rem;">
+            Real Work. <span class="text-gradient">Public Results.</span>
         </h2>
-        <p style="text-align: center; color: var(--gray); margin-bottom: 60px; font-size: 1.1rem; max-width: 800px; margin-left: auto; margin-right: auto;">
-            Professional results for security-conscious organizations.
+        <p style="text-align:center;color:var(--gray);margin-bottom:60px;font-size:1.05rem;max-width:680px;margin-left:auto;margin-right:auto;">
+            Every finding listed here was manually verified and responsibly disclosed. No simulated output. No test repos.
         </p>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:24px;">
 
-            <div class="territory-card" style="background: rgba(26,28,32,0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
-                <div style="display: flex; align-items: center; margin-bottom: 25px;">
-                    <div style="width: 60px; height: 60px; background: rgba(52,152,219,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px;">
-                        <i class="fas fa-cloud" style="color: var(--primary);"></i>
-                    </div>
+            <!-- MegaLinter -->
+            <div class="territory-card" style="background:rgba(26,28,32,0.85);padding:36px;border-radius:16px;border:1px solid rgba(52,152,219,0.15);">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;gap:12px;">
                     <div>
-                        <h4 style="margin: 0; color: white;">Cloud Infrastructure Team</h4>
-                        <div style="color: var(--gray); font-size: 0.9rem;">500+ Microservices</div>
+                        <div style="font-size:0.72rem;color:#4a5568;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">April–May 2026</div>
+                        <h4 style="color:white;margin:0;font-size:1.05rem;font-family:'JetBrains Mono','Fira Code',monospace;">oxsecurity / megalinter</h4>
+                        <div style="font-size:0.78rem;color:#4a5568;margin-top:3px;">13,000+ GitHub stars</div>
+                    </div>
+                    <div style="text-align:right;flex-shrink:0;">
+                        <div style="font-size:1.8rem;font-weight:800;color:#f87171;line-height:1;">7</div>
+                        <div style="font-size:0.7rem;color:var(--gray);">CRITICAL</div>
                     </div>
                 </div>
-                <p style="color: var(--gray); line-height: 1.6; margin-bottom: 25px;">
-                    "Identified 15+ high-risk exposures within legacy code during initial baseline setup. Sentinel now prevents secrets from ever reaching our main branches."
+                <p style="color:var(--gray);font-size:0.88rem;line-height:1.65;margin-bottom:20px;">
+                    GitHub Actions script injection via untrusted PR contexts — <code style="color:#a5f3fc;">github.head_ref</code> interpolated directly into shell steps across 6 workflow files. All 3 fix PRs merged within 24 hours.
                 </p>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">Clean</div>
-                        <div style="font-size: 0.8rem; color: var(--gray);">Baseline State</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+                    <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;font-weight:600;">
+                        <div style="width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.6);"></div>
+                        <span style="color:#4ade80;">Fixed · 3 PRs merged</span>
                     </div>
-                    <div style="color: #4ade80; font-weight: 600;">
-                        <i class="fas fa-check-circle"></i> Validated
-                    </div>
+                    <a href="audit-megalinter.html" style="color:var(--primary);font-size:0.82rem;text-decoration:none;border-bottom:1px solid rgba(52,152,219,0.3);">
+                        Full report →
+                    </a>
                 </div>
             </div>
 
-            <div class="territory-card" style="background: rgba(26,28,32,0.8); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
-                <div style="display: flex; align-items: center; margin-bottom: 25px;">
-                    <div style="width: 60px; height: 60px; background: rgba(74,222,128,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px;">
-                        <i class="fas fa-server" style="color: #4ade80;"></i>
-                    </div>
+            <!-- ShowPilot -->
+            <div class="territory-card" style="background:rgba(26,28,32,0.85);padding:36px;border-radius:16px;border:1px solid rgba(239,68,68,0.15);">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;gap:12px;">
                     <div>
-                        <h4 style="margin: 0; color: white;">Platform Engineering</h4>
-                        <div style="color: var(--gray); font-size: 0.9rem;">Global Deployment</div>
+                        <div style="font-size:0.72rem;color:#4a5568;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">April 2026</div>
+                        <h4 style="color:white;margin:0;font-size:1.05rem;font-family:'JetBrains Mono','Fira Code',monospace;">ShowPilotFPP / ShowPilot</h4>
+                        <div style="font-size:0.78rem;color:#4a5568;margin-top:3px;">Node.js · Production app</div>
+                    </div>
+                    <div style="text-align:right;flex-shrink:0;">
+                        <div style="font-size:1.8rem;font-weight:800;color:#f87171;line-height:1;">23</div>
+                        <div style="font-size:0.7rem;color:var(--gray);">CRITICAL</div>
                     </div>
                 </div>
-                <p style="color: var(--gray); line-height: 1.6; margin-bottom: 25px;">
-                    "Blocked 40+ insecure configurations at the PR level. Developers now fix infrastructure-as-code issues before the security review, reducing lead time."
+                <p style="color:var(--gray);font-size:0.88rem;line-height:1.65;margin-bottom:20px;">
+                    SQL injection, SSRF via audio proxy, missing auth on streaming endpoints, insecure session cookies, path traversal. Maintainer shipped v0.18.13 and v0.18.14 directly in response.
                 </p>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div style="font-size: 2rem; font-weight: bold; color: #4ade80;">Active</div>
-                        <div style="font-size: 0.8rem; color: var(--gray);">PR Protection</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+                    <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;font-weight:600;">
+                        <div style="width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.6);"></div>
+                        <span style="color:#4ade80;">Fixed · 2 releases shipped</span>
                     </div>
-                    <div style="color: var(--primary); font-weight: 600;">
-                        <i class="fas fa-shield-alt"></i> Hardened
-                    </div>
+                    <a href="public-audits.html" style="color:var(--primary);font-size:0.82rem;text-decoration:none;border-bottom:1px solid rgba(52,152,219,0.3);">
+                        All public audits →
+                    </a>
                 </div>
             </div>
 
+        </div>
+
+        <div style="text-align:center;margin-top:36px;">
+            <a href="public-audits.html" class="btn btn-secondary">
+                <i class="fas fa-search"></i> View Full Disclosure Log
+            </a>
         </div>
     </div>
 </section>
@@ -1017,6 +1080,12 @@ document.addEventListener('keydown',function(e){
         </div>
     </div>
 </footer>
+
+<script>
+    document.querySelector('.hamburger')?.addEventListener('click', function() {
+        document.querySelector('.nav-links').classList.toggle('active');
+    });
+</script>
 
 </body>
 </html>
