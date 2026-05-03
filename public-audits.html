@@ -452,6 +452,21 @@
                 SSRF defense, path traversal fix, and a layered secret resolution chain.
             </p>
 
+            <div style="margin: 18px 0; padding: 16px 20px; background: rgba(239,68,68,0.06); border-left: 3px solid rgba(239,68,68,0.4); border-radius: 0 8px 8px 0;">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #f87171; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px;">
+                    <i class="fas fa-clipboard-check"></i> SOC 2 Audit Impact
+                </div>
+                <p style="color: var(--gray); font-size: 0.85rem; line-height: 1.7; margin: 0;">
+                    A SOC 2 Type II auditor reviewing this codebase would flag SQL injection patterns under 
+                    <strong style="color: #e2e8f0;">CC6.1</strong> and <strong style="color: #e2e8f0;">CC6.6</strong>, 
+                    and plain-text secret storage under <strong style="color: #e2e8f0;">CC6.7</strong>. 
+                    These findings typically trigger a qualified opinion or require additional compensating controls — 
+                    delaying certification by weeks and adding remediation cost discovered late in the audit cycle. 
+                    The SSRF vector in an authenticated endpoint would additionally surface under 
+                    <strong style="color: #e2e8f0;">CC7.1</strong> as an unmonitored external communication channel.
+                </p>
+            </div>
+
             <div class="audit-meta-row">
                 <div class="audit-meta-item">
                     <i class="fas fa-list-ol"></i>
@@ -525,83 +540,20 @@
                 the initial fix and reported separately. All three fix PRs merged within 24 hours.
             </p>
 
-            <div class="audit-meta-row">
-                <div class="audit-meta-item">
-                    <i class="fas fa-file-code"></i>
-                    <span>6 workflow files</span>
+            <div style="margin: 18px 0; padding: 16px 20px; background: rgba(239,68,68,0.06); border-left: 3px solid rgba(239,68,68,0.4); border-radius: 0 8px 8px 0;">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #f87171; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px;">
+                    <i class="fas fa-clipboard-check"></i> SOC 2 Audit Impact
                 </div>
-                <div class="audit-meta-item">
-                    <i class="fas fa-crosshairs"></i>
-                    <span>2 injection vectors</span>
-                </div>
-                <div class="audit-meta-item">
-                    <i class="fas fa-clock"></i>
-                    <span>Fix: &lt;24h</span>
-                </div>
-                <div class="audit-links">
-                    <a href="https://github.com/oxsecurity/megalinter/issues/7657"
-                       target="_blank" rel="noopener" class="audit-link">
-                        <i class="fas fa-external-link-alt"></i> Issue #7657
-                    </a>
-                    <a href="https://github.com/oxsecurity/megalinter/issues/7659"
-                       target="_blank" rel="noopener" class="audit-link">
-                        <i class="fas fa-external-link-alt"></i> Issue #7659
-                    </a>
-                    <a href="public-audits.html" class="audit-link detail">
-                        <i class="fas fa-search"></i> Full report
-                    </a>
-                </div>
+                <p style="color: var(--gray); font-size: 0.85rem; line-height: 1.7; margin: 0;">
+                    Any team using MegaLinter in their CI/CD pipeline inherited this injection vector. 
+                    Under SOC 2, an unpatched CI/CD script injection falls under <strong style="color: #e2e8f0;">CC8.1</strong> — 
+                    change management controls — and <strong style="color: #e2e8f0;">CC6.6</strong> — 
+                    logical access controls over infrastructure. An auditor discovering this post-certification 
+                    would require immediate remediation evidence and could trigger a scope expansion. 
+                    Teams relying on MegaLinter for their own compliance pipelines were unknowingly running 
+                    a compromised gatekeeper.
+                </p>
             </div>
-
-        </div>
-             ═══════════════════════════════════════════════ -->
-        <div class="audit-card" data-tags="fixed cicd injection" style="animation-delay: 0.05s;">
-
-            <div class="audit-card-header">
-                <div>
-                    <div class="audit-date">April 29 – May 1, 2026</div>
-                    <div class="audit-repo-name">
-                        <a href="https://github.com/oxsecurity/megalinter" target="_blank" rel="noopener">
-                            oxsecurity / megalinter
-                        </a>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px;">
-                        <div class="status-indicator">
-                            <div class="status-dot fixed"></div>
-                            <span style="color: #4ade80;">Fixed</span>
-                        </div>
-                        <span style="color: #333;">&middot;</span>
-                        <div class="status-indicator" style="color: var(--gray);">
-                            <i class="fas fa-code-branch" style="font-size: 0.7rem;"></i>
-                            3 PRs merged
-                        </div>
-                    </div>
-                </div>
-
-                <div style="text-align: right; flex-shrink: 0;">
-                    <div style="font-size: 2rem; font-weight: 800; color: #f87171; line-height: 1;">7</div>
-                    <div style="color: var(--gray); font-size: 0.75rem; margin-top: 2px;">CRITICAL</div>
-                </div>
-            </div>
-
-            <div class="audit-badges">
-                <span class="version-badge"><i class="fas fa-cogs"></i> CI/CD</span>
-                <span class="version-badge red"><i class="fas fa-syringe"></i> Script Injection</span>
-                <span class="version-badge orange"><i class="fas fa-code-branch"></i> GitHub Actions</span>
-                <span class="version-badge purple"><i class="fas fa-tachometer-alt"></i> SPI 75.5</span>
-            </div>
-
-            <p class="audit-description">
-                GitHub Actions script injection via untrusted pull request contexts.
-                Seven confirmed vulnerabilities across 6 workflow files — both
-                <code style="color: #a5f3fc;">github.event.pull_request.title</code> and
-                <code style="color: #a5f3fc;">github.head_ref</code> interpolated directly into
-                <code style="color: #a5f3fc;">run:</code> shell steps. Two additional files
-                (<code style="color: #a5f3fc;">mega-linter.yml</code>,
-                <code style="color: #a5f3fc;">mega-linter-for-runner.yml</code>) were missed in
-                the initial fix and reported separately.
-                All three fix PRs merged within 24 hours.
-            </p>
 
             <div class="audit-meta-row">
                 <div class="audit-meta-item">
