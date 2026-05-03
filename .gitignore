@@ -17,3 +17,4 @@ sentinel.yaml
 audit-config.yml
 .github/
 reports/
+script.py
