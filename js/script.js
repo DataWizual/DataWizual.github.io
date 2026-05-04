@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
         });
 
-        // Закрыть при клике на обычную ссылку
         navLinks.querySelectorAll('a:not(.dropdown-trigger)').forEach(link => {
             link.addEventListener('click', () => {
                 hamburger.classList.remove('active');
@@ -45,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Мобильный dropdown — по клику
         document.querySelectorAll('.dropdown-trigger').forEach(trigger => {
             trigger.addEventListener('click', (e) => {
                 if (window.innerWidth <= 768) {
@@ -56,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Закрыть меню при ресайзе на десктоп
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768) {
                 hamburger.classList.remove('active');

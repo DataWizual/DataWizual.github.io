@@ -538,11 +538,9 @@ body {
     }
 }
 
-    /* Улучшенные стили выпадающего меню */
     .dropdown {
         position: relative;
         display: inline-block;
-        /* Важно: добавляем небольшой нижний отступ, чтобы мышка всегда была "над" элементом */
         padding-bottom: 15px; 
         margin-bottom: -15px;
     }
@@ -552,15 +550,15 @@ body {
         align-items: center;
         gap: 6px;
         cursor: pointer;
-        padding: 10px 0; /* Увеличиваем область наведения */
+        padding: 10px 0; 
     }
 
     .dropdown-content {
         display: none;
         position: absolute;
-        top: 100%; /* Прижимаем вплотную к родителю */
+        top: 100%; 
         left: 50%;
-        transform: translateX(-50%); /* Центрируем меню относительно ссылки */
+        transform: translateX(-50%); 
         background: #1a1c20;
         min-width: 240px;
         box-shadow: 0 15px 40px rgba(0,0,0,0.6);
@@ -568,13 +566,11 @@ body {
         border-radius: 10px;
         padding: 12px 0;
         z-index: 1000;
-        /* Убираем резкое появление */
         opacity: 0;
         visibility: hidden;
         transition: all 0.2s ease-in-out;
     }
 
-    /* "Мостик", который не дает меню закрыться при движении мыши вниз */
     .dropdown-content::before {
         content: '';
         position: absolute;
@@ -592,7 +588,6 @@ body {
         transform: translateX(-50%) translateY(0);
     }
 
-    /* Стили элементов внутри */
     .dropdown-content a {
         display: flex !important;
         align-items: center;
