@@ -467,6 +467,29 @@
                 </p>
             </div>
 
+            <div style="margin: 12px 0; padding: 16px 20px; background: rgba(168,85,247,0.06); border-left: 3px solid rgba(168,85,247,0.35); border-radius: 0 8px 8px 0;">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #a855f7; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px;">
+                    <i class="fas fa-question-circle"></i> What an Auditor Would Ask
+                </div>
+                <ul style="color: var(--gray); font-size: 0.85rem; line-height: 1.8; margin: 0; padding-left: 18px;">
+                    <li>How are database credentials and API secrets managed across environments?</li>
+                    <li>Is there a centralized secret rotation policy with documented evidence?</li>
+                    <li>Are outbound HTTP requests from the application logged and monitored?</li>
+                    <li>What controls prevent unauthenticated access to streaming or media endpoints?</li>
+                </ul>
+            </div>
+
+            <div style="margin: 12px 0; padding: 16px 20px; background: rgba(251,146,60,0.06); border-left: 3px solid rgba(251,146,60,0.35); border-radius: 0 8px 8px 0;">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #fb923c; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px;">
+                    <i class="fas fa-exclamation-triangle"></i> Business Exposure Scenarios
+                </div>
+                <ul style="color: var(--gray); font-size: 0.85rem; line-height: 1.8; margin: 0; padding-left: 18px;">
+                    <li><strong style="color: #e2e8f0;">Discovered during audit →</strong> Management letter issued, compensating controls required before opinion issued, certification delayed.</li>
+                    <li><strong style="color: #e2e8f0;">Discovered post-report →</strong> Customer notification obligation triggered, trust service criteria re-evaluated, re-audit scope expansion.</li>
+                    <li><strong style="color: #e2e8f0;">Exploited in production →</strong> Incident disclosure requirement under applicable data protection law, potential breach of customer SLA.</li>
+                </ul>
+            </div>
+
             <div class="audit-meta-row">
                 <div class="audit-meta-item">
                     <i class="fas fa-list-ol"></i>
@@ -553,6 +576,29 @@
                     Teams relying on MegaLinter for their own compliance pipelines were unknowingly running 
                     a compromised gatekeeper.
                 </p>
+            </div>
+
+            <div style="margin: 12px 0; padding: 16px 20px; background: rgba(168,85,247,0.06); border-left: 3px solid rgba(168,85,247,0.35); border-radius: 0 8px 8px 0;">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #a855f7; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px;">
+                    <i class="fas fa-question-circle"></i> What an Auditor Would Ask
+                </div>
+                <ul style="color: var(--gray); font-size: 0.85rem; line-height: 1.8; margin: 0; padding-left: 18px;">
+                    <li>How are third-party CI/CD tools vetted before being introduced into the pipeline?</li>
+                    <li>Is there a process for monitoring upstream dependency vulnerabilities in workflow tooling?</li>
+                    <li>What evidence exists that pull request inputs are sanitized before use in shell execution?</li>
+                    <li>Are pipeline secrets scoped to minimum privilege and rotated on a documented schedule?</li>
+                </ul>
+            </div>
+
+            <div style="margin: 12px 0; padding: 16px 20px; background: rgba(251,146,60,0.06); border-left: 3px solid rgba(251,146,60,0.35); border-radius: 0 8px 8px 0;">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #fb923c; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px;">
+                    <i class="fas fa-exclamation-triangle"></i> Business Exposure Scenarios
+                </div>
+                <ul style="color: var(--gray); font-size: 0.85rem; line-height: 1.8; margin: 0; padding-left: 18px;">
+                    <li><strong style="color: #e2e8f0;">Discovered during audit →</strong> CC8.1 finding raised, change management controls deemed insufficient, auditor requires pipeline remediation evidence before issuing opinion.</li>
+                    <li><strong style="color: #e2e8f0;">Discovered post-report →</strong> Inherited vulnerability from third-party tool triggers scope re-evaluation, potential management letter addendum.</li>
+                    <li><strong style="color: #e2e8f0;">Exploited in production →</strong> Attacker gains persistent access to CI environment and secrets store via malicious PR title — full pipeline compromise.</li>
+                </ul>
             </div>
 
             <div class="audit-meta-row">
